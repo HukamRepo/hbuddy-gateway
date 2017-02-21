@@ -13,7 +13,7 @@ module.exports.get = function() {
 			    "type": "shared"
 		    },
 		    "SERVICES_CONFIG":{
-		    	"gransliveApi": {
+		    	"hbuddyApi": {
 		    		"endpoint":"https://api.us.apiconnect.ibmcloud.com/gurvsin3inibmcom-learn/smarthome/api",
 		    		"clientId": "e76cf60a-e1b5-413b-af07-927c1d902d5c",
 		    		"clientSecret": "S0cI8sK2bG3pN3cM6xX7fR8tP1lO0eQ2pK7dJ3aT0kL4uG2nQ6"

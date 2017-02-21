@@ -27,7 +27,7 @@ module.exports = function(app) {
 		console.log("IN setupGateway: >> ");
 		async.waterfall([
 		                 setGlobalDetails,
-//		                 checkDependencies,
+		                 checkDependencies,
 		                 checkConnectivity,
 		    	         readConfigurationFile,
 		    	         uploadFiles
