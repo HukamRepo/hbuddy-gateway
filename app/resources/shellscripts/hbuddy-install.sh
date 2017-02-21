@@ -134,7 +134,13 @@ fi
 sudo apt-get install python3
 sudo apt-get install python-pyaudio python3-pyaudio sox
 sudo pip install pyaudio
+sudo apt-get install libatlas-base-dev
+	
 sudo cp app/resources/init.d/.asoundrc ~/.asoundrc
+	
+sudo npm install -g node-gyp
+sudo npm install -g node-pre-gyp
+sudo npm install --unsafe-perm serialport
 
 sudo npm update
 sudo bower --allow-root install

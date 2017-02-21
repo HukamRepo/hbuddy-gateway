@@ -12,7 +12,7 @@ var audioFile = "output.raw";
 //var recordingsPath = require('path').resolve(__dirname, '../recordings');
 var recordingsPath = "/tmp";//TODO: Change this later
 
-var hotwordsFilePath = require('path').resolve(__dirname, '../resources/hotwords/GransLiveHeyBuddy.pmdl');
+var hotwordsFilePath = require('path').resolve(__dirname, '../resources/hotwords/heyBuddy.pmdl');
 const VoiceOffline = require(require('path').resolve(__dirname, '../utils/voiceoffline.js'));
 var speech = GOOGLE_SPEECH({
   projectId: 'granslive',
@@ -40,7 +40,7 @@ var methods = {};
 			voiceOffline.on('hotword', (index, keyword) => console.log("hBuddy Listening Now !! ", keyword, ", index: ", index));
 			
 			voiceOffline.on('partial-result', function(result){
-	//			console.log("PartialResult: >> ", result);
+				console.log("PartialResult: >> ", result);
 			});
 			
 			voiceOffline.on('final-result', function(result){

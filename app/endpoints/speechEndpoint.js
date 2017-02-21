@@ -30,6 +30,7 @@ module.exports = function() {
 				}	
 			});
 		}catch(err){
+			console.log("ERROR in speechHandler.speechToText: >> ", err);
 			resp.status(err.statusCode || 500).json(err);
 		}
 	};
