@@ -1,0 +1,66 @@
+
+var CONFIG = require('../config/config').get();
+
+var localDBHandler = require('../handlers/localDBHandler')();
+var commonHandler = require('../handlers/commonHandler')();
+var fs = require('fs');
+
+var cloudant = require('cloudant')(CONFIG.SERVICES_CONFIG.cloudantNOSQLDB.url);
+
+var pkgcloud = require('pkgcloud'),
+osConfig = {
+	    provider: 'openstack',
+	    useServiceCatalog: true,
+	    useInternal: false,
+	    keystoneAuthVersion: 'v3',
+	    authUrl: CONFIG.SERVICES_CONFIG.objectstorage.auth_url,
+	    tenantId: CONFIG.SERVICES_CONFIG.objectstorage.projectId,    //projectId from credentials
+	    domainId: CONFIG.SERVICES_CONFIG.objectstorage.domainId,
+	    username: CONFIG.SERVICES_CONFIG.objectstorage.username,
+	    password: CONFIG.SERVICES_CONFIG.objectstorage.password,
+	    region: 'dallas'   //dallas or london region
+	};
+
+storageClient = pkgcloud.storage.createClient(osConfig);
+
+module.exports = function() {
+    
+var methods = {};
+
+	methods.authenticateObjectStorage = function(callback){
+		storageClient.auth(function(err) {
+		    callback(err, "STORAGE AUTHENTICATED");
+//		    storageClient._identity
+		});
+	};
+  	
+	methods.uploadFile = function(uploadReq, cb){
+		if(!uploadReq || !uploadReq.container){
+			cb(new Error("Invalid request for ObjectStorage: ", uploadReq), null);
+			return;
+		}
+		console.log("IN uplaodFile with uploadReq: >> ", uploadReq);
+		
+		var readStream = fs.createReadStream(uploadReq.pathToFile+uploadReq.fileName);
+		
+		var upload = storageClient.upload({
+            container: uploadReq.container,
+            remote: uploadReq.fileName
+        });
+        upload.on('error', function(err) {
+            console.log("UPLOAD ERROR: >>> ", err);
+            cb(err, null);
+        });
+
+        upload.on('success', function(file) {
+            console.log("UPLOAD SUCCESS: >>> ", file.toJSON());
+            cb(null, file.toJSON());
+        });
+        
+        readStream.pipe(upload);
+		
+	};
+
+    return methods;
+    
+}

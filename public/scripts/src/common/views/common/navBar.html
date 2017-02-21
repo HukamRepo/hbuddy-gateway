@@ -1,0 +1,22 @@
+
+    <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+        <div class="container">
+            <div class="navbar-header">
+                <a class="navbar-brand no-underline" href="/"><span class="thin-branding">hBuddy</span> Gateway </a>
+            </div>
+            <div class="float-right">
+                <ul class="nav navbar-nav navbar-right">
+                   <li class="dropdown">
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="">Configurations<span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                      <li data-ng-repeat="navlink in navLinks">
+                      	<a href="{{navlink.link}}" target="_blank" >{{navlink.title}}</a>
+                    </ul>
+                  </li>
+                </ul>
+            </div>
+            <!-- .navbar right-->
+        </div>
+        <!-- .container -->
+    </nav>
+    <!-- .navbar -->

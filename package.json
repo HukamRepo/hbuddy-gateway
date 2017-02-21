@@ -1,0 +1,71 @@
+{
+  "name": "gateway",
+  "version": "0.0.1",
+  "engines": {
+    "node": "6.2.2"
+  },
+  "private": true,
+  "main": "views/index.html",
+  "scripts": {
+    "start": "node server.js",
+    "test": "npm test",
+    "provision": "apt-get update -y && apt-get install isc-dhcp-server hostapd iw -y",
+    "bootstrap": "wget http://treebeard.home.net:1234/bootstrap/pifi-conf -O bootstrap.sh && chmod u+x bootstrap.sh && ./bootstrap.sh"
+  },
+  "keywords": [
+    "Hukam Gateway",
+    "Node",
+    "Wifi",
+    "IoT",
+    "Home Automation"
+  ],
+  "author": "Gurvinder Singh",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/sinny777/hbuddy-gateway/issues"
+  },
+  "homepage": "https://github.com/sinny777/hbuddy-gateway",
+  "dependencies": {
+    "@google-cloud/speech": "latest",
+    "async": "~0.9.0",
+    "cloudant": "^1.4.3",
+    "connect-flash": "latest",
+    "date-util": "^1.2.1",
+    "ejs": "~0.7.1",
+    "express": "~3.2.6",
+    "feedparser": "latest",
+    "google": "^2.1.0",
+    "grunt": "~0.4.1",
+    "grunt-bower-installer": "latest",
+    "grunt-contrib-copy": "latest",
+    "grunt-contrib-requirejs": "latest",
+    "grunt-nodemon": "latest",
+    "grunt-npm-install": "latest",
+    "ibmiotf": "latest",
+    "mic": "^2.1.1",
+    "moment": "^2.17.1",
+    "mqtt": "^1.10.0",
+    "multer": "latest",
+    "nedb": "^1.8.0",
+    "noble": "^1.7.0",
+    "node-arecord": "0.0.2",
+    "node-microphone": "^0.1.3",
+    "node-record-lpcm16": "^0.1.7",
+    "node-schedule": "^1.2.0",
+    "node-uuid": "latest",
+    "nrf": "^0.8.3",
+    "passport": "^0.3.2",
+    "passport-idaas-openidconnect": "^1.0.0",
+    "pkgcloud": "^1.4.0",
+    "qs": "latest",
+    "requirejs": "latest",
+    "sensortag": "^1.2.3",
+    "serialport": "latest",
+    "snowboy": "^1.1.0",
+    "socket.io": "latest",
+    "stream": "0.0.2",
+    "underscore": "~1.7.0",
+    "util": "latest",
+    "watson-developer-cloud": "latest"
+  }
+}

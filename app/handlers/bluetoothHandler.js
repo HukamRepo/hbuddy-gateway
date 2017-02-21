@@ -1,0 +1,80 @@
+
+var noble = require('noble'),
+commonHandler = require('../handlers/commonHandler')(),
+sensorTags = {},
+interval,
+ble;
+
+module.exports = function() {
+    
+var methods = {};
+
+	methods.connectSensorTags = function() {
+		console.log("IN bluetoothHandler.connectSensorTag: >>> ");
+		try{
+			noble.startScanning();
+			noble.on('stateChange', function(state) {
+				  if (state === 'poweredOn') {
+				    noble.startScanning();
+				  } else {
+				    noble.stopScanning();
+				  }
+				});
+
+				noble.on('discover', function(peripheral) {
+				    console.log('Found device with local name: ' + peripheral.advertisement.localName);
+				    console.log('advertising the following service uuid\'s: ' + peripheral.advertisement.serviceUuids);
+				    console.log();
+				    peripheral.connect(function(error) {
+				        console.log('connected to peripheral: ' + peripheral.uuid);
+				        ble = peripheral;
+				        
+				        peripheral.discoverServices(null, function(error, services) {
+				            console.log('discovered the following services:');
+				            for (var i in services) {
+				            	var service = services[i];
+				            	service.discoverCharacteristics(null, function(error, characteristics) {
+					              console.log('\n\n ....................');
+					              for (var j in characteristics) {
+//					                console.log('  ',j , ': CHARACTERISTIC: >>> ', commonHandler.simpleStringify(characteristics[j]));
+					                methods.readCharactristicData(characteristics[j]);
+					              }
+					            });
+				            }
+				          });
+				      });
+				});
+				
+		}catch(err){
+			console.log("ERROR in connectSensorTags: >> ", err);
+		}
+	};
+	
+	methods.readCharactristicData = function(characteristic){
+		characteristic.read(function(error, data){
+			if(error){
+				console.log("ERROR In reading data for ", characteristic.uuid, ": >>>", error);
+			}else{
+				console.log('\n\nFULL DATA for: >>> ', commonHandler.simpleStringify(characteristic));
+				console.log("DATA: >> ", String(data));
+			}			
+		});
+	};
+	
+	methods.disconnectSensorTags = function() {
+		console.log("IN bluetoothHandler.disconnectSensorTags: >>> ");
+		try{
+			if(ble){
+				ble.disconnect(function(error) {
+			       console.log('disconnected from peripheral: ' + ble.uuid);
+			    });
+			}
+				
+		}catch(err){
+			console.log("ERROR in disconnectSensorTags: >> ", err);
+		}
+	};
+	
+    return methods;
+    
+}
