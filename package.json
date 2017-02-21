@@ -1,5 +1,5 @@
 {
-  "name": "gateway",
+  "name": "hbuddy-gateway",
   "version": "0.0.1",
   "engines": {
     "node": "6.2.2"
@@ -35,12 +35,6 @@
     "express": "~3.2.6",
     "feedparser": "latest",
     "google": "^2.1.0",
-    "grunt": "~0.4.1",
-    "grunt-bower-installer": "latest",
-    "grunt-contrib-copy": "latest",
-    "grunt-contrib-requirejs": "latest",
-    "grunt-nodemon": "latest",
-    "grunt-npm-install": "latest",
     "ibmiotf": "latest",
     "mic": "^2.1.1",
     "moment": "^2.17.1",
@@ -67,5 +61,15 @@
     "underscore": "~1.7.0",
     "util": "latest",
     "watson-developer-cloud": "latest"
+  },
+  "devDependencies": {
+    "grunt": "^1.0.1",
+    "grunt-bower-installer": "latest",
+    "grunt-contrib-copy": "latest",
+    "grunt-contrib-requirejs": "latest",
+    "grunt-nodemon": "latest",
+    "grunt-npm-install": "latest",
+    "grunt-contrib-cssmin": "^2.0.0",
+    "jshint": "^2.5.6"
   }
 }

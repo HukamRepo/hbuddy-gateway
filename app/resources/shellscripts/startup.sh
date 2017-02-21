@@ -2,6 +2,9 @@
 
  ### BEGIN INIT INFO
  # Short-Description: Hukam hBuddy Gateway Startup Script
+ # Run this script after running below comnands
+ # sudo apt-get update
+ # sudo apt-get upgrade
  ### END INIT INFO
 
 wget -q --spider http://google.com
