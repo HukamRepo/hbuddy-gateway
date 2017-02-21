@@ -7,7 +7,7 @@ var express  = require('express'),
 	io = require('socket.io').listen(server),
 	http = require('http'),
 	path = path = require('path'),
-	uuid = require('node-uuid'),
+	uuid = require('uuid'),
 	util = require('util'),
 	watson = require('watson-developer-cloud');
 

@@ -12,7 +12,7 @@ var audioFile = "output.raw";
 //var recordingsPath = require('path').resolve(__dirname, '../recordings');
 var recordingsPath = "/tmp";//TODO: Change this later
 
-var hotwordsFilePath = require('path').resolve(__dirname, '../resources/hotwords/HeyGransLive.pmdl');
+var hotwordsFilePath = require('path').resolve(__dirname, '../resources/hotwords/GransLiveHeyBuddy.pmdl');
 const VoiceOffline = require(require('path').resolve(__dirname, '../utils/voiceoffline.js'));
 var speech = GOOGLE_SPEECH({
   projectId: 'granslive',
@@ -33,11 +33,11 @@ var methods = {};
 		console.log("IN speechHandler, speechToText >>>>>>> ");
 		try{
 			const language = "en-IN";
-			var hotwords = [{ file: hotwordsFilePath, hotword: 'hey granslive', sensitivity: '0.5' }];
+			var hotwords = [{ file: hotwordsFilePath, hotword: 'hey buddy', sensitivity: '0.5' }];
 			var voiceOffline = VoiceOffline.init({ hotwords, language }, speech);
 			VoiceOffline.start(voiceOffline);
 			
-			voiceOffline.on('hotword', (index, keyword) => console.log("GransLive Listening Now !! ", keyword, ", index: ", index));
+			voiceOffline.on('hotword', (index, keyword) => console.log("hBuddy Listening Now !! ", keyword, ", index: ", index));
 			
 			voiceOffline.on('partial-result', function(result){
 	//			console.log("PartialResult: >> ", result);
