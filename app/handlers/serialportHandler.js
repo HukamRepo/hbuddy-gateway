@@ -5,6 +5,8 @@ var commonHandler = require('../handlers/commonHandler')();
 var CONFIG = require('../config/config').get();
 var serialPort;
 
+var appClient;
+
 module.exports = function(appConfig) {
 
 	var lastPublishTime = {};
@@ -84,7 +86,7 @@ module.exports = function(appConfig) {
 		console.log("IN publishRequired: >>> ", deviceWithData);
 		
 		//TODO: Remove below return... Added for testing
-		return true;
+		return false;
 
 		if(deviceWithData.d && deviceWithData.d.boardID){
 			deviceWithData.d.boardId = deviceWithData.d.boardID;
