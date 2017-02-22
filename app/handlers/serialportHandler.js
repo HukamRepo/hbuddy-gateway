@@ -82,6 +82,9 @@ module.exports = function(appConfig) {
 
 	methods.publishRequired = function(deviceWithData){
 		console.log("IN publishRequired: >>> ", deviceWithData);
+		
+		//TODO: Remove below return... Added for testing
+		return true;
 
 		if(deviceWithData.d && deviceWithData.d.boardID){
 			deviceWithData.d.boardId = deviceWithData.d.boardID;
