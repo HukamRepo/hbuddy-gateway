@@ -4,6 +4,7 @@
 module.exports.get = function() {
 		return {
 			"gatewayId": "",
+			"GATEWAY_TYPE": "GransLiveGateway",
 			"CONFIG_FILE_PATH": "/media/pi/USB/configuration.json",
 			"CLOUD_CONFIG": {
 				"org": "o6oosq",

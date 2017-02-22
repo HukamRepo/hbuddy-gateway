@@ -64,10 +64,10 @@ module.exports = function(appConfig, serialportHandler) {
 		if(!appClient){
 			methods.connectToIBMCloud(function(appclient){
 				appClient = appclient;
-				appClient.subscribeToDeviceEvents("HukamGateway", global.gatewayInfo.gatewayId, "gateway","json");
+				appClient.subscribeToDeviceEvents(CONFIG.GATEWAY_TYPE, global.gatewayInfo.gatewayId, "gateway","json");
 			});
 		}else{
-			appClient.subscribeToDeviceEvents("HukamGateway", global.gatewayInfo.gatewayId, "gateway","json");
+			appClient.subscribeToDeviceEvents(CONFIG.GATEWAY_TYPE, global.gatewayInfo.gatewayId, "gateway","json");
 		}
 	};
 

@@ -144,10 +144,10 @@ module.exports = function(appConfig) {
 			 if(!appClient){
 				 methods.connectToIBMCloud(function(appclient){
 						appClient = appclient;
-						appClient.publishDeviceEvent("HukamGateway", global.gatewayInfo.gatewayId, "cloud", "json", sensorData);
+						appClient.publishDeviceEvent(CONFIG.GATEWAY_TYPE, global.gatewayInfo.gatewayId, "cloud", "json", sensorData);
 					});
 			 }else{
-				 appClient.publishDeviceEvent("HukamGateway", global.gatewayInfo.gatewayId, "cloud", "json", sensorData);
+				 appClient.publishDeviceEvent(CONFIG.GATEWAY_TYPE, global.gatewayInfo.gatewayId, "cloud", "json", sensorData);
 			 }
 		}catch(err){
 			console.log(err);
