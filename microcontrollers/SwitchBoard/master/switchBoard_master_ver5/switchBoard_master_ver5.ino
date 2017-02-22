@@ -519,11 +519,9 @@ void checkNbradcastUsage() {
       // convert signal sigma value to current in amps
       current_amps = intercept + slope * inputStats.sigma();      
 
-      String usage = "{uniqueId:";
-      usage += uniqueId;
-      usage += ",data : {Power:";
+      String usage = "{\"type\":\"switch_board\", \"uniqueId\":\""+uniqueId+"\", \"data\": {\"power\": ";
       usage += current_amps*voltage;
-      usage += "W }}";
+      usage += ", \"unit\":\"W\" }}";
       broadcastMsg(usage);
      }
   }
