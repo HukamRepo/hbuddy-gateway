@@ -88,6 +88,7 @@ const String f_ON  = "#k";
 const String f_OFF = "#l";
 
 //const String analog_msg = "#m";
+int cmdForDevice[2];  // to store the command for the devices
 String swNo_value = "";
 // char cb[1];  // to store the command
 // String board = "P4yd1RJhDfSDUS02";
@@ -145,29 +146,20 @@ void loop() {
       // Read the data payload until we've received everything
       String command;
       command = Serial.readString();
-      char cmdForBoard[23];
-      strcpy(cmdForBoard,command.c_str());                
-      
-      if(checkCommand(cmdForBoard)) {
-/*
-           digitalWrite(broadcast_pin,HIGH);
-           delay(1000);
-           digitalWrite(broadcast_pin,LOW);
-           delay(1000);    
-           
-*/
+      if((checkCommand(command))[0]>0) {
            command.trim();
-           if(command == "#"+uniqueId+"#getState") {
-            Serial.println(getStatusOfBoard());
-           }
-
            updateSwitches(command);  
-         }  
+      }
+      else {
+        
+        Serial.println("Sorry wrong board : ");            
+
+      }
          
     }
     else
     {
-    //      Serial.println("No radio available");
+          //
     }
     
   updateCloud();
@@ -204,35 +196,35 @@ String getStatusOfBoard() {
 }
 
 // function to check if the command is for this board
-boolean checkCommand(const char *command) {
+int* checkCommand(String command) {
 
 //    Serial.println("<<<IN cmdForTheBoard() method>>> ");
     String cmd_in;
-    boolean flag_while=true;
-    boolean res = 0;
+    boolean flag_board = true;
+    boolean flag_device= true;
+    boolean flag_value = true;
     int incr = 0;
-    char cmd_temp[20];
-    while(flag_while){
+    
+    while(flag_board){
       if(command[incr+1]=='#') {
-        flag_while = false;
+        incr++;
+        flag_board = false;
         continue;
       }      
-        cmd_in += command[incr+1];
+        cmd_in += command[incr+1];        
         incr++;
+    }    
+//    Serial.println(cmd_in);  // check cmd_in set
+    
+    if (strcmp(cmd_in.c_str(), uniqueId.c_str()) == 0) {
+      cmdForDevice[0] = incr+1;
+      cmdForDevice[1] = incr+3;      
+    }
+    else {      
+      cmdForDevice[0] = -1;
     }
     
-    strcpy(cmd_temp,cmd_in.c_str());
-//    cmd_temp = cmd_in;
-    if (strcmp(cmd_temp, uniqueId.c_str()) == 0) {
-//      Serial.println(cmd_temp);
-      res = 1;
-    }
-    else {
-      Serial.println("Sorry wrong board");
-      res = 0;
-    }
-    
-    return res;
+    return cmdForDevice;
 }
 
 void mgCmd(char task[]) {
@@ -247,12 +239,9 @@ void updateSwitches(String cmd_s) {
   for(int k=0;k<cmd_s.length();k++) {
     
   }
-  int switchNo = cmd_s[10]-'0';
-  int switchValue = cmd_s[12]-'0';
-//  Serial.print("switchNo: ");
-//  Serial.println(switchNo);
-//  Serial.print("switchValue: ");
-//  Serial.println(switchValue);  
+  int switchNo = cmd_s[cmdForDevice[0]]-'0';
+  int switchValue = cmd_s[cmdForDevice[1]]-'0';
+
   switch (switchNo) {
     asst_master_digital_serial.listen();
     case  1:
@@ -333,11 +322,8 @@ void updateCloud() {
   boolean check_digital = true;
   boolean check_analog = true;
 
-  String toSend = "{\"type\":\"switch_board\", \"uniqueId\":\""+uniqueId+"\", \"data\": {\"";
+  String toSend = "{\"type\":\"switch_board\", \"uniqueId\":\""+uniqueId+"\", \"data\": {";
 //  String toSend = "{\"d\":{\"uniqueId\":\"";
-  toSend.trim();
-  toSend += uniqueId;
-  toSend += "\",";
   toSend.trim();
   char data[24];
 
@@ -494,11 +480,12 @@ String check_asst_master_analog_serial(String toSend) {
 }
 
 void broadcastMsg(String msg) {
-     Serial.println(msg);
+     Serial.println(msg);     
      digitalWrite(broadcast_pin,HIGH);
      delay(200);
      digitalWrite(broadcast_pin,LOW);
      delay(300);    
+     Serial.flush();
 }
 
 void checkNbradcastUsage() {
@@ -513,7 +500,6 @@ void checkNbradcastUsage() {
       previousMillis = millis();   // update time
       
       // display current values to the screen
-      Serial.print( "\n" );
       // output sigma or variation values associated with the inputValue itsel
 //      Serial.print( "\tsigma: " ); Serial.print( inputStats.sigma() );
       // convert signal sigma value to current in amps
