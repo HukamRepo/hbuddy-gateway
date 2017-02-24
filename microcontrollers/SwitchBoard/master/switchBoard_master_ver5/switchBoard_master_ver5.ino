@@ -163,7 +163,7 @@ void loop() {
     }
     
   updateCloud();
-  checkNbradcastUsage();
+//  checkNbradcastUsage();
  
 }  // --(end main loop)--
 
@@ -377,6 +377,7 @@ String check_asst_master_digital_serial(String toSend) {
   delay(5);
   if (asst_master_digital_serial.available()) {
     String d = asst_master_digital_serial.readString(); 
+//    asst_master_digital_serial.readBytes(cb,1);
     asst_master_digital_serial.flush(); 
     d.trim();  
     cb[0] = d[0];
@@ -492,7 +493,7 @@ void checkNbradcastUsage() {
   RunningStatistics inputStats;                 // create statistics to look at the raw test signal
   inputStats.setWindowSecs( windowLength );
    
-//  while( true ) {   
+  while( true ) {   
     sensorValue = analogRead(A0);  // read the analog in value:
     inputStats.input(sensorValue);  // log to Stats function
         
@@ -510,7 +511,9 @@ void checkNbradcastUsage() {
       usage += ", \"unit\":\"W\" }}";
       broadcastMsg(usage);
      }
-//  } 
+  }
+
+  
 }
 //NONE
 //*********( THE END )***********
