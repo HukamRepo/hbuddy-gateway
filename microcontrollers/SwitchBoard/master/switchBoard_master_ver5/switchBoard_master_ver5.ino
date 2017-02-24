@@ -163,7 +163,7 @@ void loop() {
     }
     
   updateCloud();
-//  checkNbradcastUsage();
+  checkNbradcastUsage();
  
 }  // --(end main loop)--
 
@@ -492,7 +492,7 @@ void checkNbradcastUsage() {
   RunningStatistics inputStats;                 // create statistics to look at the raw test signal
   inputStats.setWindowSecs( windowLength );
    
-  while( true ) {   
+//  while( true ) {   
     sensorValue = analogRead(A0);  // read the analog in value:
     inputStats.input(sensorValue);  // log to Stats function
         
@@ -510,9 +510,7 @@ void checkNbradcastUsage() {
       usage += ", \"unit\":\"W\" }}";
       broadcastMsg(usage);
      }
-  }
-
-  
+//  } 
 }
 //NONE
 //*********( THE END )***********
