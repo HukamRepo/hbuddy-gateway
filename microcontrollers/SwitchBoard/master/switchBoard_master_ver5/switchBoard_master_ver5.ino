@@ -20,7 +20,7 @@
 
 #define broadcast_pin 7  // led for check
 
-static int boardIdBaseAddress = 0;
+static int boardIdBaseAddress = 0 ;
 static int timer = 0;
 static byte b5 = 0;
 static byte b6 = 0;
