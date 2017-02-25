@@ -7,7 +7,6 @@
  */
 
 #include <EEPROM.h>
-//#include <JeeLib.h>
 #define echoPin 7 // Echo Pin
 #define trigPin 8 // Trigger Pin
 #define LEDPin 13 // Onboard LED
@@ -65,7 +64,7 @@ void setup()
 {
   Serial.begin (9600);
   setupEeprom();
-  uniqueId = "WT-" +(String(b5) + String(b6) + String(b7) + String(b8));
+  uniqueId = "SNB-" +(String(b5) + String(b6) + String(b7) + String(b8));
   pinMode(trigPin, OUTPUT);
   pinMode(echoPin, INPUT);
   pinMode(LEDPin, OUTPUT); // Use LED indicator (if required)
@@ -91,7 +90,7 @@ void loop() {
  //Calculate the distance (in cm) based on the speed of sound.
  distance = duration/58.2;
  if (distance <= maximumRange && distance >= minimumRange){
-     String val = "{\"type\":\"watertank\", \"uniqueId\":\""+uniqueId+"\", \"data\": {\"distance\":" +String(distance)+"}}";
+     String val = "{\"type\":\"sensor_board\", \"uniqueId\":\""+uniqueId+"\", \"data\": {\"distance\":" +String(distance)+"}}";
      Serial.println( val );
      digitalWrite(LEDPin, HIGH);
      delay(500);
@@ -99,7 +98,7 @@ void loop() {
      delay(500);
  }else{
 //    Serial.println( distance );
-     String val = "{\"type\":\"watertank\", \"uniqueId\":\""+uniqueId+"\", \"data\": {\"distance\":" +String(distance)+"}}";
+     String val = "{\"type\":\"sensor_board\", \"uniqueId\":\""+uniqueId+"\", \"data\": {\"distance\":" +String(distance)+"}}";
      Serial.println( val );
     digitalWrite(LEDPin, LOW);
  }
@@ -109,4 +108,3 @@ delay(delayInSec * 1000);
 //Sleepy::loseSomeTime(delayInSec * 1000);
 
 }
-
