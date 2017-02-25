@@ -23,11 +23,11 @@ module.exports = function(appConfig) {
 			  });
 			  serialPort.on("open", function () {
 			    serialPort.on('data', function(data) {
-			      console.log('data received: ' + data);
+			      console.log('\n\ndata received: ' + data);
 			      if(!data || data.trim() == ""){
 			    	  console.log("Empty Data Received: >>>> ", data);
 			      }else{
-			    	  methods.handleDataOnSerialPort(data);
+			    	//  methods.handleDataOnSerialPort(data);
 			      }
 			    });
 			  });
