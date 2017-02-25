@@ -481,6 +481,10 @@ String check_asst_master_analog_serial(String toSend) {
 }
 
 void broadcastMsg(String msg) {
+     Serial.println(" ");
+     delay(10);     
+     Serial.println(" ");
+     delay(10);
      Serial.println(msg);     
      digitalWrite(broadcast_pin,HIGH);
      delay(200);

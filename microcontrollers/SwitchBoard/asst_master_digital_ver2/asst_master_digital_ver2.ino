@@ -113,21 +113,12 @@ void setup() {
 void loop() {
   
   mySerial.listen();
-  setSwiches_button();
+  setSwiches();
   delay(100);  
   mySerial.listen();
-  setSwiches();
+  setSwiches_button();
   delay(100);
 
-/*  
-   digitalWrite(sw_a,!digitalRead(sw_a));
-   digitalWrite(sw_b,!digitalRead(sw_b));
-   digitalWrite(sw_c,!digitalRead(sw_c));
-   digitalWrite(sw_d,!digitalRead(sw_d));
-   digitalWrite(sw_e,!digitalRead(sw_e));
-   digitalWrite(sw_f,!digitalRead(sw_f));
-   delay(1000);
-  */ 
 }  
 
 void setSwiches_button() {
@@ -139,72 +130,92 @@ void setSwiches_button() {
   stateHandler_f = digitalRead(handler_f); 
   mySerial.listen();
   if(stateHandler_a == LOW) {
-     digitalWrite(sw_a,!digitalRead(sw_a));
+     delay(20);
      state = digitalRead(sw_a);
-     if(state == 1) {
+     delay(20);
+     digitalWrite(sw_a,!state); 
+     delay(20);   
+     mySerial.println("check1");
+     if(state == 0) {
       mySerial.println(a_ON);
      }
-     if(state == 0) {
+     if(state == 1) {
       mySerial.println(a_OFF);
      }
      delay(debounceDelay);
   }
   
   if(stateHandler_b == LOW) {
-    digitalWrite(sw_b,!digitalRead(sw_b));
-    state = digitalRead(sw_b);    
-     if(state == 1) {
+    delay(20);
+    state = digitalRead(sw_b);
+    delay(20);
+    digitalWrite(sw_b,!state);    
+    delay(20);   
+    mySerial.println("check2");
+     if(state == 0) {
       mySerial.println(b_ON);
      }
-     if(state == 0) {
+     if(state == 1) {
       mySerial.println(b_OFF);
      }
     delay(debounceDelay);    
   }
 
-  if(stateHandler_d == LOW) {
-     digitalWrite(sw_c,!digitalRead(sw_c));
+  if(stateHandler_c == LOW) {
+     delay(20);
      state = digitalRead(sw_c);
-     if(state == 1) {
+     delay(20);
+     digitalWrite(sw_c,!state);     
+     delay(20);
+     if(state == 0) {
       mySerial.println(c_ON);
      }
-     if(state == 0) {
+     if(state == 1) {
       mySerial.println(c_OFF);
      }
      delay(debounceDelay);
   }
   
-  if(stateHandler_c == LOW) {
-     digitalWrite(sw_d,!digitalRead(sw_d));
+  if(stateHandler_d == LOW) {
+     delay(20);
      state = digitalRead(sw_d);
-     if(state == 1) {
+     delay(20);
+     digitalWrite(sw_d,!state);
+     delay(20);
+     if(state == 0) {
       mySerial.println(d_ON);
      }
-     if(state == 0) {
+     if(state == 1) {
       mySerial.println(d_OFF);
      }
      delay(debounceDelay);
   }
   
   if(stateHandler_e == LOW) {
-     digitalWrite(sw_e,!digitalRead(sw_e));
+     delay(20);
      state = digitalRead(sw_e);
-     if(state == 1) {
+     delay(20);
+     digitalWrite(sw_e,!state);
+     delay(20);
+     if(state == 0) {
       mySerial.println(e_ON);
      }
-     if(state == 0) {
+     if(state == 1) {
       mySerial.println(e_OFF);
      }
      delay(debounceDelay);
   }
   
   if(stateHandler_f == LOW) {
-     digitalWrite(sw_f,!digitalRead(sw_f));
+     delay(20);
      state = digitalRead(sw_f);
-     if(state == 1) {
+     delay(20);
+     digitalWrite(sw_f,!state);     
+     delay(20);
+     if(state == 0) {
       mySerial.println(f_ON);
      }
-     if(state == 0) {
+     if(state == 1) {
       mySerial.println(f_OFF);
      }
      delay(debounceDelay);
@@ -218,6 +229,7 @@ void setSwiches() {
    delay(1);
    String msg;
    mySerial.readBytes(cb,1);
+   delay(30);
    switch(cb[0]) {
      case 'a':
             state_a = HIGH;     
