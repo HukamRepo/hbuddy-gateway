@@ -2,6 +2,7 @@
 var SerialPort = require("serialport");
 var usbPort = "/dev/ttyUSB0";
 var commonHandler = require('../handlers/commonHandler')();
+var ibmIoTHandler = require('../handlers/ibmIoTHandler')();
 var CONFIG = require('../config/config').get();
 var serialPort;
 
@@ -79,7 +80,7 @@ module.exports = function(appConfig) {
 			deviceWithData.data.ts = timeNow;
 			deviceWithData.data.gatewayId = global.gatewayInfo.gatewayId;
 			if(methods.publishRequired(deviceWithData)){
-				methods.publishMessage(deviceWithData);
+//				methods.publishMessage(deviceWithData);
 			}
 		}catch(err){
 			console.log('ERROR IN handleDataOnSerialPort: >>> ', err);
@@ -148,7 +149,7 @@ module.exports = function(appConfig) {
 			 console.log('\n\n<<<<<< IN publishMessage >>>>>>>>> myData: ', JSON.stringify(deviceWithData));
 
 			 if(!appClient){
-				 methods.connectToIBMCloud(function(appclient){
+				 ibmIoTHandler.connectToIBMCloud(function(appclient){
 						appClient = appclient;
 						appClient.publishDeviceEvent(CONFIG.GATEWAY_TYPE, global.gatewayInfo.gatewayId, "cloud", "json", sensorData);
 					});
