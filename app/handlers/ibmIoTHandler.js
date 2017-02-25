@@ -24,7 +24,7 @@ module.exports = function(appConfig, serialportHandler) {
 			appClient.connect();
 		}
 	  //setting the log level to 'trace'
-		appClient.log.setLevel('trace');
+//		appClient.log.setLevel('trace');
 
 	    appClient.on("connect", function () {
 	    	console.log('<<<<<<< IBM IoT Cloud Connected Successfully >>>>>> \n\n');
