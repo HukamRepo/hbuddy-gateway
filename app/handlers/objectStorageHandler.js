@@ -1,11 +1,7 @@
 
 var CONFIG = require('../config/config').get();
 
-var localDBHandler = require('../handlers/localDBHandler')();
-var commonHandler = require('../handlers/commonHandler')();
 var fs = require('fs');
-
-var cloudant = require('cloudant')(CONFIG.SERVICES_CONFIG.cloudantNOSQLDB.url);
 
 var pkgcloud = require('pkgcloud'),
 osConfig = {

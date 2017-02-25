@@ -89,36 +89,42 @@ module.exports = function(appConfig) {
 	methods.publishRequired = function(deviceWithData){
 		console.log("IN publishRequired: >>> ", deviceWithData);
 		
-		//TODO: Remove below return... Added for testing
-		return false;
-
-		if(deviceWithData.d && deviceWithData.d.boardID){
-			deviceWithData.d.boardId = deviceWithData.d.boardID;
-			delete deviceWithData.d["boardID"];
+		// BELOW IS THE FORMAT OF DATA RECEIVED FROM MASTER SWITCH BOARD
+		// "{"type":"switch_board", "uniqueId":"SWB-AB00-11-22-33", "data": {"deviceId":1, "deviceValue": 1, "analogValue": 5}}";
+		
+		if(!deviceWithData || !deviceWithData.uniqueId || !deviceWithData.type || !deviceWithData.data){
+			console.log("INVALID deviceWithData to Publish ", deviceWithData);
+			return false;
+		}
+		
+		if(deviceWithData.type == "switch_board" && deviceWithData.data.deviceIndex){
 			return true;
-		}else{
+		}		
+		
+		for (var dataKey in deviceWithData.data) {
 			if(appConfig.PUBLISH_CONFIG){
 				var sensorsConf = appConfig.PUBLISH_CONFIG.sensors;
-				console.log("sensorsConf: >>>> ", sensorsConf);
+				console.log("sensorsConf: >>>> ", sensorsConf, ", deviceWithData: >> ", deviceWithData);
 				if(sensorsConf && sensorsConf.length > 0){
 					for(var i = 0; i < sensorsConf.length; i++){
 						sensorConf = sensorsConf[i];
-						console.log("sensorConf: >>> ", sensorConf);
-						var _initial = lastPublishTime[sensorConf];
-						_final = new Date();
-						if(_initial){
-							var seconds = (_final - _initial)/1000;
-							if(seconds >= sensorConf.publishAfter){
-								lastPublishTime[sensorConf] = _final;
-								console.log("\n\nPUBLISH DATA FOR: >>> ", deviceWithData);
-								return true;
+						if(dataKey == sensorConf.type){
+							var _initial = lastPublishTime[sensorConf];
+							_final = new Date();
+							if(_initial){
+								var seconds = (_final - _initial)/1000;
+								if(seconds >= sensorConf.publishAfter){
+									lastPublishTime[sensorConf] = _final;
+									console.log("\n\nPUBLISH DATA FOR: >>> ", deviceWithData);
+									return true;
+								}else{
+									console.log("DO NOT PUBLISH YET: >>> ", seconds);
+									return false;
+								}
 							}else{
-								console.log("DO NOT PUBLISH YET: >>> ", seconds);
-								return false;
+								lastPublishTime[sensorConf] = _final;
+								return true;
 							}
-						}else{
-							lastPublishTime[sensorConf] = _final;
-							return true;
 						}
 					}
 				}

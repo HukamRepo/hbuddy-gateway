@@ -119,7 +119,7 @@ unsigned long previousMillis = 0;
 void setup() {
   Serial.begin(9600); 
   setupEeprom();
-  uniqueId = "SB-" +(String(b5) + String(b6) + String(b7) + String(b8));
+  uniqueId = "SWB-" +(String(b5) + String(b6) + String(b7) + String(b8));
   while (!Serial) {
     ; // wait for serial port to connect. Needed for native USB port only
   }  
@@ -171,7 +171,7 @@ void loop() {
 // function to return status of all switches in Board
 String getStatusOfBoard() {
   String state;
-   state += "{UID:";
+   state += "{uniqueId:";
    state += uniqueId;
    state += ",state:{1:";
    state += swState_1;
