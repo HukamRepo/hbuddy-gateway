@@ -62,6 +62,9 @@ var methods = {};
   	
 	methods.uploadContent = function(contentFolder){
 		fs.readdir(contentFolder, (err, files) => {
+			if(!files){
+				return false;
+			}
 			  files.forEach(file => {
 			    console.log(file);
 			    var uploadReq = {
