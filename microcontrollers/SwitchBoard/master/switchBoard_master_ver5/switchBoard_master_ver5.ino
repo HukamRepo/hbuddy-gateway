@@ -312,26 +312,18 @@ void updateSwitches(String cmd_s) {
 void updateCloud() {
  // Serial.println("<<<IN updateCloud() method>>> ");
 
-  String toSend = "{\"type\":\"switch_board\", \"uniqueId\":\""+uniqueId+"\", \"data\": {";
+   check_asst_master_digital_serial();
 
-  toSend.trim();
+//   check_asst_master_analog_serial();
 
-  toSend = check_asst_master_digital_serial(toSend);
-
-//  toSend = check_asst_master_analog_serial(toSend);
-
-  toSend.trim();
-
-    if (change) { 
-      broadcastMsg(toSend);
-      change = false;
-    }
 }
 
 
-String check_asst_master_digital_serial(String toSend) { 
- char cb[1];  // to store the command  
- asst_master_digital_serial.listen();
+void check_asst_master_digital_serial() { 
+  String toSend = "{\"type\":\"switch_board\", \"uniqueId\":\""+uniqueId+"\", \"data\": {";
+  toSend.trim();
+  char cb[1];  // to store the command  
+  asst_master_digital_serial.listen();
   
   if (asst_master_digital_serial.available()) {
       delay(1);
@@ -401,12 +393,12 @@ String check_asst_master_digital_serial(String toSend) {
       default: 
       toSend = " "+cb[0];      
      }
-    change_digital = true; 
-    change = true;  
+
+     toSend.trim();
+     broadcastMsg(toSend);
 
     }
-
-    return toSend;  
+ 
   }
 
 
