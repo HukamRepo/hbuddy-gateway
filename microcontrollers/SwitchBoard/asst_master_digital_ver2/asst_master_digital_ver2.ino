@@ -15,13 +15,6 @@ The node react as per the command sent to it
 
 SoftwareSerial mySerial (rxPin,txPin);
 
-char cb[1];  // to store the command
-/*
-const String a_ON  = "1";
-const String a_OFF = "2";
-const String b_ON  = "3";
-const String b_OFF = "4";
-*/
 const String a_ON  = "A";
 const String a_OFF = "B";
 const String b_ON  = "C";
@@ -115,7 +108,7 @@ void loop() {
   mySerial.listen();
   setSwiches();
   delay(100);  
-  mySerial.listen();
+//  mySerial.listen();
   setSwiches_button();
   delay(100);
 
@@ -128,14 +121,10 @@ void setSwiches_button() {
   stateHandler_d = digitalRead(handler_d);
   stateHandler_e = digitalRead(handler_e);
   stateHandler_f = digitalRead(handler_f); 
-  mySerial.listen();
+
   if(stateHandler_a == LOW) {
-     delay(20);
      state = digitalRead(sw_a);
-     delay(20);
      digitalWrite(sw_a,!state); 
-     delay(20);   
-     mySerial.println("check1");
      if(state == 0) {
       mySerial.println(a_ON);
      }
@@ -146,12 +135,8 @@ void setSwiches_button() {
   }
   
   if(stateHandler_b == LOW) {
-    delay(20);
     state = digitalRead(sw_b);
-    delay(20);
     digitalWrite(sw_b,!state);    
-    delay(20);   
-    mySerial.println("check2");
      if(state == 0) {
       mySerial.println(b_ON);
      }
@@ -162,11 +147,8 @@ void setSwiches_button() {
   }
 
   if(stateHandler_c == LOW) {
-     delay(20);
      state = digitalRead(sw_c);
-     delay(20);
      digitalWrite(sw_c,!state);     
-     delay(20);
      if(state == 0) {
       mySerial.println(c_ON);
      }
@@ -177,11 +159,8 @@ void setSwiches_button() {
   }
   
   if(stateHandler_d == LOW) {
-     delay(20);
      state = digitalRead(sw_d);
-     delay(20);
      digitalWrite(sw_d,!state);
-     delay(20);
      if(state == 0) {
       mySerial.println(d_ON);
      }
@@ -192,11 +171,8 @@ void setSwiches_button() {
   }
   
   if(stateHandler_e == LOW) {
-     delay(20);
      state = digitalRead(sw_e);
-     delay(20);
      digitalWrite(sw_e,!state);
-     delay(20);
      if(state == 0) {
       mySerial.println(e_ON);
      }
@@ -207,11 +183,8 @@ void setSwiches_button() {
   }
   
   if(stateHandler_f == LOW) {
-     delay(20);
      state = digitalRead(sw_f);
-     delay(20);
      digitalWrite(sw_f,!state);     
-     delay(20);
      if(state == 0) {
       mySerial.println(f_ON);
      }
@@ -224,7 +197,7 @@ void setSwiches_button() {
 }
 
 void setSwiches() {
-
+ char cb[1];  // to store the command
  if(mySerial.available()) {
    delay(1);
    String msg;
@@ -293,11 +266,7 @@ void setSwiches() {
             break;     
     }
 
-//      sendBack(msg);
-   }  
+  }  
 }
 
-void sendBack(String mesg) {
-    mySerial.println(mesg);  
-}
 

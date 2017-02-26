@@ -227,18 +227,10 @@ int* checkCommand(String command) {
     return cmdForDevice;
 }
 
-void mgCmd(char task[]) {
-//  Serial.println(task);
-}
-
-
 // function to update switches
 void updateSwitches(String cmd_s) {
 //  Serial.println("<<<IN updateSwitch() method>>> ");
   int l=0;
-  for(int k=0;k<cmd_s.length();k++) {
-    
-  }
   int switchNo = cmd_s[cmdForDevice[0]]-'0';
   int switchValue = cmd_s[cmdForDevice[1]]-'0';
 
@@ -319,70 +311,34 @@ void updateSwitches(String cmd_s) {
 
 void updateCloud() {
  // Serial.println("<<<IN updateCloud() method>>> ");
-  boolean check_digital = true;
-  boolean check_analog = true;
 
   String toSend = "{\"type\":\"switch_board\", \"uniqueId\":\""+uniqueId+"\", \"data\": {";
-//  String toSend = "{\"d\":{\"uniqueId\":\"";
+
   toSend.trim();
-  char data[24];
 
-      if(check_digital) {
-        toSend = check_asst_master_digital_serial(toSend);
-        check_digital = false;
-//        delay(5);
-      }
+  toSend = check_asst_master_digital_serial(toSend);
 
-      if(check_analog) {
-        toSend = check_asst_master_analog_serial(toSend);
-        check_analog = false;
-//        delay(5);
-      }
+//  toSend = check_asst_master_analog_serial(toSend);
 
-     toSend.trim();
-    
-/*   
-    if (!change_digital && !change_analog) {      
-      Serial.println("Change in Analog_node");  
-      toSend = check_asst_master_analog_serial(toSend);
-      toSend.trim();
-    }
- */  
- // if (change_digital || change_analog ) { 
-     if (change) { 
+  toSend.trim();
+
+    if (change) { 
       broadcastMsg(toSend);
-     change = false;
+      change = false;
     }
-/*
-     if (change_analog) {
-     Serial.println(toSend);
-     digitalWrite(broadcast_pin,HIGH);
-     delay(500);
-     digitalWrite(broadcast_pin,LOW);
-     delay(500);    
-    }
-*/    
-//    asst_master_digital_serial.flush();
-//    asst_master_analog_serial.flush();
-                      
-    change_digital = false;
-    change_analog = false;
-    
 }
 
 
 String check_asst_master_digital_serial(String toSend) { 
  char cb[1];  // to store the command  
-  asst_master_digital_serial.listen();
-  delay(5);
+ asst_master_digital_serial.listen();
+  
   if (asst_master_digital_serial.available()) {
-    String d = asst_master_digital_serial.readString(); 
-//    asst_master_digital_serial.readBytes(cb,1);
-    asst_master_digital_serial.flush(); 
-    d.trim();  
-    cb[0] = d[0];
+      delay(1);
+      asst_master_digital_serial.readBytes(cb,1);
+      delay(30);
 
-    switch (d[0]) {
+    switch (cb[0]) {
       case 'A':
         toSend += "\"deviceIndex\":1,\"deviceValue\":1}}";
         swState_1 = 1;
@@ -442,13 +398,15 @@ String check_asst_master_digital_serial(String toSend) {
         toSend += "\"deviceIndex\":6,\"deviceValue\":0}}";
         swState_6 = 0;
         break;
-      default:      
-      toSend += "\"deviceIndex\":-1,\"deviceValue\":-1}}";      
+      default: 
+      toSend = " "+cb[0];      
      }
     change_digital = true; 
-    change = true;   
+    change = true;  
+
     }
-  return toSend;  
+
+    return toSend;  
   }
 
 
@@ -458,11 +416,10 @@ String check_asst_master_analog_serial(String toSend) {
  char cb[3];  // to store the command  
 //  asst_master_digital_serial.listen();
   asst_master_analog_serial.listen();
-      delay(4);
-  if (asst_master_analog_serial.available()>0) {
+  if (asst_master_analog_serial.available()) {
+      delay(1);
       String action = asst_master_analog_serial.readString();
-      asst_master_analog_serial.flush();
-      delay(3);
+      delay(30);
      // toSend += "\"deviceIndex\":5,\"deviceValue\":0}}";
       
       toSend += "\"deviceIndex\":";
@@ -481,10 +438,6 @@ String check_asst_master_analog_serial(String toSend) {
 }
 
 void broadcastMsg(String msg) {
-     Serial.println(" ");
-     delay(10);     
-     Serial.println(" ");
-     delay(10);
      Serial.println(msg);     
      digitalWrite(broadcast_pin,HIGH);
      delay(200);
@@ -497,7 +450,6 @@ void checkNbradcastUsage() {
   RunningStatistics inputStats;                 // create statistics to look at the raw test signal
   inputStats.setWindowSecs( windowLength );
    
-  while( true ) {   
     sensorValue = analogRead(A0);  // read the analog in value:
     inputStats.input(sensorValue);  // log to Stats function
         
@@ -515,10 +467,9 @@ void checkNbradcastUsage() {
       usage += ", \"unit\":\"W\" }}";
       broadcastMsg(usage);
      }
-  }
-
   
 }
+
 //NONE
 //*********( THE END )***********
 
