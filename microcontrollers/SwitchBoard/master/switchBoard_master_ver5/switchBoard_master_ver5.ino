@@ -131,18 +131,14 @@ void setup() {
       pinMode(rxPin_asst_analog, INPUT);
       pinMode(txPin_asst_analog, OUTPUT);
         
-  asst_master_analog_serial.begin(9600);
   asst_master_digital_serial.begin(9600);
+  asst_master_analog_serial.begin(9600);
   
 }
 
 void loop() {
-
   //  Serial.println("in loop..");
-  
-    if ( Serial.available() )
-    {
-
+    if ( Serial.available() ) {
       // Read the data payload until we've received everything
       String command;
       command = Serial.readString();
@@ -151,18 +147,14 @@ void loop() {
            updateSwitches(command);  
       }
       else {
-        
         Serial.println("Sorry wrong board : ");            
-
       }
-         
     }
-    else
-    {
-          //
-    }
+
+    //UPDATING CLOUD
+    check_asst_master_digital_serial();
+    check_asst_master_analog_serial();
     
-  updateCloud();
 //  checkNbradcastUsage();
  
 }  // --(end main loop)--
@@ -309,15 +301,6 @@ void updateSwitches(String cmd_s) {
 
 }
 
-void updateCloud() {
- // Serial.println("<<<IN updateCloud() method>>> ");
-
-   check_asst_master_digital_serial();
-
-//   check_asst_master_analog_serial();
-
-}
-
 
 void check_asst_master_digital_serial() { 
   String toSend = "{\"type\":\"switch_board\", \"uniqueId\":\""+uniqueId+"\", \"data\": {";
@@ -402,31 +385,27 @@ void check_asst_master_digital_serial() {
   }
 
 
-String check_asst_master_analog_serial(String toSend) { 
- String d; 
- int i = 0;
- char cb[3];  // to store the command  
-//  asst_master_digital_serial.listen();
-  asst_master_analog_serial.listen();
+void check_asst_master_analog_serial() { 
+  String analogData = "{\"type\":\"switch_board\", \"uniqueId\":\""+uniqueId+"\", \"data\": {";
+  analogData.trim();
+ // asst_master_analog_serial.listen();
   if (asst_master_analog_serial.available()) {
+    
       delay(1);
       String action = asst_master_analog_serial.readString();
       delay(30);
-     // toSend += "\"deviceIndex\":5,\"deviceValue\":0}}";
+      analogData += "\"deviceIndex\":";
+      analogData += action[0];
+      analogData += ",\"deviceValue\":";
+      analogData += action[2];
+      analogData += ",\"analogValue\":";
+      analogData += action[4];
+      analogData += "}}";      
       
-      toSend += "\"deviceIndex\":";
-      toSend += action[0];
-      toSend += ",\"deviceValue\":";
-      toSend += action[2];
-      toSend += ",\"analogValue\":";
-      toSend += action[4];
-      toSend += "}}";      
-      change_analog = true;    
-      change = true;     
+     analogData.trim();
+     broadcastMsg(analogData);    
  }
  
- return toSend;  
-
 }
 
 void broadcastMsg(String msg) {
