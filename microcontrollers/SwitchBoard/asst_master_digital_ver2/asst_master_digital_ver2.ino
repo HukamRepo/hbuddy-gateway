@@ -11,7 +11,7 @@ The node react as per the command sent to it
 #include <SoftwareSerial.h>
 
 #define rxPin 10
-#define txPin 11
+#define txPin  11
 
 SoftwareSerial mySerial (rxPin,txPin);
 

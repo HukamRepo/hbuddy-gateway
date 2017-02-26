@@ -15,7 +15,7 @@
 #define rxPin_asst_digital 5
 #define txPin_asst_digital 6
 
-#define rxPin_asst_analog 2
+#define rxPin_asst_analog  2
 #define txPin_asst_analog 4
 
 #define broadcast_pin 7  // led for check
