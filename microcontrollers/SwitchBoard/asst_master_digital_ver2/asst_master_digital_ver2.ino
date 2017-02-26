@@ -30,8 +30,8 @@ const String f_OFF = "L";
 
 int sw_a = 9;
 int sw_b = 8;
-int sw_c = 7;
-int sw_d = 6;
+int sw_c = 6;
+int sw_d = 7;
 int sw_e = 5;
 int sw_f = 4;
 
