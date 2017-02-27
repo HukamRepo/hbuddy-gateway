@@ -128,3 +128,23 @@ Offline STT: https://wolfpaulus.com/journal/embedded/raspberrypi2-sr/
 sudo apt-get install alsa-base alsa-utils
 aplay -l
 alsamixer
+
+---------------------
+
+XBEE CONFIGURATION
+
+CORDINATOR:
+Channel: C
+ID PAN ID: 101
+DH: 0
+DL (High): 0
+DL (Low): 0
+Scan Channel: 7FFF
+SD Scan Duration: 4
+SM Sleep Mode: No Sleep [0]
+
+
+
+
+
+

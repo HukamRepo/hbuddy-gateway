@@ -18,6 +18,7 @@ module.exports = function(app) {
     
     app.post('/api/config/internetConfiguration', showClientRequest, configEndpoint.internetConfiguration);
     app.post('/api/command', gatewayEndpoint.handleCommand);
+    
     app.post('/api/camera', gatewayEndpoint.cameraWebhook);
     
     app.post('/api/stt/start', showClientRequest, speechEndpoint.listenCommands);

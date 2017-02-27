@@ -7,7 +7,7 @@ var fs = require('fs');
 const GOOGLE_SPEECH = require('@google-cloud/speech');
 var watson = require('watson-developer-cloud');
 
-var googleKeyPath = require('path').resolve(__dirname, '../config/granslive-cd7fa4ae7894.json');
+var googleKeyPath = require('path').resolve(__dirname, '../config/hukam-774d80cae76d.json');
 var audioFile = "output.raw";
 //var recordingsPath = require('path').resolve(__dirname, '../recordings');
 var recordingsPath = "/tmp";//TODO: Change this later
@@ -15,7 +15,7 @@ var recordingsPath = "/tmp";//TODO: Change this later
 var hotwordsFilePath = require('path').resolve(__dirname, '../resources/hotwords/heyBuddy.pmdl');
 const VoiceOffline = require(require('path').resolve(__dirname, '../utils/voiceoffline.js'));
 var speech = GOOGLE_SPEECH({
-  projectId: 'granslive',
+  projectId: 'hukam-157906',
   keyFilename: googleKeyPath
 });
 
