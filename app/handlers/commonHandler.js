@@ -12,8 +12,8 @@ var methods = {};
 		    var cont_array = content.split("\n");
 		    var serial_line = cont_array[cont_array.length-2];
 		    var serial = serial_line.split(":");
-//		    return serial[1].slice(1);
-		    return "GG-000-000-001";
+		    return serial[1].slice(1);
+//		    return "GG-000-000-001";
 		}catch(err){
 			return "GG-000-000-001";
 		}

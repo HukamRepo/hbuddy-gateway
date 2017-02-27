@@ -96,6 +96,12 @@ if [ ! -d "tools" ]; then
 fi
 
 cd tools
+
+sudo apt-get install python3
+sudo apt-get install python-pyaudio python3-pyaudio sox
+sudo pip install pyaudio
+sudo apt-get install libatlas-base-dev
+
 if [ $(program_is_installed node) == 0 ]; then
 	echo "<<<< GOING TO INSTALL NODEJS INSIDE hukam/tools DIRECTORY >>>>>"
 	#wget https://nodejs.org/dist/v4.3.2/node-v4.3.2-linux-armv6l.tar.gz
@@ -131,16 +137,11 @@ else
 	sudo git reset --hard origin/master
 fi
 
-sudo apt-get install python3
-sudo apt-get install python-pyaudio python3-pyaudio sox
-sudo pip install pyaudio
-sudo apt-get install libatlas-base-dev
-	
 sudo cp app/resources/init.d/.asoundrc ~/.asoundrc
 	
 sudo npm install -g node-gyp
 sudo npm install -g node-pre-gyp
-sudo npm install --unsafe-perm serialport
+sudo npm install --unsafe-perm -g serialport
 
 sudo npm update
 sudo bower --allow-root install
