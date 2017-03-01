@@ -111,7 +111,7 @@ float intercept = -0.0000; // to be adjusted based on calibration testing
 float slope = 0.0657; // to be adjusted based on calibration testing
 float current_amps; // estimated actual current in amps
 
-unsigned long printPeriod = 2000; // in milliseconds
+unsigned long printPeriod = 10000; // in milliseconds
 // Track time in milliseconds since last reading 
 unsigned long previousMillis = 0;
 
@@ -155,7 +155,7 @@ void loop() {
     check_asst_master_digital_serial();
     check_asst_master_analog_serial();
     
-//  checkNbradcastUsage();
+  checkNbradcastUsage();
  
 }  // --(end main loop)--
 
