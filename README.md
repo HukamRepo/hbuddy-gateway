@@ -1,6 +1,6 @@
-# Granslive IoT Gateway
+# Hukam - hBuddy IoT Gateway
 
-A Node application which makes connecting your GransLive Gateway (RaspberryPi 3) to your home wifi easier
+A Node application which makes connecting your Hukam Gateway (RaspberryPi 3) to your home wifi easier
 
 ## Connecting to WiFi?
 
@@ -30,7 +30,7 @@ Once login to your Gateway (rPi):
 Run following command:
 
 ```
-wget https://raw.githubusercontent.com/sinny777/granslive-gateway/master/app/resources/shellscripts/startup.sh
+wget https://raw.githubusercontent.com/sinny777/hukam-gateway/master/app/resources/shellscripts/startup.sh
 ```
 
 ## For updating, pull and replace local
@@ -41,12 +41,12 @@ git reset --hard origin/master
 
 ## Setup the app as a service
 
-There is a startup script included to make the server starting and stopping easier. Do remember that the application is assumed to be installed under `/home/pi/granslive-gateway`. Feel free to change this in the `assets/init.d/granslive-gateway` file.
+There is a startup script included to make the server starting and stopping easier. Do remember that the application is assumed to be installed under `/home/pi/hukam-gateway`. Feel free to change this in the `assets/init.d/hukam-gateway` file.
 
 ```sh
-$sudo cp assets/init.d/granslive-gateway /etc/init.d/granslive-gateway
-$sudo chmod +x /etc/init.d/granslive-gateway
-$sudo update-rc.d granslive-gateway defaults
+$sudo cp assets/init.d/hukam-gateway /etc/init.d/hukam-gateway
+$sudo chmod +x /etc/init.d/hukam-gateway
+$sudo update-rc.d hukam-gateway defaults
 ```
 
 #### Gotchas
@@ -60,7 +60,7 @@ $iw list
 
 If the above says `nl80211 not found.` it means you are running the `rtl871xdrv` driver and probably need to update the `hostapd` binary as follows:
 ```
-$cd granslive-gateway
+$cd hukam-gateway
 $sudo mv /usr/sbin/hostapd /usr/sbin/hostapd.OLD
 $sudo mv app/resources/bin/hostapd.rtl871xdrv hostapd 
 $sudo chmod 755 /usr/sbin/hostapd
@@ -83,22 +83,22 @@ This is approximately what occurs when we run this app:
 
 Typically, I have the following line in my `/etc/rc.local` file:
 ```
-cd /home/pi/granslive-gateway
+cd /home/pi/hukam-gateway
 sudo /usr/bin/node server.js
 ```
 
 Note that this is run in a blocking fashion, in that this script will have to exit before we can proceed with others defined in `rc.local`. This way I can guarantee that other services which might rely on wifi will have said connection before being run. If this is not the case for you, and you just want this to run (if needed) in the background, then you can do:
 
 ```
-cd /home/pi/granslive-gateway
+cd /home/pi/hukam-gateway
 sudo /usr/bin/node server.js < /dev/null &
 ```
 
 ## User Interface
 
-In my config file, I have set up the static ip for my PI when in AP mode to `192.168.44.1` and the AP's broadcast SSID to `granslive-gateway`. These are images captured from my osx dev box.
+In my config file, I have set up the static ip for my PI when in AP mode to `192.168.44.1` and the AP's broadcast SSID to `hukam-gateway`. These are images captured from my osx dev box.
 
-Step 1: Power on Pi which runs this app on startup (assume it is not configured for a wifi connection). Once it boots up, you will see `granslive-gateway` among the wifi connections.  The password is configured in config.json.
+Step 1: Power on Pi which runs this app on startup (assume it is not configured for a wifi connection). Once it boots up, you will see `hukam-gateway` among the wifi connections.  The password is configured in config.json.
 
 <img src="https://raw.githubusercontent.com/sabhiram/public-images/master/raspberry-wifi-conf/wifi_options.png" width="200px" height="160px" />
 
