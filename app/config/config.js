@@ -4,7 +4,7 @@
 module.exports.get = function() {
 		return {
 			"gatewayId": "",
-			"GATEWAY_TYPE": "GransLiveGateway",
+			"GATEWAY_TYPE": "HukamGateway",
 			"CONFIG_FILE_PATH": "/media/pi/USB/configuration.json",
 			"CLOUD_CONFIG": {
 				"org": "o6oosq",
