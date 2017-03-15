@@ -209,7 +209,7 @@ var methods = {};
 		var respMsg = {};
 		try{
 			if(payload.command == 'CONNECT_SENSORS'){
-				sensorsHandler.connectSensors();
+				sensorsHandler.connectSensors(payload);
 			}
 			
 			if(payload.command == 'DISCONNECT_SENSORS'){
