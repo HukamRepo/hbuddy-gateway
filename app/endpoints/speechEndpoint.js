@@ -17,6 +17,7 @@ module.exports = function() {
 			speechHandler.speechToText(function(result){
 				if(!result || result.length > 200){
 					console.log("DO Nothing: >>> ", result);
+					resp.json({"msg": "STARTED"});
 				}else{
 					console.log("STT RESPONSE: >>>", result);				
 					if(result == 'stop' || result == 'stop buddy'){
@@ -26,7 +27,8 @@ module.exports = function() {
 							console.log("ERROR Resp: >>> ", err);
 							resp.status(err.statusCode || 500).json(err);
 						});
-					}								
+					}
+					resp.json({"msg": "STARTED"});
 				}	
 			});
 		}catch(err){
@@ -85,9 +87,10 @@ module.exports = function() {
 		});
 	};
 	
-	methods.stopSTT = function() {
+	methods.stopSTT = function(req, resp) {
 		console.log('IN speechHandler.stopSTT: >> ');   
 		speechHandler.stopSTT();
+		resp.json({"msg": "STOPPED"});
 	};
 	
 

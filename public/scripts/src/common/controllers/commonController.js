@@ -50,8 +50,8 @@ define(function () {
 	    
 	    $rootScope.startSTT = function(){
 	    	console.log('IN startSTT: >>> ');
+	    	$rootScope.speaking = true;
 	    	gatewayService.startSTT().then(function(response) {
-	    		$rootScope.speaking = true;
 	            console.log('\nResponse for startSTT :>>>> ');
 	            console.log(response);
 	           },
@@ -62,8 +62,8 @@ define(function () {
 	    
 	    $rootScope.stopSTT = function(){
 	    	console.log('IN stopSTT: >>> ');
+	    	$rootScope.speaking = false;
 	    	gatewayService.stopSTT().then(function(response) {
-	    		$rootScope.speaking = false;
 	            console.log('\nResponse for stopSTT :>>>> ');
 	            console.log(response);
 	           },
