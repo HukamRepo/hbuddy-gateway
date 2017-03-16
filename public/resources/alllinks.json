@@ -1,0 +1,16 @@
+{
+   "home":[
+      {
+         "label":"Hukam Gateway - hBuddy",
+         "href":"#!/",
+         "target":"_self"
+      }
+   ],
+   "navLinks": [
+       {
+    	   "title": "Configuration",
+    	   "link": "#!/config"
+       }
+                
+    ]
+}

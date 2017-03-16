@@ -18,10 +18,11 @@ define(function (require) {
     commonModule.controller('dashboardController', require('common/controllers/dashboardController'));
     commonModule.controller('configController', require('common/controllers/configController'));
 
-    commonModule.controller('CommonController', ['$rootScope', '$cookies', '$http', function CommonController($rootScope, $cookies, $http){
+    commonModule.controller('CommonController', ['$rootScope', '$cookies', '$http', 'gatewayService', function CommonController($rootScope, $cookies, $http, gatewayService){
 
       $rootScope.currentUser = {};
       $rootScope.footerLinks = [];
+      $rootScope.speaking = false;
       $rootScope.initNavBar = function(){
 	    //  commonService.pageLoadCalls();
 	    };
@@ -40,6 +41,7 @@ define(function (require) {
 
 			$http(req).then(function(jsonResp){
 				$rootScope.allLinks = jsonResp.data;
+				console.log("ALL LINKS: >>> ", $rootScope.allLinks);
 				if(callBack){
 					callBack(jsonResp.data);
 				}
@@ -57,6 +59,30 @@ define(function (require) {
 				$rootScope.currentUser.email = userEmail;
 				console.log('$rootScope.currentUser:>>>>> ', $rootScope.currentUser);
 			}
+	    };
+	    
+	    $rootScope.startSTT = function(){
+	    	$log.info('IN startSTT: >>> ');
+	    	gatewayService.startSTT().then(function(response) {
+	    		$rootScope.speaking = true;
+	            $log.info('\nResponse for startSTT :>>>> ');
+	            $log.info(response);
+	           },
+	           function(error) {
+	               $log.info('ERROR IN startSTT: >>>>>> ' +JSON.stringify(error));
+	           });
+	    };
+	    
+	    $rootScope.stopSTT = function(){
+	    	$log.info('IN stopSTT: >>> ');
+	    	gatewayService.stopSTT().then(function(response) {
+	    		$rootScope.speaking = false;
+	            $log.info('\nResponse for stopSTT :>>>> ');
+	            $log.info(response);
+	           },
+	           function(error) {
+	               $log.info('ERROR IN stopSTT: >>>>>> ' +JSON.stringify(error));
+	           });
 	    };
 
     }]);
@@ -92,7 +118,7 @@ define(function (require) {
   				controllerAs: 'vm',
   				access: { requiredLogin: false }
   			}).
-        otherwise('/config');
+        otherwise('/dashboard');
   	}]);
 
 

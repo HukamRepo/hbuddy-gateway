@@ -24,27 +24,6 @@ define(function () {
            });
     };
     
-    $scope.startSTT = function(){
-    	console.log('IN startSTT: >>> ');
-    	gatewayService.startSTT().then(function(response) {
-            console.log('\nResponse for startSTT :>>>> ');
-            console.log(response);
-           },
-           function(error) {
-               console.log('ERROR IN startSTT: >>>>>> ' +JSON.stringify(error));
-           });
-    };
-    
-    $scope.stopSTT = function(){
-    	console.log('IN stopSTT: >>> ');
-    	gatewayService.stopSTT().then(function(response) {
-            console.log('\nResponse for stopSTT :>>>> ');
-            console.log(response);
-           },
-           function(error) {
-               console.log('ERROR IN stopSTT: >>>>>> ' +JSON.stringify(error));
-           });
-    };
 
   }
   

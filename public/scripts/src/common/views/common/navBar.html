@@ -1,5 +1,5 @@
 
-    <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation" data-ng-init="getAllLinks();">
         <div class="container">
             <div class="navbar-header">
                 <a class="navbar-brand no-underline" href="/"><span class="thin-branding">hBuddy</span> Gateway </a>
@@ -7,12 +7,22 @@
             <div class="float-right">
                 <ul class="nav navbar-nav navbar-right">
                    <li class="dropdown">
-                    <a class="dropdown-toggle" data-toggle="dropdown" href="">Configurations<span class="caret"></span></a>
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="">Admin<span class="caret"></span></a>
                     <ul class="dropdown-menu">
-                      <li data-ng-repeat="navlink in navLinks">
-                      	<a href="{{navlink.link}}" target="_blank" >{{navlink.title}}</a>
+                      <li data-ng-repeat="navlink in allLinks.navLinks">
+                      	<a href="{{navlink.link}}" >{{navlink.title}}</a>
                     </ul>
                   </li>
+                  
+                  <li>
+	                  <a href="javascript:void(0);" data-ng-if="!speaking" data-ng-click="startSTT();">
+	                  	<span class="fa fa-microphone"></span>
+	                  </a>
+	                  <a href="javascript:void(0);" data-ng-if="speaking" data-ng-click="stopSTT();">
+	                  	<span class="fa fa-microphone-slash"></span>
+	                  </a>
+                  </li>
+                  
                 </ul>
             </div>
             <!-- .navbar right-->

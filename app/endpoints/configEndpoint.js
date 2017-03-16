@@ -27,7 +27,7 @@ module.exports = function() {
 
             internetConfiguration: function(req, res){
           	  console.log('\nIN configEndpoint to internetConfiguration >>>>>>>>>>', req.body);
-              var wifi = req.body.wifi;
+              var wifi = req.body;
               var myscript = exec('sh ~/hbuddy/hbuddy-gateway/app/resources/shellscripts/internetconfig.sh '+wifi.ssid +' ' +wifi.password );
                 myscript.stdout.on('data',function(data){
                     console.log(data); // process output will be displayed here

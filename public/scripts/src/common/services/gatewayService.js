@@ -19,6 +19,32 @@ define(['angular'], function (angular) {
           }
       };
       
+      gatewayService.updateWifiConfiguration = function(payload){
+    	  console.log('IN gatewayService.updateWifiConfiguration: >> ', payload);
+          try{
+        	  return $http({
+  	            url: '/api/config/internetConfiguration',
+  	            method: "POST",
+  	            data: payload
+  	        });
+          }catch(err){
+              console.log('Error: >>> ' +JSON.stringify(err));
+          }
+      };
+      
+      gatewayService.processCommand = function(payload){
+    	  console.log('IN gatewayService.processCommand: >> ', payload);
+          try{
+        	  return $http({
+  	            url: '/api/command',
+  	            method: "POST",
+  	            data: payload
+  	        });
+          }catch(err){
+              console.log('Error: >>> ' +JSON.stringify(err));
+          }
+      };
+      
       gatewayService.startSTT = function(){
     	  console.log('IN gatewayService.startSTT: >> ');
           try{
