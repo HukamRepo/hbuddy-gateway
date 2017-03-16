@@ -5,87 +5,18 @@ define(function (require) {
 	config = require('config'),
 	ngRoute = require('angularRoute'),
 	ngStorage = require('angularLocalStorage'),
-//	uiBootstrap = require('ui.bootstrap'),
     commonModule = angular.module('commonModule', ['ngRoute',
                                                    'ngAnimate',
                                                    'LocalStorageModule',
-//                                                   'ui.bootstrap',
                                                    'app.config']);
 
     commonModule.factory('mqttService', require('common/services/mqttService'));
     commonModule.factory('gatewayService', require('common/services/gatewayService'));
 
+    commonModule.controller('commonController', require('common/controllers/commonController'));
     commonModule.controller('dashboardController', require('common/controllers/dashboardController'));
     commonModule.controller('configController', require('common/controllers/configController'));
 
-    commonModule.controller('CommonController', ['$rootScope', '$cookies', '$http', 'gatewayService', function CommonController($rootScope, $cookies, $http, gatewayService){
-
-      $rootScope.currentUser = {};
-      $rootScope.footerLinks = [];
-      $rootScope.speaking = false;
-      $rootScope.initNavBar = function(){
-	    //  commonService.pageLoadCalls();
-	    };
-
-	    $rootScope.allLinks = [];
-
-	    $rootScope.getAllLinks = function(callBack){
-	    	console.log('IN getAllLinks >>>>>>>>>> ');
-	    	var req = {
-	    			 method: 'GET',
-	    			 url: '/resources/alllinks.json',
-	    			 headers: {
-	    			   'Accept': 'application/json'
-	    			 }
-	    			}
-
-			$http(req).then(function(jsonResp){
-				$rootScope.allLinks = jsonResp.data;
-				console.log("ALL LINKS: >>> ", $rootScope.allLinks);
-				if(callBack){
-					callBack(jsonResp.data);
-				}
-			}, function(err){
-				console.log(err);
-			});
-	    };
-
-	    $rootScope.checkCurrentUser = function(){
-	    	var cookies = $cookies.getAll();
-	    	console.log('COOKIES: >>>>>>>', cookies);
-			var userKey = cookies['user_key'];
-			if(userKey){
-				var userEmail = userKey.substring(userKey.lastIndexOf('/')+1);
-				$rootScope.currentUser.email = userEmail;
-				console.log('$rootScope.currentUser:>>>>> ', $rootScope.currentUser);
-			}
-	    };
-	    
-	    $rootScope.startSTT = function(){
-	    	$log.info('IN startSTT: >>> ');
-	    	gatewayService.startSTT().then(function(response) {
-	    		$rootScope.speaking = true;
-	            $log.info('\nResponse for startSTT :>>>> ');
-	            $log.info(response);
-	           },
-	           function(error) {
-	               $log.info('ERROR IN startSTT: >>>>>> ' +JSON.stringify(error));
-	           });
-	    };
-	    
-	    $rootScope.stopSTT = function(){
-	    	$log.info('IN stopSTT: >>> ');
-	    	gatewayService.stopSTT().then(function(response) {
-	    		$rootScope.speaking = false;
-	            $log.info('\nResponse for stopSTT :>>>> ');
-	            $log.info(response);
-	           },
-	           function(error) {
-	               $log.info('ERROR IN stopSTT: >>>>>> ' +JSON.stringify(error));
-	           });
-	    };
-
-    }]);
 
     commonModule.directive('fileModel', require('common/directives/fileModelDirective'));
     commonModule.directive('toggle', require('common/directives/toggleDirective'));
