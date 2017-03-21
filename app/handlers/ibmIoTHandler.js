@@ -14,6 +14,11 @@ module.exports = function(appConfig, serialportHandler) {
 
 	methods.connectToIBMCloud = function(){
 //		checkConnectivity();
+		
+		if(!appConfig){
+			appConfig = CONFIG;
+		}
+		
 		console.log('\n\n<<<<<< IN connectToMqtt >>>>>>>>> ', appConfig.IOT_CONFIG);
 		if(!appClient){
 			appClient = new Client.IotfApplication(appConfig.IOT_CONFIG);
@@ -71,6 +76,9 @@ module.exports = function(appConfig, serialportHandler) {
 
 	methods.broadcastMessage = function(payloadStr){
 //		console.log('IN broadcastMessage: >> payload: ', payloadStr);
+		if(!serialportHandler){
+			console.log("TODO: NEED to Handle This >>>>>>>>");
+		}
 		try{
 			var payload = JSON.parse(payloadStr);
 				if(payload.d && payload.d.boardId && payload.d.deviceIndex){
