@@ -201,15 +201,14 @@ var methods = {};
 				});
 				*/
 //				console.log(" \t >>> ", key+": "+commonHandler.simpleStringify(sensorTags[key]));
-				key = key.split(':').join('')
 				console.log(" \t Data for", key, ": ", JSON.stringify(sensorTags[key].data));
-				
 				var sensorData = {"d": sensorTags[key].data};
+				var deviceId = key.split(':').join('');
 				if(!appClient){
 					appClient = ibmIoTHandler.getAppClient();
-					appClient.publishDeviceEvent("SensorTag", key, "cloud", "json", sensorData);
+					appClient.publishDeviceEvent("SensorTag", deviceId, "cloud", "json", sensorData);
 				 }else{
-					 appClient.publishDeviceEvent("SensorTag", key, "cloud", "json", sensorData);
+					 appClient.publishDeviceEvent("SensorTag", deviceId, "cloud", "json", sensorData);
 				 }
 				
 			}
