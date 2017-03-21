@@ -2,6 +2,7 @@
 var SensorTag = require('../utils/sensorTag/sensortag'),
 commonHandler = require('../handlers/commonHandler')(),
 async = require('async'),
+CONFIG = require('../config/config').get(),
 conf,
 sensorTags = {},
 interval;
