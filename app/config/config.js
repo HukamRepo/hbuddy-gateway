@@ -6,7 +6,7 @@ module.exports.get = function() {
 			"gatewayId": "",
 			"GATEWAY_TYPE": "HukamGateway",
 			"CONFIG_FILE_PATH": "/media/pi/USB/configuration.json",
-			"CLOUD_CONFIG": {
+			"IOT_CONFIG": {
 				"org": "o6oosq",
 			    "id": "a-o6oosq-gwvhfgityg",
 			    "auth-key": "a-o6oosq-gwvhfgityg",
