@@ -206,9 +206,9 @@ var methods = {};
 				var sensorData = {"d": sensorTags[key].data};
 				if(!appClient){
 					appClient = ibmIoTHandler.getAppClient();
-					appClient.publishDeviceEvent(CONFIG.GATEWAY_TYPE, global.gatewayInfo.gatewayId, "cloud", "json", sensorData);
+					appClient.publishDeviceEvent("SensorTag", global.gatewayInfo.gatewayId, "cloud", "json", sensorData);
 				 }else{
-					 appClient.publishDeviceEvent(CONFIG.GATEWAY_TYPE, global.gatewayInfo.gatewayId, "cloud", "json", sensorData);
+					 appClient.publishDeviceEvent("SensorTag", global.gatewayInfo.gatewayId, "cloud", "json", sensorData);
 				 }
 				
 			}
