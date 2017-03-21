@@ -9,8 +9,16 @@ var startTime = new Date();
 var mqttConnected = false;
 
 module.exports = function(appConfig, serialportHandler) {
+	
 
 	var methods = {};
+	
+	methods.getAppClient = function(){
+		if(!appClient){
+			appClient = new Client.IotfApplication(appConfig.IOT_CONFIG);
+		}
+		return appClient;
+	};
 
 	methods.connectToIBMCloud = function(){
 //		checkConnectivity();

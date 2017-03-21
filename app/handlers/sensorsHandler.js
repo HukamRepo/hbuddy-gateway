@@ -1,8 +1,9 @@
 
-var sensortagHandler = require('../handlers/sensortagHandler')();
 var conf;
 
-module.exports = function() {
+module.exports = function(ibmIoTHandler) {
+	
+	var sensortagHandler = require('../handlers/sensortagHandler')(ibmIoTHandler);
     
 var methods = {};
 

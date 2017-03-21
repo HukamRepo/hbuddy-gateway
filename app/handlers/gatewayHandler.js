@@ -5,10 +5,9 @@ localDBHandler = require('../handlers/localDBHandler')(),
 cloudantHandler = require('../handlers/cloudantHandler')(),
 sceneHandler = require('../handlers/sceneHandler')(),
 scheduleHandler = require('../handlers/scheduleHandler')(),
-sensorsHandler = require('../handlers/sensorsHandler.js')(),
-
 serialportHandler = null;
 ibmIoTHandler = null;
+var appConfig;
 
 module.exports = function() {
     
@@ -40,6 +39,7 @@ var methods = {};
 					ibmIoTHandler.connectToIBMCloud(function(appclient){
 						appClient = appclient;
 					});
+					sensorsHandler = require('../handlers/sensorsHandler.js')(ibmIoTHandler);
 					methods.startProcessWithCloud();
 		    	});
 		    } else {
@@ -54,7 +54,6 @@ var methods = {};
 	
 	handleOnline = function(cb){
 		console.log("<<<<<<< INTERNET IS AVAILABLE >>>>>>> ");
-		var appConfig;
 		cloudantHandler.loadConfigurationsFromCloud(true, function(err, configurations){
 			if(err){
 				console.log('ERROR IN FETCHING CONFIGURATIONS: >>>>>> ', err);
@@ -212,6 +211,12 @@ var methods = {};
 	methods.handleSensorCommand = function(payload, cb){
 		var respMsg = {};
 		try{
+			
+			if(!sensorsHandler){
+				console.log("No SensorsHandler, may be Internet is not connected >>>>");
+				return;
+			}
+			
 			if(payload.command == 'CONNECT_SENSORS'){
 				sensorsHandler.connectSensors(payload);
 			}
