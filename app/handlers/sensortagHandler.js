@@ -1,10 +1,12 @@
 
 var SensorTag = require('../utils/sensorTag/sensortag'),
 commonHandler = require('../handlers/commonHandler')(),
+ibmIoTHandler = require('../handlers/ibmIoTHandler')(),
 async = require('async'),
 conf,
 sensorTags = {},
 interval;
+var appClient;
 
 module.exports = function() {
     
@@ -200,6 +202,17 @@ var methods = {};
 				*/
 //				console.log(" \t >>> ", key+": "+commonHandler.simpleStringify(sensorTags[key]));
 				console.log(" \t Data for", key, ": ", JSON.stringify(sensorTags[key].data));
+				
+				var sensorData = {"d": sensorTags[key].data};
+				if(!appClient){
+					 ibmIoTHandler.connectToIBMCloud(function(appclient){
+							appClient = appclient;
+							appClient.publishDeviceEvent(CONFIG.GATEWAY_TYPE, global.gatewayInfo.gatewayId, "cloud", "json", sensorData);
+						});
+				 }else{
+					 appClient.publishDeviceEvent(CONFIG.GATEWAY_TYPE, global.gatewayInfo.gatewayId, "cloud", "json", sensorData);
+				 }
+				
 			}
 		}
 	};

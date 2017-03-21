@@ -6,7 +6,9 @@ cloudantHandler = require('../handlers/cloudantHandler')(),
 sceneHandler = require('../handlers/sceneHandler')(),
 scheduleHandler = require('../handlers/scheduleHandler')(),
 sensorsHandler = require('../handlers/sensorsHandler.js')(),
+
 serialportHandler = null;
+ibmIoTHandler = null;
 
 module.exports = function() {
     
@@ -34,7 +36,7 @@ var methods = {};
 		    	handleOnline(function(appConfig){
 		    		serialportHandler = require('../handlers/serialportHandler')(appConfig);
 					serialportHandler.initSerialPort();
-					var ibmIoTHandler = require('../handlers/ibmIoTHandler')(appConfig, serialportHandler);
+					ibmIoTHandler = require('../handlers/ibmIoTHandler')(appConfig, serialportHandler);
 					ibmIoTHandler.connectToIBMCloud(function(appclient){
 						appClient = appclient;
 					});
@@ -52,6 +54,7 @@ var methods = {};
 	
 	handleOnline = function(cb){
 		console.log("<<<<<<< INTERNET IS AVAILABLE >>>>>>> ");
+		var appConfig;
 		cloudantHandler.loadConfigurationsFromCloud(true, function(err, configurations){
 			if(err){
 				console.log('ERROR IN FETCHING CONFIGURATIONS: >>>>>> ', err);
@@ -65,6 +68,7 @@ var methods = {};
 
 	handleOffline = function(cb){
 		console.log("<<<<<<< INTERNET IS NOT AVAILABLE >>>>>>> ");
+		var appConfig;
 		localDBHandler.loadConfigurationsFromLocalDB(function(err, configurations){
 			if(err){
 				console.log('ERROR IN FETCHING CONFIGURATIONS: >>>>>> ', err);

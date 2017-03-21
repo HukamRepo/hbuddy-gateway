@@ -1,7 +1,6 @@
 
 var SerialPort = require("serialport");
 var usbPort = "/dev/ttyUSB0";
-var commonHandler = require('../handlers/commonHandler')();
 var ibmIoTHandler = require('../handlers/ibmIoTHandler')();
 var CONFIG = require('../config/config').get();
 var serialPort;

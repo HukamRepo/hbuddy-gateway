@@ -10,8 +10,6 @@ var mqttConnected = false;
 
 module.exports = function(appConfig, serialportHandler) {
 
-	var commonHandler = require('../handlers/commonHandler')();
-
 	var methods = {};
 
 	methods.connectToIBMCloud = function(){
