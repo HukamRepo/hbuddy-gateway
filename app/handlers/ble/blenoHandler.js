@@ -5,9 +5,12 @@
 exports.advertise = function(gatewayInfo) {
 	
 	var util = require('util');
-
 	var bleno = require('bleno');
-
+	
+	var bleUUID = "fffffffffffffffffffffffffffffff1";
+	if(gatewayInfo && gatewayInfo.gatewayId){
+		bleUUID = gatewayInfo.gatewayId;
+	}
 
 	var BlenoPrimaryService = bleno.PrimaryService;
 	var BlenoCharacteristic = bleno.Characteristic;
@@ -187,7 +190,7 @@ exports.advertise = function(gatewayInfo) {
 	  console.log('on -> stateChange: ' + state + ', address = ' + bleno.address);
 
 	  if (state === 'poweredOn') {
-	    bleno.startAdvertising('test', ['fffffffffffffffffffffffffffffff0']);
+	    bleno.startAdvertising('hbuddy', [bleUUID]);
 	  } else {
 	    bleno.stopAdvertising();
 	  }
@@ -196,7 +199,6 @@ exports.advertise = function(gatewayInfo) {
 	// Linux only events /////////////////
 	bleno.on('accept', function(clientAddress) {
 	  console.log('on -> accept, client: ' + clientAddress);
-
 	  bleno.updateRssi();
 	});
 
