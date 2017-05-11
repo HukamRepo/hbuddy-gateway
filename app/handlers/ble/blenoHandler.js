@@ -4,10 +4,10 @@ var primaryService = new HBuddyService();
 
 exports.advertise = function(gatewayInfo) {
 	
-	var uuid = "fffffffffffffffffffffffffffffff1";
+	var uuid = "C7841029FE7C48948532F97908EF1AE4";
 	
 	if(gatewayInfo && gatewayInfo.gatewayId){
-		uuid = gatewayInfo.gatewayId; 
+//		uuid = gatewayInfo.gatewayId; 
 	}	 
     
 	  var util = require('util');
@@ -19,6 +19,7 @@ exports.advertise = function(gatewayInfo) {
 
 	  console.log('bleno for gatewayInfo: ', gatewayInfo);
 
+	  /*
 	  var StaticReadOnlyCharacteristic = function() {
 	    StaticReadOnlyCharacteristic.super_.call(this, {
 	      uuid: uuid,
@@ -36,7 +37,7 @@ exports.advertise = function(gatewayInfo) {
 
 	  var DynamicReadOnlyCharacteristic = function() {
 	    DynamicReadOnlyCharacteristic.super_.call(this, {
-	      uuid: uuid,
+	      uuid: "9A0F8BE0F89C48FEB11706A2EC7C3792",
 	      properties: ['read']
 	    });
 	  };
@@ -57,6 +58,7 @@ exports.advertise = function(gatewayInfo) {
 	    callback(result, data);
 	  };
 
+	  
 	  var LongDynamicReadOnlyCharacteristic = function() {
 	    LongDynamicReadOnlyCharacteristic.super_.call(this, {
 	      uuid: uuid,
@@ -83,22 +85,7 @@ exports.advertise = function(gatewayInfo) {
 
 	    callback(result, data);
 	  };
-
-	  var WriteOnlyCharacteristic = function() {
-	    WriteOnlyCharacteristic.super_.call(this, {
-	      uuid: uuid,
-	      properties: ['write', 'writeWithoutResponse']
-	    });
-	  };
-
-	  util.inherits(WriteOnlyCharacteristic, BlenoCharacteristic);
-
-	  WriteOnlyCharacteristic.prototype.onWriteRequest = function(data, offset, withoutResponse, callback) {
-	    console.log('WriteOnlyCharacteristic write request: ' + data.toString('hex') + ' ' + offset + ' ' + withoutResponse);
-
-	    callback(this.RESULT_SUCCESS);
-	  };
-
+	  
 	  var NotifyOnlyCharacteristic = function() {
 	    NotifyOnlyCharacteristic.super_.call(this, {
 	      uuid: uuid,
@@ -170,17 +157,34 @@ exports.advertise = function(gatewayInfo) {
 	  IndicateOnlyCharacteristic.prototype.onIndicate = function() {
 	    console.log('IndicateOnlyCharacteristic on indicate');
 	  };
+	  
+	  */
+
+	  var WriteOnlyCharacteristic = function() {
+	    WriteOnlyCharacteristic.super_.call(this, {
+	      uuid: "9A0F8BE0F89C48FEB11706A2EC7C3792",
+	      properties: ['write', 'writeWithoutResponse']
+	    });
+	  };
+
+	  util.inherits(WriteOnlyCharacteristic, BlenoCharacteristic);
+
+	  WriteOnlyCharacteristic.prototype.onWriteRequest = function(data, offset, withoutResponse, callback) {
+	    console.log('WriteOnlyCharacteristic write request: ' + data.toString('hex') + ' ' + offset + ' ' + withoutResponse);
+
+	    callback(this.RESULT_SUCCESS);
+	  };
 
 	  function SampleService() {
 	    SampleService.super_.call(this, {
 	      uuid: uuid,
 	      characteristics: [
-	        new StaticReadOnlyCharacteristic(),
-	        new DynamicReadOnlyCharacteristic(),
-	        new LongDynamicReadOnlyCharacteristic(),
+//	        new StaticReadOnlyCharacteristic(),
+//	        new DynamicReadOnlyCharacteristic(),
+//	        new LongDynamicReadOnlyCharacteristic(),
 	        new WriteOnlyCharacteristic(),
-	        new NotifyOnlyCharacteristic(),
-	        new IndicateOnlyCharacteristic()
+//	        new NotifyOnlyCharacteristic(),
+//	        new IndicateOnlyCharacteristic()
 	      ]
 	    });
 	  }
@@ -191,7 +195,7 @@ exports.advertise = function(gatewayInfo) {
 	    console.log('on -> stateChange: ' + state + ', address = ' + bleno.address);
 
 	    if (state === 'poweredOn') {
-	      bleno.startAdvertising('hBuddy', [uuid]);
+	      bleno.startAdvertising('hBuddy-gateway', [uuid]);
 	    } else {
 	      bleno.stopAdvertising();
 	    }
@@ -200,7 +204,6 @@ exports.advertise = function(gatewayInfo) {
 	  // Linux only events /////////////////
 	  bleno.on('accept', function(clientAddress) {
 	    console.log('on -> accept, client: ' + clientAddress);
-
 	    bleno.updateRssi();
 	  });
 
@@ -219,16 +222,11 @@ exports.advertise = function(gatewayInfo) {
 
 	  bleno.on('advertisingStart', function(error) {
 	    console.log('on -> advertisingStart: ' + (error ? 'error ' + error : 'success'));
-	    bleno.setServices([
-	        new SampleService()
-	    ]);
-	    /*
 	    if (!error) {
 	      bleno.setServices([
 	        new SampleService()
 	      ]);
 	    }
-	    */
 	  });
 
 	  bleno.on('advertisingStop', function() {
