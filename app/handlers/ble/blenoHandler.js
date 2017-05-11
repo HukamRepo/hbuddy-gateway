@@ -7,7 +7,7 @@ exports.advertise = function(gatewayInfo) {
 	var uuid = "fffffffffffffffffffffffffffffff1";
 	
 	if(gatewayInfo && gatewayInfo.id){
-		uuid = gatewayInfo.id; 
+		uuid = gatewayInfo.gatewayId; 
 	}	 
     
 	  var util = require('util');
@@ -27,7 +27,7 @@ exports.advertise = function(gatewayInfo) {
 	      descriptors: [
 	        new BlenoDescriptor({
 	          uuid: '2901',
-	          value: 'user description'
+	          value: 'hBuddy Gateway'
 	        })
 	      ]
 	    });
@@ -36,7 +36,7 @@ exports.advertise = function(gatewayInfo) {
 
 	  var DynamicReadOnlyCharacteristic = function() {
 	    DynamicReadOnlyCharacteristic.super_.call(this, {
-	      uuid: 'fffffffffffffffffffffffffffffff2',
+	      uuid: uuid,
 	      properties: ['read']
 	    });
 	  };
@@ -59,7 +59,7 @@ exports.advertise = function(gatewayInfo) {
 
 	  var LongDynamicReadOnlyCharacteristic = function() {
 	    LongDynamicReadOnlyCharacteristic.super_.call(this, {
-	      uuid: 'fffffffffffffffffffffffffffffff3',
+	      uuid: uuid,
 	      properties: ['read']
 	    });
 	  };
@@ -86,7 +86,7 @@ exports.advertise = function(gatewayInfo) {
 
 	  var WriteOnlyCharacteristic = function() {
 	    WriteOnlyCharacteristic.super_.call(this, {
-	      uuid: 'fffffffffffffffffffffffffffffff4',
+	      uuid: uuid,
 	      properties: ['write', 'writeWithoutResponse']
 	    });
 	  };
@@ -101,7 +101,7 @@ exports.advertise = function(gatewayInfo) {
 
 	  var NotifyOnlyCharacteristic = function() {
 	    NotifyOnlyCharacteristic.super_.call(this, {
-	      uuid: 'fffffffffffffffffffffffffffffff5',
+	      uuid: uuid,
 	      properties: ['notify']
 	    });
 	  };
@@ -137,7 +137,7 @@ exports.advertise = function(gatewayInfo) {
 
 	  var IndicateOnlyCharacteristic = function() {
 	    IndicateOnlyCharacteristic.super_.call(this, {
-	      uuid: 'fffffffffffffffffffffffffffffff6',
+	      uuid: uuid,
 	      properties: ['indicate']
 	    });
 	  };
