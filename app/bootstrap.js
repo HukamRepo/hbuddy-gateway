@@ -14,8 +14,9 @@ var CONFIG = require('./config/config').get(),
 module.exports = function(app) {
 	
 	var cleanup = require('./utils/cleanup').Cleanup(cleanupOnExit);
+//	var blenoHandler = require('./handlers/ble/blenoHandler').advertise();
 
-    setupGateway();
+    setupGateway();    
 	
 	function cleanupOnExit(){
 		console.log("\n\n<<<<<<<<< CALLING CLEANUP PROCESS >>>>>>>>> ");
@@ -45,7 +46,8 @@ module.exports = function(app) {
 		 global.appRoot = path.resolve(__dirname);
 		 global.gatewayInfo = gatewayHandler.gatewayInfo(function(gatewayInfo){
 			 global.gatewayInfo = gatewayInfo;
-			 callback(null, "GLOBAL DETAILS SET");
+			 require('./handlers/ble/blenoHandler').advertise(gatewayInfo);
+			 callback(null, "GLOBAL DETAILS SET");			 
 		 });
 	};
 	

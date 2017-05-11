@@ -5,7 +5,7 @@ localDBHandler = require('../handlers/localDBHandler')(),
 cloudantHandler = require('../handlers/cloudantHandler')(),
 sceneHandler = require('../handlers/sceneHandler')(),
 scheduleHandler = require('../handlers/scheduleHandler')(),
-bluetoothHandler = require('../handlers/bluetoothHandler')(),
+blenoHandler = require('../handlers/ble/blenoHandler'),
 serialportHandler = null;
 ibmIoTHandler = null;
 var appConfig;
@@ -30,6 +30,7 @@ var methods = {};
 	
 	methods.initGateway = function(){
 		console.log('\n\n<<<<<<<< IN initGateway >>>>>>>');
+		/*
 		localDBHandler.loadAllLocalDBs();
 		commonHandler.checkInternet(function(isConnected) {
 		    if (isConnected) {
@@ -51,8 +52,9 @@ var methods = {};
 		    	});
 		    }
 		});
+		*/
 		
-		bluetoothHandler.startAdvertising();
+		blenoHandler.advertise();
 		
 	};
 	

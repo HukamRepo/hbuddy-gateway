@@ -24,8 +24,8 @@ var BlenoCharacteristic = bleno.Characteristic;
 	};
 	
 	WifiCharacteristic.prototype.onWriteRequest = function(data, offset, withoutResponse, callback) {
-		 console.log("In onWriteRequest: >> ", data);
-		 callback(this.RESULT_SUCCESS);
+		console.log('WriteOnlyCharacteristic write request: ' + data.toString('hex') + ' ' + offset + ' ' + withoutResponse);
+		callback(this.RESULT_SUCCESS);
 	};
 
 	util.inherits(WifiCharacteristic, BlenoCharacteristic);
