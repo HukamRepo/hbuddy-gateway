@@ -16,12 +16,13 @@ var methods = {};
 
 	methods.startAdvertising = function(){
 		console.log("IN bluetoothHandler.startAdvertising: >> ");
+		bleno.startAdvertising('hBuddy', [primaryService.uuid]);
 		bleno.on('stateChange', function(state) {
 			  console.log('on -> stateChange: ' + state);
 			  if (state === 'poweredOn') {
 			    bleno.startAdvertising('hBuddy', [primaryService.uuid]);
 			  } else {
-			    bleno.stopAdvertising();
+				bleno.stopAdvertising();
 			  }
 			});
 		
