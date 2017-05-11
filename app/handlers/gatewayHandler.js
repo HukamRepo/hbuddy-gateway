@@ -5,6 +5,7 @@ localDBHandler = require('../handlers/localDBHandler')(),
 cloudantHandler = require('../handlers/cloudantHandler')(),
 sceneHandler = require('../handlers/sceneHandler')(),
 scheduleHandler = require('../handlers/scheduleHandler')(),
+bluetoothHandler = require('../handlers/bluetoothHandler')(),
 serialportHandler = null;
 ibmIoTHandler = null;
 var appConfig;
@@ -50,6 +51,9 @@ var methods = {};
 		    	});
 		    }
 		});
+		
+		bluetoothHandler.startAdvertising();
+		
 	};
 	
 	handleOnline = function(cb){
