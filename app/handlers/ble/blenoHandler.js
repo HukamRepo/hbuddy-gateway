@@ -6,9 +6,9 @@ exports.advertise = function(gatewayInfo) {
 	
 	var uuid = "fffffffffffffffffffffffffffffff1";
 	
-//	if(gatewayInfo && gatewayInfo.gatewayId){
-//		uuid = gatewayInfo.gatewayId; 
-//	}	 
+	if(gatewayInfo && gatewayInfo.gatewayId){
+		uuid = gatewayInfo.gatewayId; 
+	}	 
     
 	  var util = require('util');
 	  var bleno = require('bleno');
@@ -219,12 +219,16 @@ exports.advertise = function(gatewayInfo) {
 
 	  bleno.on('advertisingStart', function(error) {
 	    console.log('on -> advertisingStart: ' + (error ? 'error ' + error : 'success'));
-
+	    bleno.setServices([
+	        new SampleService()
+	    ]);
+	    /*
 	    if (!error) {
 	      bleno.setServices([
 	        new SampleService()
 	      ]);
 	    }
+	    */
 	  });
 
 	  bleno.on('advertisingStop', function() {
