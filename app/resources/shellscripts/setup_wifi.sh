@@ -1,4 +1,4 @@
-# GransLive 
+# Hukam 
 # Wifi Setup
 # This script configures WiFi credentials
 #

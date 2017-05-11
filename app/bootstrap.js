@@ -14,7 +14,6 @@ var CONFIG = require('./config/config').get(),
 module.exports = function(app) {
 	
 	var cleanup = require('./utils/cleanup').Cleanup(cleanupOnExit);
-//	var blenoHandler = require('./handlers/ble/blenoHandler').advertise();
 
     setupGateway();    
 	
@@ -106,7 +105,7 @@ module.exports = function(app) {
 		console.log("Read Conf file from PATH: ", CONFIG.CONFIG_FILE_PATH);
    	 	fs.readFile(CONFIG.CONFIG_FILE_PATH, 'utf8', function(err, fileData){
    	 		if(err){
-   	 			console.log('<<<<< START IN AP MODE >>>>>>>');
+   	 			console.log('<<<<< START IN AP MODE >>>>>>>', err);
    	 			enableAPMode(callback);
    	 		}else{
 	   	 		conf = JSON.parse(fileData);
@@ -121,6 +120,8 @@ module.exports = function(app) {
 	};
 	
 	function enableAPMode(callback){
+		callback(null, "NOT_ENABLING_AP_MODE");
+		return false;
 		wifi_manager.enable_ap_mode(CONFIG.access_point.ssid, function(error) {
             if(error) {
                 console.log("... AP Enable ERROR: " + error);
