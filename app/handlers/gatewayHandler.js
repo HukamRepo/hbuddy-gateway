@@ -54,8 +54,6 @@ var methods = {};
 		});
 		*/
 		
-		blenoHandler.advertise();
-		
 	};
 	
 	handleOnline = function(cb){
