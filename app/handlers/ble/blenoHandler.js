@@ -6,9 +6,9 @@ exports.advertise = function(gatewayInfo) {
 	
 	var uuid = "fffffffffffffffffffffffffffffff1";
 	
-	if(gatewayInfo && gatewayInfo.gatewayId){
-		uuid = gatewayInfo.gatewayId; 
-	}	 
+//	if(gatewayInfo && gatewayInfo.gatewayId){
+//		uuid = gatewayInfo.gatewayId; 
+//	}	 
     
 	  var util = require('util');
 	  var bleno = require('bleno');
