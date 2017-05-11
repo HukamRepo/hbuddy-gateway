@@ -6,7 +6,7 @@ exports.advertise = function(gatewayInfo) {
 	
 	var uuid = "fffffffffffffffffffffffffffffff1";
 	
-	if(gatewayInfo && gatewayInfo.id){
+	if(gatewayInfo && gatewayInfo.gatewayId){
 		uuid = gatewayInfo.gatewayId; 
 	}	 
     
@@ -26,7 +26,7 @@ exports.advertise = function(gatewayInfo) {
 	      value: new Buffer('value'),
 	      descriptors: [
 	        new BlenoDescriptor({
-	          uuid: '2901',
+	          uuid: uuid,
 	          value: 'hBuddy Gateway'
 	        })
 	      ]
