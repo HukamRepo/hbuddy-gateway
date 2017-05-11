@@ -7,7 +7,7 @@ exports.advertise = function(gatewayInfo) {
 	var util = require('util');
 	var bleno = require('bleno');
 	
-	var bleUUID = "fffffffffffffffffffffffffffffff1";
+	var bleUUID = "D128B3B1-E43A-4316-80F3-B5B96C7D9290";
 	if(gatewayInfo && gatewayInfo.gatewayId){
 		bleUUID = gatewayInfo.gatewayId;
 	}
@@ -20,7 +20,7 @@ exports.advertise = function(gatewayInfo) {
 
 	var StaticReadOnlyCharacteristic = function() {
 	  StaticReadOnlyCharacteristic.super_.call(this, {
-	    uuid: 'fffffffffffffffffffffffffffffff1',
+	    uuid: 'D128B3B1-E43A-4316-80F3-B5B96C7D9290',
 	    properties: ['read'],
 	    value: new Buffer('value'),
 	    descriptors: [
