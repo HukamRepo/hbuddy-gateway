@@ -11,6 +11,7 @@ exports.advertise = function(gatewayInfo) {
 	if(gatewayInfo && gatewayInfo.gatewayId){
 		bleUUID = gatewayInfo.gatewayId;
 	}
+	bleUUID = "705c75f8ffec";
 
 	var BlenoPrimaryService = bleno.PrimaryService;
 	var BlenoCharacteristic = bleno.Characteristic;
