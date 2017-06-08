@@ -64,15 +64,15 @@ module.exports = function() {
 	};
 	
 	methods.getPlace = function(req, resp){
-		res.json(global.place);
+		resp.json(global.place);
 	};
 	
 	methods.getPlaceAreas = function(req, resp){
 		localDBHandler.loadPlaceAreasFromLocalDB(function(err, placeAreas){
 			if(err){
-				res.json(err);
+				resp.json(err);
 			}else{
-				res.json(placeAreas);
+				resp.json(placeAreas);
 			}			
 		});
 	};
@@ -80,9 +80,9 @@ module.exports = function() {
 	methods.getAllBoards = function(req, resp){
 		localDBHandler.loadBoardsFromLocalDB(function(err, boards){
 			if(err){
-				res.json(err);
+				resp.json(err);
 			}else{
-				res.json(boards);
+				resp.json(boards);
 			}			
 		});
 	};
@@ -91,7 +91,7 @@ module.exports = function() {
 		localDBHandler.loadBoardsFromLocalDB(function(err, boards){
 			var filteredBoards = [];
 			if(err){
-				res.json(err);
+				resp.json(err);
 			}else{
 				var payload = req.body;
 				for(var i=0; i < boards.length; i++){
@@ -101,7 +101,7 @@ module.exports = function() {
 					}					  
 				}				
 			}
-			res.json(filteredBoards);
+			resp.json(filteredBoards);
 		});
 	};
 
