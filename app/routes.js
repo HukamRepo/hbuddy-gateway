@@ -23,6 +23,11 @@ module.exports = function(app) {
     
     app.post('/api/stt/start', showClientRequest, speechEndpoint.listenCommands);
     app.post('/api/stt/stop', showClientRequest, speechEndpoint.stopSTT);
+    
+    app.get('/api/place', gatewayEndpoint.getPlace);
+    app.get('/api/place/areas', gatewayEndpoint.getPlaceAreas);
+    app.get('/api/place/boards', gatewayEndpoint.getAllBoards);
+    app.post('/api/place/boards', gatewayEndpoint.getBoards);
 
     function showClientRequest(req, res, next) {
         var request = {

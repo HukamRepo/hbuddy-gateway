@@ -62,7 +62,49 @@ module.exports = function() {
 		}
 		scheduleHandler.uploadContent(contentFolder);
 	};
+	
+	methods.getPlace = function(req, resp){
+		res.json(global.place);
+	};
+	
+	methods.getPlaceAreas = function(req, resp){
+		localDBHandler.loadPlaceAreasFromLocalDB(function(err, placeAreas){
+			if(err){
+				res.json(err);
+			}else{
+				res.json(placeAreas);
+			}			
+		});
+	};
+	
+	methods.getAllBoards = function(req, resp){
+		localDBHandler.loadBoardsFromLocalDB(function(err, boards){
+			if(err){
+				res.json(err);
+			}else{
+				res.json(boards);
+			}			
+		});
+	};
+	
+	methods.getBoards = function(req, resp){
+		localDBHandler.loadBoardsFromLocalDB(function(err, boards){
+			var filteredBoards = [];
+			if(err){
+				res.json(err);
+			}else{
+				var payload = req.body;
+				for(var i=0; i < boards.length; i++){
+					var board = boards[i];
+					if(payload.connectedToId && board.connectedToId == payload.connectedToId){
+						filteredBoards.push(board);
+					}					  
+				}				
+			}
+			res.json(filteredBoards);
+		});
+	};
 
-return methods;
+	return methods;
 
 }
