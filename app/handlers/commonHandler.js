@@ -15,6 +15,7 @@ var methods = {};
 		    return serial[1].slice(1);
 //		    return "GG-000-000-001";
 		}catch(err){
+//			return "000000008c0be72b";
 			return null;
 		}
 	};

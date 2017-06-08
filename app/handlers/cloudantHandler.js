@@ -35,46 +35,98 @@ var methods = {};
 				  }
 			});
 	};
+	
+	methods.loadPlaceFromCloud = function(cb){
+		var cloudantDB = cloudant.use('places');
+		  var findReq = {selector:{'loopback__model__name': 'Place', 'gatewayId': global.gatewayInfo.gatewayId}};
+//		  console.log("FIND Places REQ: >>> ", findReq);
+		  cloudantDB.find(findReq, function(err, result) {
+				  if (err) {
+					  cb(err, null);
+				  }else{
+					  if(result && result.docs && result.docs.length > 0){
+						  cb(err, result.docs[0]);
+					  }else{
+						  cb(err, null);
+					  }
+				  }
+			});
+	};
+	
+	methods.loadPlaceAreasFromCloud = function(updateLocalDB, cb){
+		var cloudantDB = cloudant.use('placeareas');
+		  var findReq = {selector:{'loopback__model__name': 'PlaceArea', 'placeId': global.place._id}};
+//		  console.log("FIND PlaceAreas REQ: >>> ", findReq);
+		  cloudantDB.find(findReq, function(err, result) {
+				  if (err) {
+					  cb(err, result);
+				  }else{
+					  if(updateLocalDB){
+						  localDBHandler.refreshPlaceAreasDB(result.docs, function(err, placeAreas){
+							  cb(err, placeAreas);
+						  });
+					  }else{
+						  if(result && result.docs && result.docs.length > 0){
+							  cb(err, result.docs[0]);
+						  }else{
+							  cb(err, result);
+						  }
+					  }
+					  
+				  }
+			});
+	};
 
 	methods.loadBoardsFromCloud = function(updateLocalDB, cb){
 		var cloudantDB = cloudant.use('boards');
-		  var findReq = {selector:{'loopback__model__name': 'Board', 'gatewayId': global.gatewayInfo.gatewayId}};
-		  console.log("FIND Boards REQ: >>> ", findReq);
+//		  var findReq = {selector:{'loopback__model__name': 'Board', 'gatewayId': global.gatewayInfo.gatewayId}};
+		  var findReq = {
+					selector:{
+	    			  		   "$and": [{'loopback__model__name': 'Board'},
+	    			  		                 {"$or":[{'gatewayId': global.gatewayInfo.gatewayId},
+	    			  		                        {'placeId': global.place._id}]}
+	    			  		 				]
+							}
+  						};
+//		  console.log("FIND Boards REQ: >>> ", findReq);
 		  cloudantDB.find(findReq, function(err, result) {
 				  if (err) {
 					  cb(err, null);
 				  }else{
 					  if(updateLocalDB){
 						  localDBHandler.refreshBoardsDB(result.docs, function(err, boards){
-							  if(err){
-								  console.log("ERROR WHILE REFRESHING BOARDS IN LOCAL DB:>> ", err);
-							  }else{
-								  console.log("TOTAL BOARDS INSERTED IN LOCAL DB: >> ", boards.length);
-							  }
+							  cb(err, boards);
 						  });
+					  }else{
+						  if(result && result.docs && result.docs.length > 0){
+							  cb(err, result.docs[0]);
+						  }else{
+							  cb(err, result);
+						  }
 					  }
-					  cb(err, result.docs);
 				  }
 			});
 	};
 	
 	methods.loadScenesFromCloud = function(updateLocalDB, cb){
 		var cloudantDB = cloudant.use('scenes');
-		  var findReq = {selector:{'loopback__model__name': 'Scene'}};
+		  var findReq = {selector:{'loopback__model__name': 'Scene', 'placeId': global.place._id}};
 		  cloudantDB.find(findReq, function(err, result) {
 				  if (err) {
 					  cb(err, null);
 				  }else{
 					  if(updateLocalDB){
 						  localDBHandler.refreshScenesDB(result.docs, function(err, scenes){
-							  if(err){
-								  console.log("ERROR WHILE REFRESHING SCENES IN LOCAL DB:>> ", err);
-							  }else{
-								  console.log("TOTAL SCENES INSERTED IN LOCAL DB: >> ", scenes.length);
-							  }
+							  cb(err, scenes);
 						  });
+					  }else{
+						  if(result && result.docs && result.docs.length > 0){
+							  cb(err, result.docs[0]);
+						  }else{
+							  cb(err, result);
+						  }
 					  }
-					  cb(err, result.docs);
+					  
 				  }
 			});
 	};

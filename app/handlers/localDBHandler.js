@@ -8,19 +8,28 @@ module.exports = function() {
 var methods = {};
   	
 	methods.loadAllLocalDBs = function(){
-		var boardsDBFile = { filename: '../../localdb/boards.db', autoload: true };
-		localDB.boards = new Datastore(boardsDBFile);
-		localDB.boards.loadDatabase(function (err) {    // Callback is optional
-			 if(err){
-				 console.log("ERROR WHILE LOADING BOARDS FROM LOCAL DB: >>> "+err, null);
-			 }
-		});
 		
 		var configurationsDBFile = { filename: '../../localdb/configurations.db', autoload: true };
 		localDB.configurations = new Datastore(configurationsDBFile);
 		localDB.configurations.loadDatabase(function (err) {    // Callback is optional
 			 if(err){
 				 console.log("ERROR WHILE LOADING CONFIGURATIONS FROM LOCAL DB: >>> "+err, null);
+			 }
+		});
+		
+		var placeAreasDBFile = { filename: '../../localdb/placeAreas.db', autoload: true };
+		localDB.placeAreas = new Datastore(placeAreasDBFile);
+		localDB.placeAreas.loadDatabase(function (err) {    // Callback is optional
+			 if(err){
+				 console.log("ERROR WHILE LOADING PLACEAREAS FROM LOCAL DB: >>> "+err, null);
+			 }
+		});
+		
+		var boardsDBFile = { filename: '../../localdb/boards.db', autoload: true };
+		localDB.boards = new Datastore(boardsDBFile);
+		localDB.boards.loadDatabase(function (err) {    // Callback is optional
+			 if(err){
+				 console.log("ERROR WHILE LOADING BOARDS FROM LOCAL DB: >>> "+err, null);
 			 }
 		});
 		
@@ -33,6 +42,19 @@ var methods = {};
 		});
 	};
 	
+	methods.loadConfigurationsFromLocalDB = function(cb){
+		 localDB.configurations.find({}, function (err, configurations) {
+			  cb(err, configurations);
+		 });
+	};
+	
+	methods.loadPlaceAreasFromLocalDB = function(cb){
+//		var findReq = {"gatewayId": CONFIG.gatewayId};
+		 localDB.placeAreas.find({}, function (err, placeAreas) {
+			  cb(err, placeAreas);
+		 });
+	};
+	
 	methods.loadBoardsFromLocalDB = function(cb){
 //		var findReq = {"gatewayId": CONFIG.gatewayId};
 		 localDB.boards.find({}, function (err, boards) {
@@ -40,12 +62,6 @@ var methods = {};
 		 });
 	};
 
-	methods.loadConfigurationsFromLocalDB = function(cb){
-		 localDB.configurations.find({}, function (err, configurations) {
-			  cb(err, configurations);
-		 });
-	};
-	
 	methods.loadScenesFromLocalDB = function(cb){
 		 localDB.scenes.find({}, function (err, scenes) {
 			  cb(err, scenes);
@@ -63,18 +79,26 @@ var methods = {};
 		});
 	}
 	
-	methods.refreshBoardsDB = function(boards, cb){
-		localDB.boards.remove({}, { multi: true }, function (err, numRemoved) {
-			  localDB.boards.insert(boards, function (err, boards) {
-				  cb(err, boards);
-				});
-		  });
-	};
-	
 	methods.refreshConfigurationDB = function(configuration, cb){
 		localDB.configurations.remove({}, { multi: true }, function (err, numRemoved) {
 			localDB.configurations.insert(configuration, function (err, configurations) {
 					cb(err, configurations);
+				});
+		  });
+	};
+	
+	methods.refreshPlaceAreasDB = function(placeAreas, cb){
+		localDB.placeAreas.remove({}, { multi: true }, function (err, numRemoved) {
+			  localDB.placeAreas.insert(placeAreas, function (err, placeAreas) {
+				  cb(err, placeAreas);
+				});
+		  });
+	};
+	
+	methods.refreshBoardsDB = function(boards, cb){
+		localDB.boards.remove({}, { multi: true }, function (err, numRemoved) {
+			  localDB.boards.insert(boards, function (err, boards) {
+				  cb(err, boards);
 				});
 		  });
 	};

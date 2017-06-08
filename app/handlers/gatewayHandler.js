@@ -30,7 +30,6 @@ var methods = {};
 	
 	methods.initGateway = function(){
 		console.log('\n\n<<<<<<<< IN initGateway >>>>>>>');
-		/*
 		localDBHandler.loadAllLocalDBs();
 		commonHandler.checkInternet(function(isConnected) {
 		    if (isConnected) {
@@ -52,7 +51,6 @@ var methods = {};
 		    	});
 		    }
 		});
-		*/
 		
 	};
 	
@@ -84,23 +82,48 @@ var methods = {};
 	};
 	
 	methods.startProcessWithCloud = function(){
-		cloudantHandler.loadBoardsFromCloud(true, function(err, boards){
+		console.log("\n\n <<<<<<<<<<<< IN startProcessWithCloud: >>>>>>>\n\n ");
+		cloudantHandler.loadPlaceFromCloud(function(err, place){
 			if(err){
-				console.log("ERROR IN loadBoardsFromCloud: >>>> ", err );
+				console.log("ERROR IN loadPlaceFromCloud: >>>> ", err );
 			}else{
-				console.log("<<<< BOARDS SYNCHRONISED WITH CLOUD IN LOCAL DB >>>>> ", boards.length);
-				methods.broadcastCommandsToBoards(boards);
+				
+				if(!place || !place._id){
+					console.log("<<<<<<<<<<< NO PLACE CONNECTED TO THE GATEWAY >>>>>>>>>>>>>>");
+					return false;
+				}
+				
+				global.place = place;
+				console.log("<<<< PLACE SYNCHRONISED WITH CLOUD IN LOCAL DB >>>>> ", global.place);
+				cloudantHandler.loadPlaceAreasFromCloud(true, function(err, placeAreas){
+					if(err){
+						console.log("ERROR IN loadPlaceAreasFromCloud: >>>> ", err );
+					}else{
+						console.log("\n\n<<<< PLACEAREAS SYNCHRONISED WITH CLOUD IN LOCAL DB >>>>> ", placeAreas);
+					}
+				});
+				
+				cloudantHandler.loadBoardsFromCloud(true, function(err, boards){
+					if(err){
+						console.log("ERROR IN loadBoardsFromCloud: >>>> ", err );
+					}else{
+						console.log("\n\n<<<< BOARDS SYNCHRONISED WITH CLOUD IN LOCAL DB >>>>> ", boards.length);
+						methods.broadcastCommandsToBoards(boards);
+					}
+				});
+				
+				cloudantHandler.loadScenesFromCloud(true, function(err, scenes){
+					if(err){
+						console.log("ERROR IN loadScenesFromCloud: >>>> ", err );
+					}else{
+						console.log("\n\n<<<< SCENES SYNCHRONISED WITH CLOUD IN LOCAL DB >>>>> ", scenes.length);
+						sceneHandler.processScenes(scenes);
+					}
+				});				
+				
 			}
 		});
 		
-		cloudantHandler.loadScenesFromCloud(true, function(err, scenes){
-			if(err){
-				console.log("ERROR IN loadScenesFromCloud: >>>> ", err );
-			}else{
-				console.log("<<<< SCENES SYNCHRONISED WITH CLOUD IN LOCAL DB >>>>> ", scenes.length);
-				sceneHandler.processScenes(scenes);
-			}
-		});
 	};
 	
 	methods.startProcessWithLocal = function(){
