@@ -26,7 +26,7 @@ module.exports = function(appConfig) {
 			      if(!data || data.trim() == ""){
 			    	  console.log("Empty Data Received: >>>> ", data);
 			      }else{
-			    	//  methods.handleDataOnSerialPort(data);
+			    	  methods.handleDataOnSerialPort(data);
 			      }
 			    });
 			  });
@@ -79,7 +79,7 @@ module.exports = function(appConfig) {
 			deviceWithData.data.ts = timeNow;
 			deviceWithData.data.gatewayId = global.gatewayInfo.gatewayId;
 			if(methods.publishRequired(deviceWithData)){
-//				methods.publishMessage(deviceWithData);
+				methods.publishMessage(deviceWithData);
 			}
 		}catch(err){
 			console.log('ERROR IN handleDataOnSerialPort: >>> ', err);
