@@ -7,8 +7,6 @@
  # sudo apt-get upgrade
  ### END INIT INFO
 
-sudo -i
-
 wget -q --spider http://google.com
 if [ $? -eq 0 ]; then
     echo "Online"
