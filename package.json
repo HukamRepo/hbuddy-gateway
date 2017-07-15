@@ -53,6 +53,7 @@
     "qs": "latest",
     "requirejs": "latest",
     "sensortag": "^1.2.3",
+    "serialport": "latest",
     "snowboy": "^1.1.0",
     "socket.io": "latest",
     "stream": "0.0.2",
