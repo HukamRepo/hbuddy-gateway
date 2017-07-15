@@ -10,6 +10,11 @@
 wget -q --spider http://google.com
 if [ $? -eq 0 ]; then
     echo "Online"
+    
+    curl -sL https://deb.nodesource.com/setup_8.x | sudo -E bash -
+    sudo apt-get install -y nodejs
+	sudo apt-get install -y build-essential    
+    
     sudo rm -rf hbuddy-install.sh
 	wget https://raw.githubusercontent.com/sinny777/hbuddy-gateway/master/app/resources/shellscripts/hbuddy-install.sh
 	sudo bash hbuddy-install.sh
