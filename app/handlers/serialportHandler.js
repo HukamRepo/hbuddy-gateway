@@ -15,13 +15,13 @@ module.exports = function(appConfig) {
 
 	methods.initSerialPort = function(){
 		try{
+			var Readline = SerialPort.parsers.Readline;
 			serialPort = new SerialPort(usbPort, {
 			    baudrate: 9600,
-			    bufferSize: 131072,
-			    parser: SerialPort.parsers.readline('\n')
+			    highWaterMark: 131072,
 			  });
-			  serialPort.on("open", function () {
-			    serialPort.on('data', function(data) {
+			  var parser = serialPort.pipe(Readline({delimiter: '\n'}));
+			  parser.on('data', function(data) {
 			      console.log('\n\ndata received: ' + data);
 			      if(!data || data.trim() == ""){
 			    	  console.log("Empty Data Received: >>>> ", data);
@@ -29,7 +29,6 @@ module.exports = function(appConfig) {
 			    	  methods.handleDataOnSerialPort(data);
 			      }
 			    });
-			  });
 
 			  serialPort.on('error', function(err) {
 	//			  throw new Error('Custom SerialPort Communication Error: ', err);
