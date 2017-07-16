@@ -6,7 +6,6 @@ module.exports = function(grunt) {
 
         bower: {
             install: {
-            	/*
               options: {
             	targetDir: "public/scripts/lib",
                 layout: 'byType',
@@ -16,7 +15,7 @@ module.exports = function(grunt) {
                 cleanTargetDir: false,
                 cleanBowerDir: false,
                 bowerOptions: {}
-              }*/
+              }
 
             }
         },
