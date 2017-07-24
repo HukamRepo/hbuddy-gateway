@@ -1,4 +1,4 @@
-FROM resin/raspberrypi3-node:8.0.0
+FROM hypriot/rpi-node:8.1.3
 # Enable systemd
 ENV INITSYSTEM on
 MAINTAINER Gurvinder Singh <contact@hukamtechnologies.com>
