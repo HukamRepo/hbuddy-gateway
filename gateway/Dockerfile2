@@ -1,0 +1,109 @@
+FROM resin/raspberrypi3-node:onbuild
+# Enable systemd
+ENV INITSYSTEM on
+MAINTAINER Gurvinder Singh <contact@hukamtechnologies.com>
+
+#
+# install packages for "motion" and mail support
+#
+RUN apt-get update
+RUN apt-get install -q -y --no-install-recommends \
+  apt-utils \
+  csh \
+  make \
+  build-essential \
+  cmake \
+  tcsh \
+  bc \
+  gawk \
+  motion \
+  imagemagick \
+  sysstat rsync ssh \
+  curl \
+  python3.4-dev \
+  python-pip \
+  python3-pip \
+  x264 \
+  unzip \
+  vsftpd \
+  gcc
+
+RUN apt-get install -q -y --no-install-recommends \
+  bison \
+  alsa-base \
+  alsa-utils \
+  autoconf \
+  automake \
+  libasound2-dev \
+  libtool \
+  portaudio19-dev python-all-dev python3-all-dev \
+  python-pyaudio \
+  python3-pyaudio \
+  sox
+
+#
+# VSFTPD
+#
+RUN echo "anon_root=/var/lib/motion" >> /etc/vsftpd.conf \
+      && sed -i -e"s/^.*listen=.*$/listen=YES/" /etc/vsftpd.conf \
+      && sed -i -e"s/^.*listen_ipv6=.*$/listen_ipv6=NO/" /etc/vsftpd.conf \
+      && sed -i -e"s/^.*anonymous_enable=.*$/anonymous_enable=YES/" /etc/vsftpd.conf
+
+#
+# ALSA (http://julius.sourceforge.jp/forum/viewtopic.php?f=9&t=66)
+#
+RUN echo 'pcm.array { type hw card 1 }' >! ~/.asoundrc
+RUN echo 'pcm.array_gain { type softvol slave { pcm "array" } control { name "Mic Gain" count 2 } min_dB -10.0 max_dB 5.0 }' >> ~/.asoundrc
+RUN echo 'pcm.cap { type plug slave { pcm "array_gain" channels 4 } route_policy sum }' >> ~/.asoundrc
+
+#
+# resin-electron dependencies
+#
+
+RUN apt-get update && apt-get install -y \
+  clang \
+  xserver-xorg-core \
+  xserver-xorg-input-all \
+  xserver-xorg-video-fbdev \
+  xorg \
+  libatlas-base-dev \
+  libudev-dev \
+  florence \
+  libdbus-1-dev \
+  libgtk2.0-dev \
+  libnotify-dev \
+  libgnome-keyring-dev \
+  libgconf2-dev \
+  libasound2-dev \
+  libcap-dev \
+  libcups2-dev \
+  libxtst-dev \
+  libxss1 \
+  libnss3-dev \
+  fluxbox \
+  libsmbclient \
+  libssh-4 \
+  fbset \
+  libexpat-dev && rm -rf /var/lib/apt/lists/*
+
+USER root
+ENTRYPOINT []
+
+# Define working directory
+# WORKDIR /hbuddy-gateway
+# COPY app/resources/init.d/.asoundrc ~/.asoundrc
+
+# audio drivers
+ENV AUDIODEV hw:1,0
+ENV AUDIODRIVER alsa
+
+# Install npm modules for the application
+RUN JOBS=MAX npm install --unsafe-perm --production
+RUN npm install -g node-gyp
+RUN npm install -g node-pre-gyp
+RUN npm install -g bower
+RUN npm install serialport --unsafe-perm --build-from-source
+RUN npm install && bower --allow-root install --fix-missing
+
+# run application
+EXPOSE 9000

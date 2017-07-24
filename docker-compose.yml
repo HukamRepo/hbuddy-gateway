@@ -1,0 +1,27 @@
+version: '3'
+
+services:
+
+  app-service:
+    container_name: gateway-app-container
+    build:
+      context: ./gateway
+      dockerfile: Dockerfile
+      args:
+        buildno: 1
+    volumes:
+      - ./gateway:/usr/src/app
+    ports:
+     - 9000:9000
+
+  ui-service:
+    container_name: gateway-web-container
+    build:
+      context: ./web
+      dockerfile: Dockerfile
+      args:
+        buildno: 1
+    volumes:
+      - ./web:/usr/src/app
+    ports:
+     - 3000:4200

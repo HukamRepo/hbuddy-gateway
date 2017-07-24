@@ -1,5 +1,8 @@
-/node_modules
-/npm-debug.log
+**/node_modules
+gateway/node_modules
+web/node_modules
+node_modules
+**/npm-debug.log
 /app/public/external
 /lib
 /public/scripts/lib
