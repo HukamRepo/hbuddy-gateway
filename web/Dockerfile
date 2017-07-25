@@ -1,4 +1,4 @@
-FROM arm32v6/alpine:3.6
+FROM hypriot/rpi-alpine
 
 # Internal unprivileged user will have this ID:
 ENV CONTAINER_USER_ID="1000" \
