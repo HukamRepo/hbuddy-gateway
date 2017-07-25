@@ -10,7 +10,7 @@ MAINTAINER Gurvinder Singh <contact@hukamtechnologies.com>
 USER root
 
 RUN apt-get update && \
-    apt-get -qy install curl ca-certificates \
+    apt-get -qy install npm curl ca-certificates \
     -y --no-install-recommends --fix-missing libatlas-base-dev libudev-dev portaudio19-dev \
     python3 python3-pip python-pyaudio python3-pyaudio sox \
     apt-utils csh build-essential make cmake tcsh bc gawk motion curl \
@@ -44,7 +44,6 @@ RUN rm -rf node-v8.2.1-linux-armv7l.tar.gz
 RUN cd node-v8.2.1-linux-armv7l
 RUN cp -R * /usr/local/
 
-RUN apt-get install npm
 RUN npm install -g npm@latest
 RUN npm install -g node-gyp@3.6.2
 RUN npm install -g node-pre-gyp --fallback-to-build
