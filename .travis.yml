@@ -6,7 +6,7 @@ script:
 # prepare qemu
 - docker run --rm --privileged multiarch/qemu-user-static:register --reset
 # build image
-- docker build -t hukam/gateway-ui ./web
+- docker build -t hukam/gateway-ui ./gateway
 # test image
 - docker run --rm -ti hukam/gateway-ui -p 3000:4200 --version
 # push image
@@ -18,4 +18,3 @@ script:
     docker push hukam/gateway-ui:$TAG
     docker push hukam/gateway-ui
   fi
-  
