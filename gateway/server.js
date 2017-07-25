@@ -4,7 +4,6 @@
 var express  = require('express'),
 	app = express(),
 	server = require('http').createServer(app),
-	io = require('socket.io').listen(server),
 	http = require('http'),
 	path = path = require('path'),
 	uuid = require('uuid'),
@@ -20,7 +19,7 @@ var ip     = process.env.IP || "localhost";
 app.configure(function() {
     // set up our express application
     app.set('port', port);
-    app.use(express.logger('dev')); // log every request to the console
+    // app.use(express.logger('dev')); // log every request to the console
     app.use(express.bodyParser()); // get information from html forms
     app.use(express.cookieParser());
     app.use(express.session({ secret: 'keyboard cat' }));// persistent login sessions

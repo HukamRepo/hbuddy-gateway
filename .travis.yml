@@ -13,6 +13,18 @@ script:
     docker login -u="$DOCKER_USER" -p="$DOCKER_PASS"
     TAG=$(grep "ENV BUILD_VERSION" Dockerfile | awk 'NF>1{print $NF}')
     docker tag hukam/gateway-ui hukam/gateway-ui:$TAG
-    docker push hukam/gateway-ui:$TAG
+    docker push hukam/gateway-ui:$BUILD_VERSION
     docker push hukam/gateway-ui
+  fi
+
+# build image
+- docker build -t hukam/gateway-app ./gateway
+# push image
+- >
+  if [ "$TRAVIS_BRANCH" == "master" ] && [ "$TRAVIS_PULL_REQUEST" == "false" ]; then
+    docker login -u="$DOCKER_USER" -p="$DOCKER_PASS"
+    TAG=$(grep "ENV BUILD_VERSION" Dockerfile | awk 'NF>1{print $NF}')
+    docker tag hukam/gateway-app hukam/gateway-app:$TAG
+    docker push hukam/gateway-app:$BUILD_VERSION
+    docker push hukam/gateway-app
   fi
