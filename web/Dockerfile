@@ -15,6 +15,9 @@ COPY ./entrypoint.sh /entrypoint.sh
 COPY ./ /home
 WORKDIR /home
 
+RUN npm install -g node-gyp@3.6.2
+RUN npm install -g node-pre-gyp --fallback-to-build
+npm install -g node-sass
 RUN npm install
 
 EXPOSE 4200
