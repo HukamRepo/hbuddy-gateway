@@ -12,10 +12,10 @@ USER root
 COPY ./entrypoint.sh /entrypoint.sh
 
 # Copy everything (except what is in .dockerignore) to the workdir, inside the container
-COPY . /home
+COPY ./ /home
 WORKDIR /home
 
-RUN npm install --production
+RUN npm install
 
 EXPOSE 4200
 # ENTRYPOINT ["entrypoint.sh"]

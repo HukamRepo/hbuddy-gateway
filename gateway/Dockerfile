@@ -1,7 +1,10 @@
 FROM hukam/pi3-base:v2
 # Enable systemd
 ENV INITSYSTEM on \
-    BUILD_VERSION="V1"
+  AUDIODEV hw:1,0 \
+  AUDIODRIVER alsa \
+  BUILD_VERSION="V1"
+
 MAINTAINER Gurvinder Singh <contact@hukamtechnologies.com>
 
 RUN apt-get update
@@ -22,19 +25,13 @@ RUN echo 'pcm.array_gain { type softvol slave { pcm "array" } control { name "Mi
 RUN echo 'pcm.cap { type plug slave { pcm "array_gain" channels 4 } route_policy sum }' >> ~/.asoundrc
 
 COPY app/resources/init.d/.asoundrc ~/.asoundrc
-COPY . /usr/src/app
-WORKDIR /usr/src/app
-
+COPY ./ /usr/src
+WORKDIR /usr/src
 
 USER root
 ENTRYPOINT []
 
-# audio drivers
-ENV AUDIODEV hw:1,0
-ENV AUDIODRIVER alsa
-ENV BUILD_VERSION="V1"
-
-RUN JOBS=MAX npm install
+RUN npm install
 
 EXPOSE 9000
 
