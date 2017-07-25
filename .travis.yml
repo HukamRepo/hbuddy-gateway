@@ -18,3 +18,4 @@ script:
     docker push hukam/gateway-ui:$TAG
     docker push hukam/gateway-ui
   fi
+  
