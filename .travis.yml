@@ -11,7 +11,7 @@ script:
 - >
   if [ "$TRAVIS_BRANCH" == "master" ] && [ "$TRAVIS_PULL_REQUEST" == "false" ]; then
     docker login -u="$DOCKER_USER" -p="$DOCKER_PASS"
-    TAG=$BUILD_VERSION
+    TAG=$(grep "ENV BUILD_VERSION" Dockerfile | awk 'NF>1{print $NF}')
     docker tag hukam/gateway-app hukam/gateway-app:$TAG
     docker push hukam/gateway-app:$TAG
     docker push hukam/gateway-app

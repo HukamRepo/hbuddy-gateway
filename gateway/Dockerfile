@@ -3,7 +3,7 @@ FROM resin/rpi-raspbian:jessie
 ENV INITSYSTEM on \
   AUDIODEV hw:1,0 \
   AUDIODRIVER alsa \
-  BUILD_VERSION="V2"
+  BUILD_VERSION="V1"
 
 MAINTAINER Gurvinder Singh <contact@hukamtechnologies.com>
 
@@ -43,7 +43,7 @@ RUN tar -xvf node-*.tar.gz -C /usr/local \
   --strip-components=1
 
   RUN npm config set unsafe-perm true -g --unsafe-perm
-  RUN npm install -g node-gyp@3.4.0
+  RUN npm install -g node-gyp@3.6.2
   RUN npm install -g node-pre-gyp --fallback-to-build
   RUN npm install serialport@4.0.7 --save --unsafe-perm --build-from-source
 
