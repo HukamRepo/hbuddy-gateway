@@ -11,8 +11,8 @@ USER root
 
 RUN apt-get update && \
     apt-get -qy install curl ca-certificates \
-    -y --no-install-recommends --fix-missing libatlas-base-dev libudev-dev portaudio19-dev \
-    npm python3 python3-pip python-pyaudio python3-pyaudio sox \
+    -y --no-install-recommends --fix-missing yum libatlas-base-dev libudev-dev portaudio19-dev \
+    python3 python3-pip python-pyaudio python3-pyaudio sox \
     apt-utils csh build-essential make cmake tcsh bc gawk motion curl \
     libatlas-base-dev libudev-dev && rm -rf /var/lib/apt/lists/*
 
@@ -37,12 +37,9 @@ COPY app/resources/init.d/.asoundrc ~/.asoundrc
 COPY ./ /root
 WORKDIR /root
 
-RUN curl -O \
-  https://nodejs.org/dist/v8.2.1/node-v8.2.1-linux-armv7l.tar.gz
-RUN tar -xvf node-*.tar.gz
-RUN rm -rf node-v8.2.1-linux-armv7l.tar.gz
-RUN cd node-v8.2.1-linux-armv7l
-RUN cp -R * /usr/local/
+RUN yum install nodejs npm --enablerepo=epel
+
+RUN node -v
 
 RUN npm install -g npm@latest
 RUN npm install -g node-gyp
