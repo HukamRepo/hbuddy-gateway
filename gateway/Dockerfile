@@ -82,7 +82,7 @@ RUN npm config set unsafe-perm true -g --unsafe-perm
 RUN npm install -g node-gyp@3.4.0
 RUN npm install -g node-pre-gyp --fallback-to-build
 RUN npm install serialport@4.0.7 --save --unsafe-perm --build-from-source
-RUN JOBS=MAX npm install --no-bin-links
+RUN JOBS=MAX npm install
 
 EXPOSE 9000
 

@@ -1,22 +1,17 @@
-FROM hypriot/rpi-alpine
+FROM resin/raspberrypi3-alpine-node:8.0.0
 
 # Internal unprivileged user will have this ID:
-ENV CONTAINER_USER_ID="1000" \
-    CONTAINER_GROUP_ID="1000" \
-    BUILD_VERSION="V1"
+ENV BUILD_VERSION="V1"
 
 # Updates S.O. and adds system required packages
-RUN apk update && apk upgrade
-RUN apk add --update nodejs nodejs-npm python make g++ git
+# RUN apk update && apk upgrade
 
 USER root
 
-# configures environment
-ENV NPM_CONFIG_PREFIX=/opt/npm-global
-ENV PATH=$NPM_CONFIG_PREFIX/bin:$PATH
-
 # Install usefull npm packages
-RUN npm install -g npm
+# RUN npm cache clean --force
+# RUN npm install -g npm
+RUN npm install -g typescript@2.2.0
 RUN npm install -g @angular/cli
 
 WORKDIR /home/user/src
