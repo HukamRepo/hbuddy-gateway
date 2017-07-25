@@ -73,6 +73,7 @@ ENTRYPOINT []
 # audio drivers
 ENV AUDIODEV hw:1,0
 ENV AUDIODRIVER alsa
+ENV BUILD_VERSION="V1"
 
 RUN pip3 install pyaudio
 

@@ -2,7 +2,8 @@ FROM arm32v6/alpine:3.6
 
 # Internal unprivileged user will have this ID:
 ENV CONTAINER_USER_ID="1000" \
-    CONTAINER_GROUP_ID="1000"
+    CONTAINER_GROUP_ID="1000" \
+    BUILD_VERSION="V1"
 
 # Updates S.O. and adds system required packages
 RUN apk update && apk upgrade
