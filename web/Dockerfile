@@ -1,4 +1,4 @@
-FROM hukam/pi-angular-cli
+FROM hukam/pi-angular-cli:v1
 
 # Internal unprivileged user will have this ID:
 ENV BUILD_VERSION="V1"
