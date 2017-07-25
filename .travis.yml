@@ -8,7 +8,7 @@ script:
 # build image
 - docker build -t hukam/gateway-ui ./gateway
 # test image
-- docker run --rm -ti hukam/gateway-ui -p 3000:4200 --version
+# - docker run --rm -it hukam/gateway-ui -p 3000:4200
 # push image
 - >
   if [ "$TRAVIS_BRANCH" == "master" ] && [ "$TRAVIS_PULL_REQUEST" == "false" ]; then

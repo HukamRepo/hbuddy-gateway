@@ -16,9 +16,8 @@ ENV NPM_CONFIG_PREFIX=/opt/npm-global
 ENV PATH=$NPM_CONFIG_PREFIX/bin:$PATH
 
 # Install usefull npm packages
-RUN npm install -g \
-    npm@latest \
-    @angular/cli
+RUN npm install -g npm
+RUN npm install -g @angular/cli
 
 WORKDIR /home/user/src
 VOLUME /home/user/src
