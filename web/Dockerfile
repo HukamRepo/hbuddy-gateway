@@ -8,14 +8,12 @@ ENV BUILD_VERSION="V1"
 
 USER root
 
-WORKDIR /home/user/src
-VOLUME /home/user/src
-
 # Copy entrypoint script (should be an executable) into the container
 COPY ./entrypoint.sh /entrypoint.sh
 
 # Copy everything (except what is in .dockerignore) to the workdir, inside the container
-COPY ./ .
+COPY . /home
+WORKDIR /home
 
 RUN npm install --production
 
