@@ -3,7 +3,7 @@ FROM resin/rpi-raspbian:latest
 ENV INITSYSTEM on \
   AUDIODEV hw:1,0 \
   AUDIODRIVER alsa \
-  BUILD_VERSION="V1"
+  BUILD_VERSION="V2"
 
 MAINTAINER Gurvinder Singh <contact@hukamtechnologies.com>
 
