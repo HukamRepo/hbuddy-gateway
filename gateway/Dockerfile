@@ -39,9 +39,13 @@ WORKDIR /root
 
 RUN curl -O \
   https://nodejs.org/dist/v8.2.1/node-v8.2.1-linux-armv7l.tar.gz
-RUN tar -xvf node-*.tar.gz -C /usr/local \
-  --strip-components=1
+RUN tar -xvf node-*.tar.gz
+RUN rm -rf node-v8.2.1-linux-armv7l.tar.gz
+RUN cd node-v8.2.1-linux-armv7l
+RUN cp -R * /usr/local/
 
+RUN apt-get install npm
+RUN npm install -g npm@latest
 RUN npm install -g node-gyp@3.6.2
 RUN npm install -g node-pre-gyp --fallback-to-build
 RUN npm install serialport@4.0.7 --save --unsafe-perm --build-from-source
