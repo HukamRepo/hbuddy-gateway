@@ -33,7 +33,7 @@
     "connect-flash": "latest",
     "date-util": "^1.2.1",
     "ejs": "~0.7.1",
-    "express": "~3.2.6",
+    "express": "^3.2.6",
     "feedparser": "latest",
     "google": "^2.1.0",
     "ibmiotf": "latest",
@@ -61,15 +61,5 @@
     "util": "latest",
     "uuid": "latest",
     "watson-developer-cloud": "latest"
-  },
-  "devDependencies": {
-    "grunt": "^1.0.1",
-    "grunt-bower-installer": "latest",
-    "grunt-contrib-copy": "latest",
-    "grunt-contrib-requirejs": "latest",
-    "grunt-nodemon": "latest",
-    "grunt-npm-install": "latest",
-    "grunt-contrib-cssmin": "^2.0.0",
-    "jshint": "^2.5.6"
   }
 }

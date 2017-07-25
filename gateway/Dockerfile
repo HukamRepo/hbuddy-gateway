@@ -11,9 +11,9 @@ USER root
 
 RUN apt-get update && \
     apt-get -qy install curl ca-certificates \
-    -y --no-install-recommends --fix-missing libatlas-base-dev libudev-dev portaudio19-dev \
+    -y --no-install-recommends --fix-missing apt-utils libatlas-base-dev libudev-dev portaudio19-dev \
     python3 python3-pip python-pyaudio python3-pyaudio sox \
-    apt-utils csh build-essential make cmake tcsh bc gawk motion curl \
+    csh build-essential make cmake tcsh bc gawk motion curl \
     libatlas-base-dev libudev-dev && rm -rf /var/lib/apt/lists/*
 
 RUN pip3 install pyaudio
