@@ -1,4 +1,4 @@
-FROM resin/rpi-raspbian:latest
+FROM resin/rpi-raspbian:jessie
 
 ENV INITSYSTEM on \
   AUDIODEV hw:1,0 \
@@ -42,9 +42,10 @@ RUN curl -O \
 RUN tar -xvf node-*.tar.gz -C /usr/local \
   --strip-components=1
 
-RUN npm install -g node-gyp
-RUN npm install -g node-pre-gyp
-RUN npm install -g serialport --unsafe-perm --build-from-source
+  RUN npm config set unsafe-perm true -g --unsafe-perm
+  RUN npm install -g node-gyp@3.4.0
+  RUN npm install -g node-pre-gyp --fallback-to-build
+  RUN npm install serialport@4.0.7 --save --unsafe-perm --build-from-source
 
 RUN npm install
 
