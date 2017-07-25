@@ -1,4 +1,4 @@
-FROM resin/raspberrypi3-alpine-node:8.0.0
+FROM hukam/pi-angular-cli
 
 # Internal unprivileged user will have this ID:
 ENV BUILD_VERSION="V1"
@@ -7,12 +7,6 @@ ENV BUILD_VERSION="V1"
 # RUN apk update && apk upgrade
 
 USER root
-
-# Install usefull npm packages
-# RUN npm cache clean --force
-# RUN npm install -g npm
-RUN npm install -g typescript@2.2.0
-RUN npm install -g @angular/cli
 
 WORKDIR /home/user/src
 VOLUME /home/user/src

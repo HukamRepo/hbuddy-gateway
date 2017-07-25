@@ -97,11 +97,9 @@ fi
 
 cd tools
 
-sudo apt-get install python3
-sudo apt-get install python-pyaudio python3-pyaudio sox
-sudo pip install pyaudio
-sudo apt-get install libatlas-base-dev
-sudo apt-get install libudev-dev
+sudo apt-get install python3 python3-pip python-pyaudio python3-pyaudio sox gcc
+sudo pip3 install pyaudio
+sudo apt-get install -y --no-install-recommends --fix-missing libatlas-base-dev libudev-dev portaudio19-dev
 
 if [ $(program_is_installed node) == 0 ]; then
 	echo "<<<< GOING TO INSTALL NODEJS INSIDE hukam/tools DIRECTORY >>>>>"
@@ -142,7 +140,7 @@ sudo cp app/resources/init.d/.asoundrc ~/.asoundrc
 	
 sudo npm install -g node-gyp
 sudo npm install -g node-pre-gyp
-sudo npm install serialport --unsafe-perm --build-from-source
+sudo npm install -g serialport --unsafe-perm --build-from-source
 
 sudo npm update
 sudo bower --allow-root install
