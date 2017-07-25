@@ -1,22 +1,35 @@
-FROM hypriot/rpi-node:8.1.3
-# Enable systemd
-ENV INITSYSTEM on
-MAINTAINER Gurvinder Singh <contact@hukamtechnologies.com>
+FROM arm32v6/alpine:3.6
 
-RUN apt-get update
-RUN apt-get install -q -y --no-install-recommends --fix-missing \
-  apt-utils \
-  build-essential
+# Internal unprivileged user will have this ID:
+ENV CONTAINER_USER_ID="1000" \
+    CONTAINER_GROUP_ID="1000"
 
-COPY . /usr/src/app
-WORKDIR /usr/src/app
+# Updates S.O. and adds system required packages
+RUN apk update && apk upgrade
+RUN apk add --update nodejs nodejs-npm python make g++ git
 
 USER root
-ENTRYPOINT []
 
-RUN npm install --ignore-scripts --unsafe-perm
-RUN npm config set unsafe-perm true -g --unsafe-perm
-RUN npm install -g @angular/cli
-RUN JOBS=MAX npm install --production
+# configures environment
+ENV NPM_CONFIG_PREFIX=/opt/npm-global
+ENV PATH=$NPM_CONFIG_PREFIX/bin:$PATH
 
-CMD ["ng","serve"]
+# Install usefull npm packages
+RUN npm install -g \
+    npm@latest \
+    @angular/cli
+
+WORKDIR /home/user/src
+VOLUME /home/user/src
+
+# Copy entrypoint script (should be an executable) into the container
+COPY ./entrypoint.sh /entrypoint.sh
+
+# Copy everything (except what is in .dockerignore) to the workdir, inside the container
+COPY ./ .
+
+RUN npm install
+
+EXPOSE 4200
+# ENTRYPOINT ["entrypoint.sh"]
+CMD ["ng", "serve", "--host=0.0.0.0"]  # default is defined in entrypoint.sh

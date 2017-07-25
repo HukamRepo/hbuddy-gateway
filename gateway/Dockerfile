@@ -76,12 +76,13 @@ ENV AUDIODRIVER alsa
 
 RUN pip3 install pyaudio
 
-RUN npm install --ignore-scripts --unsafe-perm
+RUN npm cache clean --force
 RUN npm config set unsafe-perm true -g --unsafe-perm
 RUN npm install -g node-gyp@3.4.0
 RUN npm install -g node-pre-gyp --fallback-to-build
 RUN npm install serialport@4.0.7 --save --unsafe-perm --build-from-source
-RUN JOBS=MAX npm install --production
+RUN JOBS=MAX npm install --no-bin-links
 
+EXPOSE 9000
 
 CMD ["node","server.js"]

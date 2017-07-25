@@ -1,3 +1,10 @@
+# Docker
+
+docker run --rm --privileged multiarch/qemu-user-static:register --reset
+
+docker run --rm -it -v "$PWD:/home/user/src" -p  4200:4200 -p 49153:49153 sinny777/hukam-gateway-ui
+
+
 # Web
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 1.1.3.
