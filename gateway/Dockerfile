@@ -42,9 +42,9 @@ RUN curl -O \
 RUN tar -xvf node-*.tar.gz -C /usr/local \
   --strip-components=1
 
-  RUN npm install -g node-gyp@3.6.2
-  RUN npm install -g node-pre-gyp --fallback-to-build
-  RUN npm install serialport@4.0.7 --save --unsafe-perm --build-from-source
+RUN npm install -g node-gyp@3.6.2
+RUN npm install -g node-pre-gyp --fallback-to-build
+RUN npm install serialport@4.0.7 --save --unsafe-perm --build-from-source
 
 RUN npm install
 
