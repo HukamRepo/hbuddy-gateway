@@ -17,7 +17,7 @@ WORKDIR /home
 
 RUN npm install -g node-gyp
 RUN npm install -g node-pre-gyp --fallback-to-build
-RUN npm install -g @angular/cli
+RUN npm install -g @angular/cli --save-dev
 RUN npm install
 
 EXPOSE 4200
