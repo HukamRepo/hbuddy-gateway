@@ -143,6 +143,5 @@ sudo npm install -g node-pre-gyp
 sudo npm install -g serialport --unsafe-perm --build-from-source
 
 sudo npm update
-sudo bower --allow-root install
 
 exit 0
