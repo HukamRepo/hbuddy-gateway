@@ -24,4 +24,4 @@ COPY . /usr/src/app
 
 EXPOSE 4200
 ENTRYPOINT []
-CMD ["ng", "serve", "--host=0.0.0.0", "--disable-host-check"]
+CMD ["npm", "start"]
