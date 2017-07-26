@@ -2,15 +2,14 @@
   "name": "hbuddy-gateway",
   "version": "0.0.1",
   "engines": {
-    "node": "6.2.2"
+    "node": "8.0.0"
   },
   "private": true,
   "main": "views/index.html",
   "scripts": {
     "start": "node server.js",
     "test": "npm test",
-    "provision": "apt-get update -y && apt-get install isc-dhcp-server hostapd iw -y",
-    "bootstrap": "wget http://treebeard.home.net:1234/bootstrap/pifi-conf -O bootstrap.sh && chmod u+x bootstrap.sh && ./bootstrap.sh"
+    "provision": "apt-get update -y && apt-get install isc-dhcp-server hostapd iw -y"
   },
   "keywords": [
     "Hukam Gateway",
@@ -33,7 +32,7 @@
     "connect-flash": "latest",
     "date-util": "^1.2.1",
     "ejs": "~0.7.1",
-    "express": "^3.2.6",
+    "express": "^3.21.2",
     "feedparser": "latest",
     "google": "^2.1.0",
     "ibmiotf": "latest",
@@ -51,7 +50,6 @@
     "passport-idaas-openidconnect": "2.0.0",
     "pkgcloud": "^1.4.0",
     "qs": "latest",
-    "requirejs": "latest",
     "sensortag": "^1.2.3",
     "serialport": "latest",
     "snowboy": "^1.1.0",

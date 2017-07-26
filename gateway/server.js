@@ -1,34 +1,22 @@
 /**
  * Module dependencies
 */
-var express  = require('express'),
-	app = express(),
-	server = require('http').createServer(app),
-	http = require('http'),
-	path = path = require('path'),
-	uuid = require('uuid'),
-	util = require('util'),
-	watson = require('watson-developer-cloud');
+var express = require('express'),
+	app = express();
+var path = require('path');
+var favicon = require('serve-favicon');
+var logger = require('morgan');
+var cookieParser = require('cookie-parser');
+var bodyParser = require('body-parser');
+app.use(logger('dev'));
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(cookieParser());
+app.use(express.static(__dirname));
 
 var bluemix = require('./app/config/bluemix');
 
-var vhost = 'hbuddy-gateway.local'
-var port     = process.env.PORT || 9000;
-
-app.configure(function() {
-    // set up our express application
-    app.set('port', port);
-    // app.use(express.logger('dev')); // log every request to the console
-    app.use(express.bodyParser()); // get information from html forms
-    app.use(express.cookieParser());
-    app.use(express.session({ secret: 'keyboard cat' }));// persistent login sessions
-    app.use(express.methodOverride());
-    app.use(express.json({limit: '50mb'}));
-    app.use(express.urlencoded({ extended: true }));
-
-    app.use(express.session({ secret: 'keyboard cat' }));
-
-});
+var port = process.env.PORT || 9000;
 
 /*
 app.use(function(req, res, next) {
@@ -61,13 +49,11 @@ app.all('*', function(req, res,next) {
 
 });
 
-
-
 //require('./app/startup.js')(app);
 require('./app/bootstrap.js')(app);
 require('./app/routes.js')(app);
 
-var sttEndpoint = require('./app/endpoints/sttEndpoint.js')(io);
+// var sttEndpoint = require('./app/endpoints/sttEndpoint.js')(io);
 
 app.use(app.router); //init routing
 
@@ -86,9 +72,8 @@ app.use(function (err, req, res, next) {
 	  res.status(500).send('Something broke!')
 	});
 
-express.vhost(vhost, app);
+// express.vhost(vhost, app);
 
-server.listen(app.get('port'), function () {
-    console.log('Express server listening on port ' + vhost+":"+server.address().port);
+app.listen(app.get('port'), function () {
+    console.log('Express server listening on port ' + app.get('port'));
 });
-//server.timeout = 2000;
