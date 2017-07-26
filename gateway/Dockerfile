@@ -44,4 +44,4 @@ COPY . /usr/src/app
 
 EXPOSE 9000
 
-CMD ["node","server.js"]
+CMD ["npm","start"]
