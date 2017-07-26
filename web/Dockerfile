@@ -1,25 +1,27 @@
-FROM hukam/pi-angular-cli:v1
+FROM resin/raspberrypi3-node:8.0.0
 
-# Internal unprivileged user will have this ID:
 ENV BUILD_VERSION="V1"
 
 USER root
 
 # Updates S.O. and adds system required packages
-RUN apk update && apk upgrade
+RUN apt-get update
 
-# Copy entrypoint script (should be an executable) into the container
-COPY ./entrypoint.sh /entrypoint.sh
+# Create a directory where our app will be placed
+RUN mkdir -p /usr/src/app
 
-# Copy everything (except what is in .dockerignore) to the workdir, inside the container
-COPY ./ /home
-WORKDIR /home
+#Change directory so that our commands run inside this new directory
+WORKDIR /usr/src/app
 
-RUN npm install -g node-gyp
-RUN npm install -g node-pre-gyp --fallback-to-build
-RUN npm install -g @angular/cli --save-dev
+# Copy dependency definitions
+COPY package.json /usr/src/app
+
+# Install dependencies
 RUN npm install
+
+# Get all the code needed to run the app
+COPY . /usr/src/app
 
 EXPOSE 4200
 ENTRYPOINT []
-CMD ["ng", "serve", "--host=0.0.0.0"]  # default is defined in entrypoint.sh
+CMD ["ng", "serve", "--host=0.0.0.0", "--disable-host-check"]

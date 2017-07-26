@@ -2,7 +2,11 @@
 
 docker run --rm --privileged multiarch/qemu-user-static:register --reset
 
-docker run --rm -it -v "$PWD:/home/user/src" -p  4200:4200 -p 49153:49153 sinny777/hukam-gateway-ui
+docker run --rm -it -p 3000:4200 hukam/pi-angular-cli:v1-arm ng serve --host=0.0.0.0 --disable-host-check
+
+OR
+
+docker run --rm -it -p 3000:4200 -v 'pwd':/usr/src/app hukam/pi-angular-cli:v1-arm npm start --disable-host-check
 
 
 # Web

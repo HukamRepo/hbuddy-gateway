@@ -14,7 +14,6 @@ var bluemix = require('./app/config/bluemix');
 
 var vhost = 'hbuddy-gateway.local'
 var port     = process.env.PORT || 9000;
-var ip     = process.env.IP || "localhost";
 
 app.configure(function() {
     // set up our express application

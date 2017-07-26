@@ -1,4 +1,4 @@
-FROM hukam/pi3-base:v2
+FROM resin/raspberrypi3-node:8.0.0
 
 ENV INITSYSTEM on \
   AUDIODEV hw:1,0 \
@@ -7,10 +7,16 @@ ENV INITSYSTEM on \
 
 MAINTAINER Gurvinder Singh <contact@hukamtechnologies.com>
 
-# Updates S.O. and adds system required packages
-RUN apt-get update
-
 USER root
+
+RUN apt-get update && \
+    apt-get -qy install curl ca-certificates \
+    -y --no-install-recommends --fix-missing apt-utils libatlas-base-dev libudev-dev portaudio19-dev \
+    python3 python3-pip python-pyaudio python3-pyaudio sox \
+    csh build-essential make cmake tcsh bc gawk motion curl \
+    libatlas-base-dev libudev-dev && rm -rf /var/lib/apt/lists/*
+
+RUN pip3 install pyaudio
 
 #
 # VSFTPD
@@ -27,20 +33,15 @@ RUN echo 'pcm.array { type hw card 1 }' >! ~/.asoundrc
 RUN echo 'pcm.array_gain { type softvol slave { pcm "array" } control { name "Mic Gain" count 2 } min_dB -10.0 max_dB 5.0 }' >> ~/.asoundrc
 RUN echo 'pcm.cap { type plug slave { pcm "array_gain" channels 4 } route_policy sum }' >> ~/.asoundrc
 
-# Create a directory where our app will be placed
-RUN mkdir -p /usr/src/app
+COPY app/resources/init.d/.asoundrc ~/.asoundrc
+COPY ./ /root
+WORKDIR /root
 
-#Change directory so that our commands run inside this new directory
-WORKDIR /usr/src/app
+RUN npm install -g node-gyp
+RUN npm install -g node-pre-gyp --fallback-to-build
+RUN npm install serialport@4.0.7 --save --unsafe-perm --build-from-source
 
-# Copy dependency definitions
-COPY package.json /usr/src/app
-
-# Install dependencies
 RUN npm install
-
-# Get all the code needed to run the app
-COPY . /usr/src/app
 
 EXPOSE 9000
 
