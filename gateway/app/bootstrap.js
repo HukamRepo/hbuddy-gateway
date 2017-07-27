@@ -1,8 +1,8 @@
 
 var CONFIG = require('./config/config').get(),
   // exec = require("child_process").exec,
-  gatewayHandler = require('./handlers/gatewayHandler.js')(),
-  sensortagHandler = require('./handlers/sensortagHandler.js')(),
+  // gatewayHandler = require('./handlers/gatewayHandler.js')(),
+  // sensortagHandler = require('./handlers/sensortagHandler.js')(),
   // dependency_manager = require('./endpoints/dependency_manager.js')(),
   // wifi_manager = require('./endpoints/wifi_manager.js')(),
   scheduleHandler = require('./handlers/scheduleHandler.js')(),
@@ -19,14 +19,14 @@ module.exports = function(app) {
 
 	function cleanupOnExit(){
 		console.log("\n\n<<<<<<<<< CALLING CLEANUP PROCESS >>>>>>>>> ");
-		sensortagHandler.disconnectSensorTags();
+		// sensortagHandler.disconnectSensorTags();
 		console.log("<<<<<<< Gateway Stopped, Good Bye >>>>>>>>\n");
 	}
 
 	function setupGateway(){
 		console.log("IN setupGateway: >> ");
 		async.waterfall([
-		                 setGlobalDetails,
+		                //  setGlobalDetails,
 //		                 checkDependencies,
 		                //  checkConnectivity,
 		    	        //  readConfigurationFile,
@@ -37,10 +37,11 @@ module.exports = function(app) {
 								return;
 							}
 							console.log("Final Result: >> ", result);
-							gatewayHandler.initGateway();
+							// gatewayHandler.initGateway();
 	     			    });
 	};
 
+/*
 	function setGlobalDetails(callback){
 		 global.appRoot = path.resolve(__dirname);
 		 global.gatewayInfo = gatewayHandler.gatewayInfo(function(gatewayInfo){
@@ -49,6 +50,7 @@ module.exports = function(app) {
 			 callback(null, "GLOBAL DETAILS SET");
 		 });
 	};
+*/
 
 	function uploadFiles(status, callback){
   		scheduleHandler.scheduleContentUpload(function(err, resp){
