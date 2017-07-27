@@ -27,7 +27,7 @@ module.exports = function(app) {
 		console.log("IN setupGateway: >> ");
 		async.waterfall([
 		                  setGlobalDetails,
-		                  checkDependencies,
+		                  // checkDependencies,
 		                  checkConnectivity,
 		    	            readConfigurationFile,
 		    	         uploadFiles
@@ -37,14 +37,14 @@ module.exports = function(app) {
 								return;
 							}
 							console.log("Final Result: >> ", result);
-							// gatewayHandler.initGateway();
+							       gatewayHandler.initGateway();
 	     			    });
 	};
 
 
 	function setGlobalDetails(callback){
-		//  global.appRoot = path.resolve(__dirname);
-     global.appRoot = "/usr/src/app";
+		 global.appRoot = path.resolve(__dirname);
+    //  global.appRoot = "/usr/src/app";
 		 global.gatewayInfo = gatewayHandler.gatewayInfo(function(gatewayInfo){
 			 global.gatewayInfo = gatewayInfo;
 			//  require('./handlers/ble/blenoHandler').advertise(gatewayInfo);

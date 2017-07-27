@@ -8,7 +8,9 @@ ENV INITSYSTEM on \
   BUILD_VERSION="V1"
 
 # Updates and adds system required packages
-RUN apt-get update
+RUN apt-get update && \
+    apt-get -qy install curl ca-certificates \
+    -y --no-install-recommends --fix-missing apt-utils netcat && rm -rf /var/lib/apt/lists/*
 
 USER root
 
