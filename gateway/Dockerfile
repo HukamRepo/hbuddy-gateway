@@ -39,14 +39,14 @@ WORKDIR /usr/src/app
 COPY package.json /usr/src/app
 
 # Install dependencies
-RUN npm install
+RUN JOBS=MAX npm i --unsafe-perm --production
 
 # Get all the code needed to run the app
 COPY . /usr/src/app
 
 ENV TINI_SUBREAPER=true
 
-EXPOSE 9000
+EXPOSE 9000 1883 8883
 
 ENTRYPOINT ["tini","-s", "--"]
 

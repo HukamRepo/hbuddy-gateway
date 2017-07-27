@@ -30,13 +30,13 @@ module.exports = function(appConfig, serialportHandler) {
 		console.log('\n\n<<<<<< IN connectToMqtt >>>>>>>>> ', appConfig.IOT_CONFIG);
 		if(!appClient){
 			appClient = new Client.IotfApplication(appConfig.IOT_CONFIG);
-			console.log("IBM IoT appClient created >>>>>>>> ");
 		}
 		if(!mqttConnected){
+			console.log("Connecting IBM Iot over MQTT >>>>>>>> ");
 			appClient.connect();
 		}
 	  //setting the log level to 'trace'
-//		appClient.log.setLevel('trace');
+		appClient.log.setLevel('trace');
 
 	    appClient.on("connect", function () {
 	    	console.log('<<<<<<< IBM IoT Cloud Connected Successfully >>>>>> \n\n');
