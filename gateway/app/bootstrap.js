@@ -44,8 +44,7 @@ module.exports = function(app) {
 
 	function setGlobalDetails(callback){
 		 global.appRoot = path.resolve(__dirname);
-    //  global.appRoot = "/usr/src/app";
-		 global.gatewayInfo = gatewayHandler.gatewayInfo(function(gatewayInfo){
+     global.gatewayInfo = gatewayHandler.gatewayInfo(function(gatewayInfo){
 			 global.gatewayInfo = gatewayInfo;
 			//  require('./handlers/ble/blenoHandler').advertise(gatewayInfo);
 			 callback(null, "GLOBAL DETAILS SET");
