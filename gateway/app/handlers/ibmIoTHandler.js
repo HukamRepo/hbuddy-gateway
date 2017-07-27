@@ -9,10 +9,10 @@ var startTime = new Date();
 var mqttConnected = false;
 
 module.exports = function(appConfig, serialportHandler) {
-	
+
 
 	var methods = {};
-	
+
 	methods.getAppClient = function(){
 		if(!appClient){
 			appClient = new Client.IotfApplication(appConfig.IOT_CONFIG);
@@ -22,14 +22,15 @@ module.exports = function(appConfig, serialportHandler) {
 
 	methods.connectToIBMCloud = function(){
 //		checkConnectivity();
-		
+
 		if(!appConfig){
 			appConfig = CONFIG;
 		}
-		
+
 		console.log('\n\n<<<<<< IN connectToMqtt >>>>>>>>> ', appConfig.IOT_CONFIG);
 		if(!appClient){
 			appClient = new Client.IotfApplication(appConfig.IOT_CONFIG);
+			console.log("IBM IoT appClient created >>>>>>>> ");
 		}
 		if(!mqttConnected){
 			appClient.connect();
