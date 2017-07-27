@@ -1,6 +1,6 @@
 
 var CONFIG = require('./config/config').get(),
-  // exec = require("child_process").exec,
+   exec = require("child_process").exec,
    gatewayHandler = require('./handlers/gatewayHandler.js')(),
   // sensortagHandler = require('./handlers/sensortagHandler.js')(),
   // dependency_manager = require('./endpoints/dependency_manager.js')(),
@@ -13,7 +13,7 @@ var CONFIG = require('./config/config').get(),
 
 module.exports = function(app) {
 
-//	var cleanup = require('./utils/cleanup').Cleanup(cleanupOnExit);
+	var cleanup = require('./utils/cleanup').Cleanup(cleanupOnExit);
 
     setupGateway();
 
@@ -46,13 +46,14 @@ module.exports = function(app) {
 		 global.appRoot = path.resolve(__dirname);
 		 global.gatewayInfo = gatewayHandler.gatewayInfo(function(gatewayInfo){
 			 global.gatewayInfo = gatewayInfo;
-			 require('./handlers/ble/blenoHandler').advertise(gatewayInfo);
+			//  require('./handlers/ble/blenoHandler').advertise(gatewayInfo);
 			 callback(null, "GLOBAL DETAILS SET");
 		 });
 	};
 
 
 	function uploadFiles(status, callback){
+    console.log("IN uploadFiles: >> ", status);
   		scheduleHandler.scheduleContentUpload(function(err, resp){
   			console.log(resp);
   		});
