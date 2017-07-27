@@ -3,8 +3,8 @@ var CONFIG = require('./config/config').get(),
    exec = require("child_process").exec,
    gatewayHandler = require('./handlers/gatewayHandler.js')(),
   // sensortagHandler = require('./handlers/sensortagHandler.js')(),
-  // dependency_manager = require('./endpoints/dependency_manager.js')(),
-  // wifi_manager = require('./endpoints/wifi_manager.js')(),
+  dependency_manager = require('./endpoints/dependency_manager.js')(),
+  wifi_manager = require('./endpoints/wifi_manager.js')(),
   scheduleHandler = require('./handlers/scheduleHandler.js')(),
   path = require('path'),
   async = require("async"),
@@ -27,9 +27,9 @@ module.exports = function(app) {
 		console.log("IN setupGateway: >> ");
 		async.waterfall([
 		                  setGlobalDetails,
-//		                 checkDependencies,
+		                  checkDependencies,
 		                  checkConnectivity,
-		    	        //  readConfigurationFile,
+		    	            readConfigurationFile,
 		    	         uploadFiles
 		    	     ], function (err, result) {
 							if (err) {
@@ -43,14 +43,14 @@ module.exports = function(app) {
 
 
 	function setGlobalDetails(callback){
-		 global.appRoot = path.resolve(__dirname);
+		//  global.appRoot = path.resolve(__dirname);
+     global.appRoot = "/usr/src/app";
 		 global.gatewayInfo = gatewayHandler.gatewayInfo(function(gatewayInfo){
 			 global.gatewayInfo = gatewayInfo;
 			//  require('./handlers/ble/blenoHandler').advertise(gatewayInfo);
 			 callback(null, "GLOBAL DETAILS SET");
 		 });
 	};
-
 
 	function uploadFiles(status, callback){
     console.log("IN uploadFiles: >> ", status);
@@ -82,7 +82,6 @@ module.exports = function(app) {
         });
 	};
 
-/*
 	function checkDependencies(status, callback){
 		dependency_manager.check_deps({
 		      "binaries": ["dhcpd", "hostapd", "iw"],
@@ -153,8 +152,5 @@ module.exports = function(app) {
    	 		}
    	 	});
 	};
-
-  */
-
 
 }
