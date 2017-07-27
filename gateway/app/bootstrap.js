@@ -28,7 +28,7 @@ module.exports = function(app) {
 		async.waterfall([
 		                //  setGlobalDetails,
 //		                 checkDependencies,
-		                //  checkConnectivity,
+		                  checkConnectivity,
 		    	        //  readConfigurationFile,
 		    	         uploadFiles
 		    	     ], function (err, result) {
@@ -59,25 +59,7 @@ module.exports = function(app) {
   		callback(null, "SCHEDULER CALLED");
   	};
 
-/*
-	function checkDependencies(status, callback){
-		dependency_manager.check_deps({
-		      "binaries": ["dhcpd", "hostapd", "iw"],
-		      "files":    ["/etc/init.d/isc-dhcp-server"]
-		  }, function(error) {
-		      if (error){
-		    	  var err = new Error("* Dependency error, did you run `sudo npm run-script provision`? " +error);
-		    	  callback(err, null);
-		    	  // For testing locally uncomment below line and comment above line
-//		    	  callback(null, null);
-		      }else{
-		    	  callback(null, "DEPENDENCIES CHECKED");
-		      }
-		  });
-	};
-
-
-	function checkConnectivity(status, callback){
+  function checkConnectivity(status, callback){
 		var scriptPath = appRoot+"/resources/shellscripts/connectivity.sh";
 		var command = 'sh '+scriptPath;
         var myscript = exec(command);
@@ -97,6 +79,23 @@ module.exports = function(app) {
         		callback(null, resp);
         	}
         });
+	};
+
+/*
+	function checkDependencies(status, callback){
+		dependency_manager.check_deps({
+		      "binaries": ["dhcpd", "hostapd", "iw"],
+		      "files":    ["/etc/init.d/isc-dhcp-server"]
+		  }, function(error) {
+		      if (error){
+		    	  var err = new Error("* Dependency error, did you run `sudo npm run-script provision`? " +error);
+		    	  callback(err, null);
+		    	  // For testing locally uncomment below line and comment above line
+//		    	  callback(null, null);
+		      }else{
+		    	  callback(null, "DEPENDENCIES CHECKED");
+		      }
+		  });
 	};
 
   function enableAPMode(callback){
