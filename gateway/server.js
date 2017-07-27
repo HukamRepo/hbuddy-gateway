@@ -16,8 +16,6 @@ app.use(express.static(__dirname));
 
 var bluemix = require('./app/config/bluemix');
 
-var port = process.env.PORT || 9000;
-
 /*
 app.use(function(req, res, next) {
 	  res.header("Access-Control-Allow-Origin", "*");
@@ -74,6 +72,6 @@ app.use(function (err, req, res, next) {
 
 // express.vhost(vhost, app);
 
-app.listen(app.get('port'), function () {
-    console.log('Express server listening on port ' + app.get('port'));
+app.listen(9000, function () {
+    console.log('\n\n--------- Hukam IoT Gateway server listening on port 9000 ----------- \n\n');
 });

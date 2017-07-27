@@ -1,13 +1,13 @@
 FROM hukam/pi3-base:v2
 
+MAINTAINER Gurvinder Singh <contact@hukamtechnologies.com>
+
 ENV INITSYSTEM on \
   AUDIODEV hw:1,0 \
   AUDIODRIVER alsa \
   BUILD_VERSION="V1"
 
-MAINTAINER Gurvinder Singh <contact@hukamtechnologies.com>
-
-# Updates S.O. and adds system required packages
+# Updates and adds system required packages
 RUN apt-get update
 
 USER root
@@ -42,6 +42,10 @@ RUN npm install
 # Get all the code needed to run the app
 COPY . /usr/src/app
 
+ENV TINI_SUBREAPER=true
+
 EXPOSE 9000
 
-CMD ["npm","start"]
+ENTRYPOINT ["tini","-s", "--"]
+
+CMD ["npm", "start"]

@@ -2,6 +2,10 @@
 
 A Node application which makes connecting your Hukam Gateway (RaspberryPi 3) to your home wifi easier
 
+## DOCKER IMORTANT
+Ubuntu base image:
+https://github.com/phusion/baseimage-docker
+
 ## Connecting to WiFi?
 
 When unable to connect to a wifi network, this service will turn the RPI into a wireless AP. This allows us to connect to it via a phone or other device and configure our home wifi network (for example).
@@ -15,7 +19,7 @@ That project broadly follows these [instructions](http://www.maketecheasier.com/
 ###Main files to be configured:
 sudo nano /etc/wpa_supplicant/wpa_supplicant.conf
 
-and 
+and
 
 sudo nano /etc/network/interfaces
 
@@ -62,7 +66,7 @@ If the above says `nl80211 not found.` it means you are running the `rtl871xdrv`
 ```
 $cd hukam-gateway
 $sudo mv /usr/sbin/hostapd /usr/sbin/hostapd.OLD
-$sudo mv app/resources/bin/hostapd.rtl871xdrv hostapd 
+$sudo mv app/resources/bin/hostapd.rtl871xdrv hostapd
 $sudo chmod 755 /usr/sbin/hostapd
 ```
 
@@ -142,9 +146,3 @@ DL (Low): 0
 Scan Channel: 7FFF
 SD Scan Duration: 4
 SM Sleep Mode: No Sleep [0]
-
-
-
-
-
-
