@@ -5,29 +5,28 @@ localDBHandler = require('../handlers/localDBHandler')(),
 cloudantHandler = require('../handlers/cloudantHandler')(),
 sceneHandler = require('../handlers/sceneHandler')(),
 scheduleHandler = require('../handlers/scheduleHandler')(),
-blenoHandler = require('../handlers/ble/blenoHandler'),
 serialportHandler = null;
 ibmIoTHandler = null;
 var appConfig;
 
 module.exports = function() {
-    
+
 var methods = {};
 
 	methods.gatewayInfo = function(cb){
-		var info = {"gatewayId": "", "internet": "", "visibility": true};		
+		var info = {"gatewayId": "", "internet": "", "visibility": true};
 		info.gatewayId = commonHandler.getRPISerialNumber();
-		
+
 		commonHandler.checkInternet(function(isConnected) {
 			info.internet = isConnected;
 			if(cb){
 				cb(info);
 			}
 		});
-		
+
 		return info;
 	};
-	
+
 	methods.initGateway = function(){
 		console.log('\n\n<<<<<<<< IN initGateway >>>>>>>');
 		localDBHandler.loadAllLocalDBs();
@@ -51,9 +50,9 @@ var methods = {};
 		    	});
 		    }
 		});
-		
+
 	};
-	
+
 	handleOnline = function(cb){
 		console.log("<<<<<<< INTERNET IS AVAILABLE >>>>>>> ");
 		cloudantHandler.loadConfigurationsFromCloud(true, function(err, configurations){
@@ -80,19 +79,19 @@ var methods = {};
 			cb(appConfig);
 		});
 	};
-	
+
 	methods.startProcessWithCloud = function(){
 		console.log("\n\n <<<<<<<<<<<< IN startProcessWithCloud: >>>>>>>\n\n ");
 		cloudantHandler.loadPlaceFromCloud(function(err, place){
 			if(err){
 				console.log("ERROR IN loadPlaceFromCloud: >>>> ", err );
 			}else{
-				
+
 				if(!place || !place._id){
 					console.log("<<<<<<<<<<< NO PLACE CONNECTED TO THE GATEWAY >>>>>>>>>>>>>>");
 					return false;
 				}
-				
+
 				global.place = place;
 				console.log("<<<< PLACE SYNCHRONISED WITH CLOUD IN LOCAL DB >>>>> ", global.place);
 				cloudantHandler.loadPlaceAreasFromCloud(true, function(err, placeAreas){
@@ -102,7 +101,7 @@ var methods = {};
 						console.log("\n\n<<<< PLACEAREAS SYNCHRONISED WITH CLOUD IN LOCAL DB >>>>> ", placeAreas);
 					}
 				});
-				
+
 				cloudantHandler.loadBoardsFromCloud(true, function(err, boards){
 					if(err){
 						console.log("ERROR IN loadBoardsFromCloud: >>>> ", err );
@@ -111,7 +110,7 @@ var methods = {};
 						methods.broadcastCommandsToBoards(boards);
 					}
 				});
-				
+
 				cloudantHandler.loadScenesFromCloud(true, function(err, scenes){
 					if(err){
 						console.log("ERROR IN loadScenesFromCloud: >>>> ", err );
@@ -119,13 +118,13 @@ var methods = {};
 						console.log("\n\n<<<< SCENES SYNCHRONISED WITH CLOUD IN LOCAL DB >>>>> ", scenes.length);
 						sceneHandler.processScenes(scenes);
 					}
-				});				
-				
+				});
+
 			}
 		});
-		
+
 	};
-	
+
 	methods.startProcessWithLocal = function(){
 		localDBHandler.loadBoardsFromLocalDB(function(err, boards){
 			if(err){
@@ -135,7 +134,7 @@ var methods = {};
 				methods.broadcastCommandsToBoards(boards);
 			}
 		});
-		
+
 		sceneHandler.processScenes(null);
 	};
 
@@ -145,7 +144,7 @@ var methods = {};
 			return false;
 		}
 		console.log("IN broadcastCommandsToBoards: >>>> ", boards.length);
-		
+
 		for(var i = 0; i < boards.length; i++){
 			var board = boards[i];
 			if(board.devices){
@@ -163,22 +162,22 @@ var methods = {};
 			}
 		}
 	};
-	
+
 	methods.handleCommand = function(payload, cb){
 		var respMsg = {};
 		console.log("IN gatewayHandler.handleCommand: PAYLOAD: >>> ", payload);
 		try{
-			
+
 			if(payload){
 				if(payload.type == 'DEVICE'){
 					methods.handleDeviceCommand(payload, cb);
 				}
-				
+
 				if(payload.type == 'SENSOR'){
 					methods.handleSensorCommand(payload, cb);
 				}
 			}
-			
+
 		}catch(err){
 			console.log("ERROR In handlePayload, payload: ", payload, ", ERROR: >>",  err);
 			respMsg.status = "ERROR";
@@ -187,9 +186,9 @@ var methods = {};
 				cb(respMsg);
 			}
 		}
-		
+
 	};
-	
+
 	methods.handleDeviceCommand = function(payload, cb){
 		var respMsg = {};
 		try{
@@ -206,7 +205,7 @@ var methods = {};
 					});
 				}else if(payload.action){
 					if(payload.type && payload.type == "Scene" && payload.data){
-						// TODO: Refresh Scene 
+						// TODO: Refresh Scene
 						console.log("Refresh Scene: >>> ", payload.data.title);
 						sceneHandler.updateScene(payload.data);
 					}else{
@@ -234,30 +233,30 @@ var methods = {};
 			}
 		}
 	};
-  	
+
 	methods.handleSensorCommand = function(payload, cb){
 		var respMsg = {};
 		try{
-			
+
 			if(!sensorsHandler){
 				console.log("No SensorsHandler, may be Internet is not connected >>>>");
 				return;
 			}
-			
+
 			if(payload.command == 'CONNECT_SENSORS'){
 				sensorsHandler.connectSensors(payload);
 			}
-			
+
 			if(payload.command == 'DISCONNECT_SENSORS'){
 				sensorsHandler.disconnectSensors();
 			}
-			
+
 			respMsg.status = "SUCCESS";
 			respMsg.msg = "Command Executed Successfully: >>> ", payload;
 			if(cb){
 				cb(respMsg);
 			}
-			
+
 		}catch(err){
 			console.log("ERROR In handleSensorCommand, payload: ", payload, ", ERROR: >>",  err);
 			respMsg.status = "ERROR";
@@ -267,8 +266,8 @@ var methods = {};
 			}
 		}
 	};
-	
-	
+
+
     return methods;
-    
+
 }
