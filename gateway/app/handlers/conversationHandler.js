@@ -1,6 +1,6 @@
 'use strict'
 
-var CONFIG = require('../config/config').get(),
+var CONFIG = require('../common/common').CONFIG(),
     request = require('request'),
     format = require('util').format,
     moment = require('moment');
@@ -27,7 +27,7 @@ var methods = {};
 		apiOptions.url = CONFIG.SERVICES_CONFIG.hbuddyApi.endpoint + "/Conversations";
 		apiOptions.method = "POST";
 		apiOptions.json = req;
-		
+
 	    request(apiOptions, function (err, resp, body) {
 	        if (err) {
 	            cb(err, null);

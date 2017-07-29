@@ -46,7 +46,7 @@ COPY . /usr/src/app
 
 ENV TINI_SUBREAPER=true
 
-EXPOSE 9000 1883 8883
+EXPOSE 9000
 
 ENTRYPOINT ["tini","-s", "--"]
 

@@ -1,0 +1,78 @@
+  {
+      "gatewayId": "",
+      "GATEWAY_TYPE": "HukamGateway",
+      "CONFIG_FILE_PATH": "/media/pi/USB/configuration.json",
+      "IOT_CONFIG": {
+        "org": "o6oosq",
+          "id": "a-o6oosq-gwvhfgityg",
+          "auth-key": "a-o6oosq-gwvhfgityg",
+          "auth-token": "xwottObtqR@WHSe+q-",
+          "type": "shared"
+        },
+        "SERVICES_CONFIG":{
+          "hbuddyApi": {
+            "endpoint":"https://hbuddy-dev.mybluemix.net/api",
+            "clientId": "default",
+            "clientSecret": "SECRET"
+          },
+          "cloudantNOSQLDB":{
+             "username": "34fd0b82-60b8-4d0d-9231-1f03135d4273-bluemix",
+             "password": "75ae9c3507534f29ddfd175531aa780f889f4fc858a666dcacf572b097d08849",
+             "host": "34fd0b82-60b8-4d0d-9231-1f03135d4273-bluemix.cloudant.com",
+             "port": 443,
+             "url": "https://34fd0b82-60b8-4d0d-9231-1f03135d4273-bluemix:75ae9c3507534f29ddfd175531aa780f889f4fc858a666dcacf572b097d08849@34fd0b82-60b8-4d0d-9231-1f03135d4273-bluemix.cloudant.com"
+          },
+          "conversation":{
+            "credentials":{
+              "url": "https://gateway.watsonplatform.net/conversation/api",
+              "username": "2a071897-6991-47d4-87f2-fda6d2d9c021",
+              "password": "5vr8NeNBQnli",
+              "version_date": "2016-07-11",
+              "version": "v1-experimental",
+              "silent": true
+            },
+            "workspace_id": "ccc639e8-9b25-4226-8611-1f4386000344"
+          },
+          "objectstorage":{
+            "auth_url": "https://identity.open.softlayer.com",
+            "project": "object_storage_cc2840c0_0a4a_4e30_a58c_4fb16873bc12",
+            "projectId": "152c01ff330647bd81131826c8743add",
+            "region": "dallas",
+            "userId": "bf708f65c02a40749fdbe790b70ff768",
+            "username": "admin_7c9f22b4564493840d0137c4cff4626d5d9382dc",
+            "password": "twL/&mwXlCOT7DS2",
+            "domainId": "6c6ce1dcde5345a6ab68eea1e7aff099",
+            "domainName": "1404123",
+            "role": "admin"
+          },
+          "tts":{
+            "url": "https://stream.watsonplatform.net/text-to-speech/api",
+            "username": "9e89d5d9-d0bf-4133-8851-926887f21b52",
+            "password": "bHAjueswe6fI"
+          }
+      },
+      "home_path":"/home/pi",
+        "wifi_interface": "wlan0",
+        "wifi_driver_type": "nl80211",
+
+        "access_point": {
+            "force_reconfigure": true,
+            "wifi_interface":    "wlan0",
+            "ssid":              "hbuddy-gateway",
+            "passphrase":        "1SatnamW",
+            "domain":            "hbuddy-gateway.local",
+            "ip_addr":           "192.168.44.1",
+            "netmask":           "255.255.255.0",
+            "subnet_ip":         "192.168.44.0",
+            "broadcast_address": "192.168.44.255",
+            "subnet_range": {
+                "start":         "192.168.44.10",
+                "end":           "192.168.44.50"
+            }
+        },
+
+        "server": {
+            "port": 9000
+        }
+
+  }

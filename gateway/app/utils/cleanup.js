@@ -26,5 +26,5 @@ exports.Cleanup = function Cleanup(callback) {
     console.log(e.stack);
     process.exit(99);
   });
-  
+
 };

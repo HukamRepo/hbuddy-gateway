@@ -5,7 +5,7 @@ var cloudantHandler = require('../handlers/cloudantHandler')();
 var localDBHandler = require('../handlers/localDBHandler')();
 
 module.exports = function() {
-	
+
 var methods = {};
 
 	methods.processScenes = function(scenes){
@@ -21,24 +21,24 @@ var methods = {};
 			});
 		}
 	};
-	
+
 	methods.scheduleAllScenes = function(scenes){
 		if(!scenes){
 			console.log("NO SCENES TO BROADCAST :>>>>>>> ");
 			return false;
 		}
 		console.log("IN scheduleAllScenes: >>>> ", scenes.length);
-		
+
 		for(var i = 0; i < scenes.length; i++){
 			var scene = scenes[i];
 			methods.scheduleScene(scene, function(sceneJob){
 				if(!sceneJob){
 					console.log("\n\n <<<<< JOB CANNOT BE ADDED FOR: >> ", scene.title, "\n\n");
-				}				
+				}
 			});
 		}
 	};
-	
+
 	methods.scheduleScene = function(scene, cb) {
 		if(!scene || !scene.status || scene.status != "ACTIVE"){
 			console.log("SCENE CANNOT BE SCEHDULED: >>> ", scene.title);
@@ -59,7 +59,7 @@ var methods = {};
 			rule.dayOfWeek = [scene.settings.repeat];
 			rule.hour = hours;
 			rule.minute = mins;
-			rule.second = secs;			
+			rule.second = secs;
 			console.log("SCHEDULE RULE JOB FOR SCENE: ", scene._id);
 			sceneJob = schedule.scheduleJob(scene._id, rule, function(){
 				methods.executeScene(scene);
@@ -72,11 +72,11 @@ var methods = {};
 				methods.executeScene(scene);
 			});
 		 }
-		
+
 		console.log("Job Added for Scene: >> ", scene.title, "\n\n");
 		cb(sceneJob);
 	};
-	
+
 	methods.executeScene = function(scene){
 		console.log(" \n\nEXECUTING SCENE AT: ", new Date(), ", SCENE: ", scene.title);
 		for(var i = 0; i < scene.areas.length; i++ ){
@@ -85,13 +85,13 @@ var methods = {};
 				var device = area.devices[j];
 				var command = "#"+device.parentId+"#"+device.deviceIndex+"#"+device.value;
 				console.log('Command To Broadcast: >>> ', command);
-			}	
+			}
 		}
-		
+
 		methods.inactivateScene(scene);
-		
+
 	};
-	
+
 	methods.inactivateScene = function(scene){
 		if(!scene.settings.repeat || scene.settings.repeat.length == 0){
 			if(scene.settings && scene.settings.startTime && scene.status == "ACTIVE"){
@@ -106,7 +106,7 @@ var methods = {};
 							console.log("SCENE Updated in LocalDB: >>> ", scene.title);
 						}
 					});
-					
+
 					cloudantHandler.updateScene(scene, function(err, scene){
 						if(err){
 							console.log("Error while updating Scene in Cloudant: >>> ", err);
@@ -118,10 +118,10 @@ var methods = {};
 			}
 		}
 	};
-	
+
 	methods.updateScene = function(scene){
 		console.log("IN updateScene: >>> ID: ", scene.id, ", Title: ", scene.title);
-		
+
 		localDBHandler.updateScene(scene, function(err, scene){
 			if(err){
 				console.log("Error while updating Scene in LocalDB: >>> ", err);
@@ -129,7 +129,7 @@ var methods = {};
 				console.log("SCENE Updated in LocalDB: >>> ", scene.title);
 			}
 		});
-		
+
 		if(schedule.scheduledJobs && schedule.scheduledJobs.length > 0){
 			console.log("sceneJobs already in place: >> ", schedule.scheduledJobs.length);
 			var sceneFound = false;
@@ -161,7 +161,7 @@ var methods = {};
 			});
 		}
 	};
-	
+
     return methods;
-    
+
 }

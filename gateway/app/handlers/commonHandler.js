@@ -2,7 +2,7 @@
 var crypto = require('crypto');
 
 module.exports = function() {
-    
+
 var methods = {};
 
 	methods.getRPISerialNumber = function() {
@@ -23,7 +23,7 @@ var methods = {};
 			}
 		}
 	};
-	
+
 	methods.checkInternet = function(cb) {
 	    require('dns').lookup('google.com',function(err, address) {
 	    	console.log("IN CheckInternet Resp: ", err, ", address: >> ", address);
@@ -34,35 +34,35 @@ var methods = {};
 	        }
 	    })
 	};
-	
+
 	methods.gatewayInfo = function(cb){
-		var info = {"gatewayId": "", "internet": "", "visibility": true};		
+		var info = {"gatewayId": "", "internet": "", "visibility": true};
 		info.gatewayId = methods.getRPISerialNumber();
-		
+
 		methods.checkInternet(function(isConnected) {
 			info.internet = isConnected;
 			if(cb){
 				cb(info);
 			}
 		});
-		
+
 		return info;
 	};
-  	
+
 	methods.random = function(howMany, chars) {
-	    chars = chars 
+	    chars = chars
 	        || "abcdefghijklmnopqrstuwxyzABCDEFGHIJKLMNOPQRSTUWXYZ23456789";
 	    var rnd = crypto.randomBytes(howMany)
 	        , value = new Array(howMany)
 	        , len = chars.length;
-	
+
 	    for (var i = 0; i < howMany; i++) {
 	        value[i] = chars[rnd[i] % len]
 	    };
-	
+
 	    return value.join('');
 	};
-	
+
 	/**
 	 * timeString is in format HH:MM:SS
 	 */
@@ -78,7 +78,7 @@ var methods = {};
 			 secs = parseInt(timeArr[2]);
 		return methods.timeDifference(hours, mins, secs);
 	};
-	
+
 	methods.timeDifference = function(hours, minutes, seconds){
 		console.log("IN commonHandler.timeDifference with values, hours: ", hours, ", mins: ", minutes, ", secs: ", seconds);
 		var timeNow = new Date();
@@ -86,12 +86,12 @@ var methods = {};
 		var minNow = timeNow.getMinutes();
 		var scheduleTime = new Date();
 		scheduleTime.setHours(hours, minutes, seconds);
-		
+
 		console.log("timeNow: >>> ", timeNow, ", scheduleTime: ", scheduleTime);
 		var secsDiff = (scheduleTime.getTime() - timeNow.getTime())/1000;
 		return secsDiff;
 	};
-	
+
 	 methods.simpleStringify = function(object){
 	    var simpleObject = {};
 	    for (var prop in object ){
@@ -108,7 +108,7 @@ var methods = {};
 	    }
 	    return JSON.stringify(simpleObject); // returns cleaned up JSON
 	};
-	
+
     return methods;
-    
+
 }

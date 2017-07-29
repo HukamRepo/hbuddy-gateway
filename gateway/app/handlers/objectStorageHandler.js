@@ -1,5 +1,5 @@
 
-var CONFIG = require('../config/config').get();
+var CONFIG = require('../common/common').CONFIG();
 
 var fs = require('fs');
 
@@ -20,7 +20,7 @@ osConfig = {
 storageClient = pkgcloud.storage.createClient(osConfig);
 
 module.exports = function() {
-    
+
 var methods = {};
 
 	methods.authenticateObjectStorage = function(callback){
@@ -29,16 +29,16 @@ var methods = {};
 //		    storageClient._identity
 		});
 	};
-  	
+
 	methods.uploadFile = function(uploadReq, cb){
 		if(!uploadReq || !uploadReq.container){
 			cb(new Error("Invalid request for ObjectStorage: ", uploadReq), null);
 			return;
 		}
 		console.log("IN uplaodFile with uploadReq: >> ", uploadReq);
-		
+
 		var readStream = fs.createReadStream(uploadReq.pathToFile+uploadReq.fileName);
-		
+
 		var upload = storageClient.upload({
             container: uploadReq.container,
             remote: uploadReq.fileName
@@ -52,11 +52,11 @@ var methods = {};
             console.log("UPLOAD SUCCESS: >>> ", file.toJSON());
             cb(null, file.toJSON());
         });
-        
+
         readStream.pipe(upload);
-		
+
 	};
 
     return methods;
-    
+
 }

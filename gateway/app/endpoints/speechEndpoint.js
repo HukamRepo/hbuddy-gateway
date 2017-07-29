@@ -1,5 +1,5 @@
 
-var CONFIG = require('../config/config').get();
+var CONFIG = require('../common/common').CONFIG();
 var conversationHandler = require('../handlers/conversationHandler')();
 var speechHandler = require('../handlers/speechHandler')();
 
@@ -10,7 +10,7 @@ var watsonResponse = {};
 var methods = {};
 
 module.exports = function() {
-	
+
 	methods.listenCommands = function(req, resp, next){
 		console.log("IN speechEndpoint, listenCommands >>>>>>> ");
 		try{
@@ -19,7 +19,7 @@ module.exports = function() {
 					console.log("DO Nothing: >>> ", result);
 					resp.json({"msg": "STARTED"});
 				}else{
-					console.log("STT RESPONSE: >>>", result);				
+					console.log("STT RESPONSE: >>>", result);
 					if(result == 'stop' || result == 'stop buddy'){
 						speechHandler.stopTTS();
 					}else{
@@ -29,14 +29,14 @@ module.exports = function() {
 						});
 					}
 					resp.json({"msg": "STARTED"});
-				}	
+				}
 			});
 		}catch(err){
 			console.log("ERROR in speechHandler.speechToText: >> ", err);
 			resp.status(err.statusCode || 500).json(err);
 		}
 	};
-	
+
 	methods.getCommandResponse = function(commandResp, errFunc){
 		var conversationReq = {
 								"params": {
@@ -65,16 +65,16 @@ module.exports = function() {
 						for(var i = 0 ; i < watsonResponse.output.text.length; i++){
 							respText += watsonResponse.output.text[i]+" ";
 						}
-						
+
 						console.log("Conversation Response: ", respText);
-						var query = {"voice": speakInVoice, 
+						var query = {"voice": speakInVoice,
 			  			  		"text": respText,
 			  			  		"accept": "audio/ogg; codec=opus",
 			  			  		"download": true };
 						speechHandler.convertTTS(query, errFunc);
 					}else{
 						if(watsonResponse && watsonResponse.context && watsonResponse.context.next_action != "DO_NOTHING"){
-							var query = {"voice": speakInVoice, 
+							var query = {"voice": speakInVoice,
 				  			  		"text": "Sorry, I can not help you with this.",
 				  			  		"accept": "audio/ogg; codec=opus",
 				  			  		"download": true };
@@ -86,15 +86,14 @@ module.exports = function() {
 			}
 		});
 	};
-	
+
 	methods.stopSTT = function(req, resp) {
-		console.log('IN speechHandler.stopSTT: >> ');   
+		console.log('IN speechHandler.stopSTT: >> ');
 		speechHandler.stopSTT();
 		resp.json({"msg": "STOPPED"});
 	};
-	
+
 
 return methods;
 
 }
-

@@ -1,33 +1,50 @@
-module.exports = function(app) {
+module.exports = function(router) {
 
-  var configEndpoint = require('./endpoints/configEndpoint.js')();
+  // var configEndpoint = require('./endpoints/configEndpoint.js')();
   var gatewayEndpoint = require('./endpoints/gatewayEndpoint.js')();
-  var speechEndpoint = require('./endpoints/speechEndpoint.js')();
-  
-    app.get('/', function(req, res){
-        res.render('index');
-    });
+  // var speechEndpoint = require('./endpoints/speechEndpoint.js')();
 
-    app.get('/views/:name', showClientRequest, function (req, res) {
-        var name = req.params.name;
-        res.render('views/' + name);
-    });
+  router.get('/', function(req, res) {
+    res.json({ message: 'Hukam IoT Gateway Server Running ... ' });
+  });
 
-    app.get('/api/gateway/info', gatewayEndpoint.gatewayInfo);
-    app.post('/api/gateway/content', gatewayEndpoint.uploadContent);
-    
-    app.post('/api/config/internetConfiguration', showClientRequest, configEndpoint.internetConfiguration);
-    app.post('/api/command', gatewayEndpoint.handleCommand);
-    
-    app.post('/api/camera', gatewayEndpoint.cameraWebhook);
-    
-    app.post('/api/stt/start', showClientRequest, speechEndpoint.listenCommands);
-    app.post('/api/stt/stop', showClientRequest, speechEndpoint.stopSTT);
-    
-    app.get('/api/place', gatewayEndpoint.getPlace);
-    app.get('/api/place/areas', gatewayEndpoint.getPlaceAreas);
-    app.get('/api/place/boards', gatewayEndpoint.getAllBoards);
-    app.post('/api/place/boards', gatewayEndpoint.getBoards);
+  router.get('/gateway/info', gatewayEndpoint.gatewayInfo);
+  router.post('/gateway/content', gatewayEndpoint.uploadContent);
+  router.post('/command', gatewayEndpoint.handleCommand);
+  router.post('/camera', gatewayEndpoint.cameraWebhook);
+
+  // router.post('/stt/start', showClientRequest, speechEndpoint.listenCommands);
+  // router.post('/stt/stop', showClientRequest, speechEndpoint.stopSTT);
+
+  router.get('/place', gatewayEndpoint.getPlace);
+  router.get('/place/areas', gatewayEndpoint.getPlaceAreas);
+  router.get('/place/boards', gatewayEndpoint.getAllBoards);
+  router.post('/place/boards', gatewayEndpoint.getBoards);
+
+  function showClientRequest(req, res, next) {
+      var request = {
+          REQUEST : {
+              HEADERS: req.headers,
+              BODY : req.body
+          }
+      }
+      return next();
+  }
+
+/*
+
+    router.post('/api/config/internetConfiguration', showClientRequest, configEndpoint.internetConfiguration);
+    router.post('/api/command', gatewayEndpoint.handleCommand);
+
+    router.post('/api/camera', gatewayEndpoint.cameraWebhook);
+
+    router.post('/api/stt/start', showClientRequest, speechEndpoint.listenCommands);
+    router.post('/api/stt/stop', showClientRequest, speechEndpoint.stopSTT);
+
+    router.get('/api/place', gatewayEndpoint.getPlace);
+    router.get('/api/place/areas', gatewayEndpoint.getPlaceAreas);
+    router.get('/api/place/boards', gatewayEndpoint.getAllBoards);
+    router.post('/api/place/boards', gatewayEndpoint.getBoards);
 
     function showClientRequest(req, res, next) {
         var request = {
@@ -39,7 +56,6 @@ module.exports = function(app) {
         return next();
     }
 
-    /*
     function showMultipartRequest(req, res, next) {
     	var form = new multiparty.Form();
         form.parse(req, function(err, fields, files) {

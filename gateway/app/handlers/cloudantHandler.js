@@ -1,5 +1,5 @@
 
-var CONFIG = require('../config/config').get();
+var CONFIG = require('../common/common').CONFIG();
 
 var localDBHandler = require('../handlers/localDBHandler')();
 var commonHandler = require('../handlers/commonHandler')();
@@ -7,9 +7,9 @@ var commonHandler = require('../handlers/commonHandler')();
 var cloudant = require('cloudant')(CONFIG.SERVICES_CONFIG.cloudantNOSQLDB.url);
 
 module.exports = function() {
-    
+
 var methods = {};
-  	
+
 	methods.loadConfigurationsFromCloud = function(updateLocalDB, cb){
 		var cloudantDB = cloudant.use('configurations');
 		var findReq = {selector:{"loopback__model__name":"Configuration"}};
@@ -18,7 +18,7 @@ var methods = {};
 				  if (err) {
 					  cb(err, null);
 				  }else{
-					  for(var index in result.docs) { 
+					  for(var index in result.docs) {
 						  var resp = result.docs[index];
 						  configuration[resp.configurationType] = resp.configuration;
 					  }
@@ -35,7 +35,7 @@ var methods = {};
 				  }
 			});
 	};
-	
+
 	methods.loadPlaceFromCloud = function(cb){
 		var cloudantDB = cloudant.use('places');
 		  var findReq = {selector:{'loopback__model__name': 'Place', 'gatewayId': global.gatewayInfo.gatewayId}};
@@ -52,7 +52,7 @@ var methods = {};
 				  }
 			});
 	};
-	
+
 	methods.loadPlaceAreasFromCloud = function(updateLocalDB, cb){
 		var cloudantDB = cloudant.use('placeareas');
 		  var findReq = {selector:{'loopback__model__name': 'PlaceArea', 'placeId': global.place._id}};
@@ -72,7 +72,7 @@ var methods = {};
 							  cb(err, result);
 						  }
 					  }
-					  
+
 				  }
 			});
 	};
@@ -107,7 +107,7 @@ var methods = {};
 				  }
 			});
 	};
-	
+
 	methods.loadScenesFromCloud = function(updateLocalDB, cb){
 		var cloudantDB = cloudant.use('scenes');
 		  var findReq = {selector:{'loopback__model__name': 'Scene', 'placeId': global.place._id}};
@@ -126,11 +126,11 @@ var methods = {};
 							  cb(err, result);
 						  }
 					  }
-					  
+
 				  }
 			});
 	};
-	
+
 	methods.updateScene = function(scene, cb){
 		if(!scene){
 			return false;
@@ -140,7 +140,7 @@ var methods = {};
 			cb(err, scene);
 		});
 	};
-	
+
     return methods;
-    
+
 }

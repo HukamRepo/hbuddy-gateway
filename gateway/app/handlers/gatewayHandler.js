@@ -1,5 +1,5 @@
 
-var CONFIG = require('../config/config').get(),
+var CONFIG = require('../common/common').CONFIG(),
 commonHandler = require('../handlers/commonHandler')(),
 localDBHandler = require('../handlers/localDBHandler')(),
 cloudantHandler = require('../handlers/cloudantHandler')(),
@@ -7,6 +7,7 @@ sceneHandler = require('../handlers/sceneHandler')(),
 scheduleHandler = require('../handlers/scheduleHandler')(),
 serialportHandler = null;
 ibmIoTHandler = null;
+sensorsHandler = null;
 var appConfig;
 
 module.exports = function() {
@@ -28,25 +29,25 @@ var methods = {};
 	};
 
 	methods.initGateway = function(){
-		console.log('\n\n<<<<<<<< IN initGateway >>>>>>>');
+		console.log('\n\n<<<<<<<< IN initGateway >>>>>>> ');
 		localDBHandler.loadAllLocalDBs();
 		commonHandler.checkInternet(function(isConnected) {
 		    if (isConnected) {
 		    	handleOnline(function(appConfig){
-		    		serialportHandler = require('../handlers/serialportHandler')(appConfig);
-					serialportHandler.initSerialPort();
-					ibmIoTHandler = require('../handlers/ibmIoTHandler')(appConfig, serialportHandler);
-					ibmIoTHandler.connectToIBMCloud(function(appclient){
-						appClient = appclient;
-					});
-					sensorsHandler = require('../handlers/sensorsHandler.js')(ibmIoTHandler);
-					methods.startProcessWithCloud();
+				    	serialportHandler = require('../handlers/serialportHandler')(appConfig);
+							serialportHandler.initSerialPort();
+							ibmIoTHandler = require('../handlers/ibmiotHandler')();
+							ibmIoTHandler.connectToIBMCloud(function(appclient){
+								appClient = appclient;
+							});
+							// sensorsHandler = require('../handlers/sensorsHandler.js')(ibmIoTHandler);
+							methods.startProcessWithCloud();
 		    	});
 		    } else {
 		    	handleOffline(function(appConfig){
-		    		serialportHandler = require('../handlers/serialportHandler')(appConfig);
-					serialportHandler.initSerialPort();
-					methods.startProcessWithLocal();
+			    		serialportHandler = require('../handlers/serialportHandler')(appConfig);
+							serialportHandler.initSerialPort();
+							methods.startProcessWithLocal();
 		    	});
 		    }
 		});

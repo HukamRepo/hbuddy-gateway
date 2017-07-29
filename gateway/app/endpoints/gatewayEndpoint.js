@@ -1,10 +1,8 @@
 
-var CONFIG = require('../config/config').get();
+var CONFIG = require('../common/common').CONFIG();
 
 var commonHandler = require('../handlers/commonHandler')();
 var localDBHandler = require('../handlers/localDBHandler')();
-var cloudantHandler = require('../handlers/cloudantHandler')();
-var sceneHandler = require('../handlers/sceneHandler')();
 var scheduleHandler = require('../handlers/scheduleHandler')();
 var gatewayHandler = require('../handlers/gatewayHandler')();
 
@@ -62,31 +60,31 @@ module.exports = function() {
 		}
 		scheduleHandler.uploadContent(contentFolder);
 	};
-	
+
 	methods.getPlace = function(req, resp){
 		resp.json(global.place);
 	};
-	
+
 	methods.getPlaceAreas = function(req, resp){
 		localDBHandler.loadPlaceAreasFromLocalDB(function(err, placeAreas){
 			if(err){
 				resp.json(err);
 			}else{
 				resp.json(placeAreas);
-			}			
+			}
 		});
 	};
-	
+
 	methods.getAllBoards = function(req, resp){
 		localDBHandler.loadBoardsFromLocalDB(function(err, boards){
 			if(err){
 				resp.json(err);
 			}else{
 				resp.json(boards);
-			}			
+			}
 		});
 	};
-	
+
 	methods.getBoards = function(req, resp){
 		localDBHandler.loadBoardsFromLocalDB(function(err, boards){
 			var filteredBoards = [];
@@ -98,8 +96,8 @@ module.exports = function() {
 					var board = boards[i];
 					if(payload.connectedToId && board.connectedToId == payload.connectedToId){
 						filteredBoards.push(board);
-					}					  
-				}				
+					}
+				}
 			}
 			resp.json(filteredBoards);
 		});

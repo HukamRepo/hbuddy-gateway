@@ -2,7 +2,12 @@
 
 A Node application which makes connecting your Hukam Gateway (RaspberryPi 3) to your home wifi easier
 
-## DOCKER IMORTANT
+## hBuddy DOCKER Container
+
+RUN Docker container by following command:
+
+docker run --rm -p 9000:9000 --privileged -it hukam/gateway-app npm start
+
 Ubuntu base image:
 https://github.com/phusion/baseimage-docker
 
