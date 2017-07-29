@@ -1,6 +1,7 @@
 **/node_modules
 gateway/node_modules
 web/node_modules
+**/package-lock.json
 node_modules
 **/npm-debug.log
 /app/public/external
