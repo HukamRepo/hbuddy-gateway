@@ -11,6 +11,7 @@ module.exports = function() {
 var methods = {};
 
 	methods.scheduleContentUpload = function(callback){
+		console.log("IN scheduleContentUpload, CRON: >> ", CONFIG.UPLOAD_CRON, ", CONTENT_FOLDER: >> ", CONFIG.CONTENT_FOLDER)
 		/*
 		var rule = new schedule.RecurrenceRule();
 		rule.hour = 1;
@@ -30,19 +31,39 @@ var methods = {};
 			  });
 		});
 		*/
+		
+		authenticateObjectStorage(function(err, authResp){
+			  if(err){
+				  console.log("ERROR IN authenticateObjectStorage:>>> ", err);					  
+			  }else{
+				  objStorageHandler.createContainer(gatewayInfo.gatewayId, function(err, container){
+			  			if(err){
+			  				console.log("ERROR while creating Container on ObjectStorage: >>", err);
+			  			}else{
+			  	  			console.log("\n\n <<<< Container Created on Object Storage: >> ", container.name);
+				  	  		methods.uploadContent(CONFIG.CONTENT_FOLDER, function(err, resp){
+								  console.log(resp);
+							});
+			  			}
+			  		});
+			  }
+		  });
 
-			var j = schedule.scheduleJob('0 0 */1 * * *', function(){
+			var j = schedule.scheduleJob(CONFIG.UPLOAD_CRON, function(){
 			  console.log('Going to Run Scheduler >>>>>> ', new Date());
 			  authenticateObjectStorage(function(err, authResp){
 				  if(err){
-					  console.log("ERROR IN authenticateObjectStorage:>>> ", err);
+					  console.log("ERROR IN authenticateObjectStorage:>>> ", err);					  
 				  }else{
 					  console.log("authenticateObjectStorage Resp: >> ", authResp);
-					  const contentFolder = "/tmp/motion/cam1/";
-					  methods.uploadContent(contentFolder);
+					  methods.uploadContent(CONFIG.CONTENT_FOLDER, function(err, resp){
+						  console.log(resp);
+					  });
 				  }
 			  });
 			});
+			
+			callback(null, " \n\n Upload Job Scheduled with CRON >>>>> " +CONFIG.UPLOAD_CRON);
 	};
 
 	function authenticateObjectStorage(callback){
@@ -60,24 +81,32 @@ var methods = {};
   		});
   	};
 
-	methods.uploadContent = function(contentFolder){
+	methods.uploadContent = function(contentFolder, cb){
 		fs.readdir(contentFolder, (err, files) => {
 			if(!files){
-				return false;
-			}
-			  files.forEach(file => {
-			    console.log(file);
-			    var uploadReq = {
-						"pathToFile": contentFolder,
-						"fileName": file,
-						"container":"surveillance"
+				console.log("IN ScheduleHandler.uploadContent, No Files to upload !!!! ");
+				if(cb){
+					cb(null, "No Files To Upload !!! ");
 				}
-			    methods.uploadFile(uploadReq, function(err, resp){
-			    	console.log("UPLOAD RESP: >> ", resp);
-			    });
-
-			  });
-			});
+			}else{
+				 files.forEach(file => {
+				    console.log(file);
+				    var uploadReq = {
+							"pathToFile": contentFolder,
+							"fileName": file,
+							"container":"surveillance"
+					}
+				    methods.uploadFile(uploadReq, function(err, resp){
+				    	console.log("UPLOAD RESP: >> ", resp);
+				    });
+				  });
+				 
+				 if(cb){
+					cb(null, "Uploading Files in progress from ... ", contentFolder);
+				 }
+			}
+			 
+		});
 	};
 
 	methods.uploadFile = function(uploadReq, cb){

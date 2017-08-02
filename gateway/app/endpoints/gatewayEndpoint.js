@@ -18,6 +18,11 @@ module.exports = function() {
 			resp.json(info);
 		})
 	};
+	
+	methods.motionDetected = function(req, resp){
+		console.log("IN gatewayEndpoint.motionDetected at : >>>>>> ", new Date());
+		methods.uploadContent(req, resp);
+	};
 
 	methods.handleCommand = function(req, res){
 		var payload = req.body;
@@ -53,12 +58,14 @@ module.exports = function() {
 
 	methods.uploadContent = function(req, resp){
 		var payload = req.body;
-		console.log("IN gransiveGateway.uploadContent: PAYLOAD: >>> ", payload);
+		console.log("IN gatewayEndpoint.uploadContent: PAYLOAD: >>> ", payload);
 		var contentFolder = "/tmp/motion/cam1/";
 		if(payload && payload.contentFolder){
 			contentFolder = payload.contentFolder;
 		}
-		scheduleHandler.uploadContent(contentFolder);
+		scheduleHandler.uploadContent(contentFolder, function(err, result){
+			resp.json(result);
+		});
 	};
 
 	methods.getPlace = function(req, resp){

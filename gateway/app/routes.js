@@ -12,6 +12,8 @@ module.exports = function(router) {
   router.post('/gateway/content', gatewayEndpoint.uploadContent);
   router.post('/command', gatewayEndpoint.handleCommand);
   router.post('/camera', gatewayEndpoint.cameraWebhook);
+  
+  router.get('/gateway/motion/detected', gatewayEndpoint.motionDetected);
 
   // router.post('/stt/start', showClientRequest, speechEndpoint.listenCommands);
   // router.post('/stt/stop', showClientRequest, speechEndpoint.stopSTT);

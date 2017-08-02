@@ -29,6 +29,17 @@ var methods = {};
 //		    storageClient._identity
 		});
 	};
+	
+	methods.createContainer = function(containerName, callback){
+		storageClient.createContainer({
+			 name: containerName,
+			 metadata: {
+			  company: 'Hukam',
+			  gatewayId: containerName
+			 }}, function(err, container) {
+			  	callback(err, container);
+			 });
+	};
 
 	methods.uploadFile = function(uploadReq, cb){
 		if(!uploadReq || !uploadReq.container){

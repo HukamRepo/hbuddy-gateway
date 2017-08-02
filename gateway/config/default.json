@@ -1,6 +1,8 @@
   {
       "gatewayId": "",
       "GATEWAY_TYPE": "HukamGateway",
+      "UPLOAD_CRON": "0 0 */1 * * *",
+      "CONTENT_FOLDER": "/tmp/motion/cam1/",
       "CONFIG_FILE_PATH": "/media/pi/USB/configuration.json",
       "IOT_CONFIG": {
         "org": "o6oosq",
