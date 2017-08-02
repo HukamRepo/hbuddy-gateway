@@ -94,7 +94,7 @@ var methods = {};
 				    var uploadReq = {
 							"pathToFile": contentFolder,
 							"fileName": file,
-							"container":"surveillance"
+							"container": gatewayInfo.gatewayId
 					}
 				    methods.uploadFile(uploadReq, function(err, resp){
 				    	console.log("UPLOAD RESP: >> ", resp);
