@@ -25,7 +25,7 @@ module.exports = function(appConfig) {
 			    baudrate: 9600,
 			    highWaterMark: 131072,
 			  });
-			  var parser = serialPort.pipe(Readline({delimiter: '\n'}));
+			  var parser = serialPort.pipe(new Readline({delimiter: '\n'}));
 			  parser.on('data', function(data) {
 			      console.log('\n\ndata received: ' + data);
 			      if(!data || data.trim() == ""){

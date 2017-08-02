@@ -30,6 +30,12 @@ TO STOP
 
 `docker run -p 9000:9000 -p 8000:8000 -t -i bamos/openface /bin/bash -l -c '/root/openface/demos/web/start-servers.sh'`
 
+## DOCKER COMMANDS
+
+To Clear Docker logs
+
+`truncate -s 0 /var/lib/docker/containers/*/*-json.log`
+
 
 ## REFERENCES
 [OpenCV on Raspberry Pi](http://www.pyimagesearch.com/2016/04/18/install-guide-raspberry-pi-3-raspbian-jessie-opencv-3/) |
