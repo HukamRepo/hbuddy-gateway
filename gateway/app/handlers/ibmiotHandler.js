@@ -22,7 +22,7 @@ module.exports = function() {
 
 	methods.getAppClient = function(){
 		if(!appClient){
-			appClient = new Client.IotfApplication(CONFIG.IOT_CONFIG);
+			appClient = new Client.IotfGateway(CONFIG.IOT_CONFIG);
 		}
 		return appClient;
 	};
@@ -32,7 +32,7 @@ module.exports = function() {
 
 		console.log('\n\n<<<<<< IN connectToMqtt >>>>>>>>> ', CONFIG.IOT_CONFIG);
 		if(!appClient){
-			appClient = new Client.IotfApplication(CONFIG.IOT_CONFIG);
+			appClient = new Client.IotfGateway(CONFIG.IOT_CONFIG);
 		}
 		if(!mqttConnected){
 			console.log("Connecting IBM Iot over MQTT >>>>>>>> ");
