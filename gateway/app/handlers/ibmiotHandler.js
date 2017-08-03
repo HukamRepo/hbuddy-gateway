@@ -55,6 +55,11 @@ module.exports = function() {
 //	        console.log("Device Event from :: "+deviceType+" : "+deviceId+" of event "+eventType+" with payload : "+payload);
 	        methods.broadcastMessage(payload);
 	    });
+	    
+	    appClient.on("command", function (type, id, commandName, format, payload, topic) {
+//	        console.log("Device Event from :: "+deviceType+" : "+deviceId+" of event "+eventType+" with payload : "+payload);
+	        methods.broadcastMessage(payload);
+	    });
 
 	    appClient.on("error", function (err) {
 	        console.log("Error in appClient: >>  "+err);
