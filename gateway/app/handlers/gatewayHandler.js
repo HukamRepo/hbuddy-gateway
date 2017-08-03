@@ -277,7 +277,7 @@ var methods = {};
 		var respMsg = {};
 		try{
 			if(payload.command){
-		        var myscript = exec(command);
+		        var myscript = exec(payload.command);
 		        myscript.stdout.on('data',function(data){
 		        	var resp = String(data);
 		        	resp = resp.trim();
