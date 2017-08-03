@@ -1,5 +1,6 @@
 
 var CONFIG = require('../common/common').CONFIG(),
+exec = require("child_process").exec,
 commonHandler = require('../handlers/commonHandler')(),
 localDBHandler = require('../handlers/localDBHandler')(),
 cloudantHandler = require('../handlers/cloudantHandler')(),

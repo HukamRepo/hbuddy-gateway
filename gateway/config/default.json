@@ -5,10 +5,10 @@
       "CONTENT_FOLDER": "/tmp/motion/cam1/",
       "CONFIG_FILE_PATH": "/media/pi/USB/configuration.json",
       "IOT_CONFIG": {
-        "org": "o6oosq",
-          "id": "a-o6oosq-gwvhfgityg",
-          "auth-key": "a-o6oosq-gwvhfgityg",
-          "auth-token": "xwottObtqR@WHSe+q-",
+          "org": "rqeofj",
+          "id": "a-rqeofj-maegv4oxmm",
+          "auth-key": "a-rqeofj-maegv4oxmm",
+          "auth-token": "1@UiJCNqja-weuMXyK",
           "type": "shared"
         },
         "SERVICES_CONFIG":{
