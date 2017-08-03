@@ -3,20 +3,24 @@
 docker run --rm --privileged multiarch/qemu-user-static:register --reset
 
 ## Running Hukam Gateway Application Docker Container
-`docker run --rm -p 9000:9000 --privileged -it hukam/gateway-app npm start`
+`docker run --rm -d -p 9000:9000 --name gateway-app -v /tmp:/tmp --privileged -it hukam/gateway-app`
 
 ## Running Hukam Gateway UI Docker Container
 `docker run --rm -it -p 3000:4200 hukam/gateway-ui`
 
 OR
 
-`docker run --rm -it -p 3000:4200 hukam/pi-angular-cli:v1-arm ng serve --host=0.0.0.0 --disable-host-check`
+`docker run --rm -d -it -p 3000:4200 hukam/pi-angular-cli:v1-arm ng serve --host=0.0.0.0 --disable-host-check`
 
 ## Running Docker container for motion detection
 
 START CONTAINER
 
 `docker run --rm -it -d --name motion -p 80:8081 -v /tmp:/tmp --device=/dev/video0 hukam/rpi-motion-detection`
+
+FOR LINKING CONTAINERS
+
+`docker run --rm -it -d --name motion -p 80:8081 -v /tmp:/tmp --link gateway-app:gateway-app --device=/dev/video0 hukam/rpi-motion-detection`
 
 TO START MOTION DETECTION
 
@@ -35,6 +39,24 @@ TO STOP
 To Clear Docker logs
 
 `truncate -s 0 /var/lib/docker/containers/*/*-json.log`
+
+OR 
+
+`echo "" > $(docker inspect --format='{{.LogPath}}' <CONTAINER_ID_OR_NAME>)`
+
+Stop and remove all containers:
+
+`docker stop $(docker ps -a -q)`
+
+`docker rm $(docker ps -a -q)`
+
+Stop all stopped containers
+
+`docker rm $(docker ps -a -q)`
+
+Stop all untagged images
+
+`docker rmi $(docker images | grep "^<none>" | awk "{print $3}")`
 
 
 ## REFERENCES

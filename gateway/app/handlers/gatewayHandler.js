@@ -177,6 +177,10 @@ var methods = {};
 				if(payload.type == 'SENSOR'){
 					methods.handleSensorCommand(payload, cb);
 				}
+				
+				if(payload.type == 'LINUX'){
+					methods.handleLinuxCommand(payload, cb);
+				}
 			}
 
 		}catch(err){
@@ -268,6 +272,42 @@ var methods = {};
 		}
 	};
 
+	methods.handleLinuxCommand = function(payload, cb){
+		var respMsg = {};
+		try{
+			if(payload.command){
+		        var myscript = exec(command);
+		        myscript.stdout.on('data',function(data){
+		        	var resp = String(data);
+		        	resp = resp.trim();
+		        	respMsg.status = "SUCCESS";
+		        	respMsg.msg = resp;
+		        	cb(respMsg);
+		        });
+		        myscript.stderr.on('data',function(data){
+		        	var resp = String(data);
+		        	resp = resp.trim();
+		        	respMsg.status = "ERROR";
+		        	respMsg.msg = resp;
+		        	cb(respMsg);
+		        });
+			}else{
+				respMsg.status = "ERROR";
+				respMsg.msg = "COMMAND NOT FOUND: >>> ";
+				if(cb){
+					cb(respMsg);
+				}
+			}
+		}catch(err){
+			console.log("ERROR In handleSensorCommand, payload: ", payload, ", ERROR: >>",  err);
+			respMsg.status = "ERROR";
+			respMsg.msg = err;
+			if(cb){
+				cb(respMsg);
+			}
+		}
+	};
+	
 
     return methods;
 
