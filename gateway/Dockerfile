@@ -9,7 +9,7 @@ ENV INITSYSTEM on \
 
 # Updates and adds system required packages
 RUN apt-get update && \
-    apt-get -qy install curl ca-certificates \
+    apt-get -qy install curl ca-certificates nano \
     -y --no-install-recommends --fix-missing apt-utils netcat && rm -rf /var/lib/apt/lists/*
 
 USER root
