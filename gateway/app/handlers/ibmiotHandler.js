@@ -22,33 +22,32 @@ module.exports = function() {
 
 	methods.getAppClient = function(){
 		if(!appClient){
-			appClient = new Client.IotfGateway(CONFIG.IOT_CONFIG);
+			CONFIG.GATEWAY_IOT_CONFIG.id = gatewayInfo.gatewayId;
+			appClient = new Client.IotfGateway(CONFIG.GATEWAY_IOT_CONFIG);
 		}
 		return appClient;
 	};
 
 	methods.connectToIBMCloud = function(){
 //		checkConnectivity();
-
-		console.log('\n\n<<<<<< IN connectToMqtt >>>>>>>>> ', CONFIG.IOT_CONFIG);
 		if(!appClient){
-			appClient = new Client.IotfGateway(CONFIG.IOT_CONFIG);
+			CONFIG.GATEWAY_IOT_CONFIG.id = gatewayInfo.gatewayId;
+			appClient = new Client.IotfGateway(CONFIG.GATEWAY_IOT_CONFIG);
 		}
 		if(!mqttConnected){
-			console.log("Connecting IBM Iot over MQTT >>>>>>>> ");
 			appClient.connect();
 		}
 	  //setting the log level to 'trace'
 		// appClient.log.setLevel('trace');
 
 	    appClient.on("connect", function () {
-	    	console.log('<<<<<<< IBM IoT Cloud Connected Successfully >>>>>> \n\n');
+	    	console.log('\n\n<<<<<<< IBM IoT Cloud Connected Successfully >>>>>> \n\n');
 	    	mqttConnected = true;
 	    	methods.subscribeToGateway();
 	    });
 
 	    appClient.on("disconnect", function () {
-	    	console.log('<<<<<<< IBM IoT Cloud Is Offline >>>>>> \n\n');
+	    	console.log('\n\n<<<<<<< IBM IoT Cloud Is Offline >>>>>> \n\n');
 	    	mqttConnected = false;
 	    });
 
@@ -79,10 +78,10 @@ module.exports = function() {
 		if(!appClient){
 			methods.connectToIBMCloud(function(appclient){
 				appClient = appclient;
-				appClient.subscribeToDeviceEvents(CONFIG.GATEWAY_TYPE, global.gatewayInfo.gatewayId, "gateway","json");
+				appClient.subscribeToGatewayCommand("gateway");
 			});
 		}else{
-			appClient.subscribeToDeviceEvents(CONFIG.GATEWAY_TYPE, global.gatewayInfo.gatewayId, "gateway","json");
+			appClient.subscribeToGatewayCommand("gateway");
 		}
 	};
 
@@ -150,10 +149,10 @@ module.exports = function() {
 			 if(!appClient){
 				 methods.connectToIBMCloud(function(appclient){
 						appClient = appclient;
-						appClient.publishDeviceEvent(CONFIG.GATEWAY_TYPE, global.gatewayInfo.gatewayId, "cloud", "json", sensorData);
+						appClient.publishDeviceEvent(CONFIG.GATEWAY_IOT_CONFIG.type, global.gatewayInfo.gatewayId, "cloud", "json", sensorData);
 					});
 			 }else{
-				 appClient.publishDeviceEvent(CONFIG.GATEWAY_TYPE, global.gatewayInfo.gatewayId, "cloud", "json", sensorData);
+				 appClient.publishDeviceEvent(CONFIG.GATEWAY_IOT_CONFIG.type, global.gatewayInfo.gatewayId, "cloud", "json", sensorData);
 			 }
 		}catch(err){
 			console.log(err);

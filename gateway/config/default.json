@@ -4,12 +4,13 @@
       "UPLOAD_CRON": "0 0 */1 * * *",
       "CONTENT_FOLDER": "/tmp/motion/cam1/",
       "CONFIG_FILE_PATH": "/media/pi/USB/configuration.json",
-      "IOT_CONFIG": {
+      "GATEWAY_IOT_CONFIG": {
           "org": "rqeofj",
           "id": "a-rqeofj-maegv4oxmm",
-          "auth-key": "a-rqeofj-maegv4oxmm",
-          "auth-token": "1@UiJCNqja-weuMXyK",
-          "type": "shared"
+          "type": "HukamGateway",
+          "domain": "internetofthings.ibmcloud.com",
+          "auth-method" : "token",
+          "auth-token": "1WaheguruJi"
         },
         "SERVICES_CONFIG":{
           "hbuddyApi": {
