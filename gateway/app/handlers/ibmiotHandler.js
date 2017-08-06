@@ -57,7 +57,7 @@ module.exports = function() {
 	    });
 	    
 	    appClient.on("command", function (type, id, commandName, format, payload, topic) {
-//	        console.log("Device Event from :: "+deviceType+" : "+deviceId+" of event "+eventType+" with payload : "+payload);
+//	        console.log("Gateway Command from :: "+deviceType+" : "+deviceId+" of event "+eventType+" with payload : "+payload);
 	        methods.broadcastMessage(payload);
 	    });
 
@@ -167,8 +167,6 @@ module.exports = function() {
 
 	methods.broadcastMessage = function(payloadStr){
 //		console.log('IN broadcastMessage: >> payload: ', payloadStr);
-
-
 		try{
 			var payload = JSON.parse(payloadStr);
 				if(payload.d && payload.d.boardId && payload.d.deviceIndex){

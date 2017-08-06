@@ -110,7 +110,7 @@ var methods = {};
 				});
 		  });
 	};
-
+	
     return methods;
 
 }
