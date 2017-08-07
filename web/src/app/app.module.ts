@@ -11,6 +11,7 @@ import { GoogleMapsAPIWrapper } from '@agm/core/services/google-maps-api-wrapper
 import { MarkerManager } from '@agm/core/services/managers/marker-manager';
 import { MqttService } from './services/mqtt.service';
 import { SharedService } from './services/shared.service';
+import { GatewayService } from './services/gateway.service';
 import { HBuddyComponent } from './pages/h-buddy/h-buddy.component';
 
 let providers = {

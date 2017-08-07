@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { SharedService } from '../../services/shared.service';
 
 @Component({
@@ -9,9 +9,9 @@ import { SharedService } from '../../services/shared.service';
 export class HBuddyComponent implements OnInit {
 
   currentUser: any;
-
+  
   constructor(public sharedService: SharedService) {
-
+      
   }
 
   ngOnInit() {

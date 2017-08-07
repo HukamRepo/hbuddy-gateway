@@ -23,7 +23,7 @@ module.exports = function() {
 		console.log("IN gatewayEndpoint.motionDetected at : >>>>>> ", new Date());
 		methods.uploadContent(req, resp);
 	};
-
+	
 	methods.handleCommand = function(req, res){
 		var payload = req.body;
 		gatewayHandler.handleCommand(payload, function(respMsg){

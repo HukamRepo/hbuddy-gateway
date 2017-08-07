@@ -309,7 +309,6 @@ var methods = {};
 		}
 	};
 	
-
-    return methods;
+	return methods;
 
 }

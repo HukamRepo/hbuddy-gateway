@@ -29,8 +29,8 @@ module.exports = function(app) {
 		                  setGlobalDetails,
 		                  // checkDependencies,
 		                  checkConnectivity,
-		    	            readConfigurationFile,
-		    	            uploadFiles
+		    	          readConfigurationFile,
+		    	          uploadFiles
 		    	     ], function (err, result) {
         							if (err) {
         								console.log("SHOW STOPPER ERROR: >>>  ", err);
@@ -44,11 +44,11 @@ module.exports = function(app) {
 
 	function setGlobalDetails(callback){
 		   global.appRoot = path.resolve(__dirname);
-       global.gatewayInfo = gatewayHandler.gatewayInfo(function(gatewayInfo){
-			 global.gatewayInfo = gatewayInfo;
-			//  require('./handlers/ble/blenoHandler').advertise(gatewayInfo);
-			 callback(null, "GLOBAL DETAILS SET");
-		 });
+		   global.gatewayInfo = gatewayHandler.gatewayInfo(function(gatewayInfo){
+				 global.gatewayInfo = gatewayInfo;
+				//  require('./handlers/ble/blenoHandler').advertise(gatewayInfo);
+				 callback(null, "GLOBAL DETAILS SET");
+		   });
 	};
 
 	function uploadFiles(status, callback){
@@ -111,16 +111,17 @@ module.exports = function(app) {
    	 	fs.readFile(CONFIG.CONFIG_FILE_PATH, 'utf8', function(err, fileData){
    	 		if(err){
    	 			console.log('<<<<< START IN AP MODE >>>>>>>', err);
-   	 			enableAPMode(callback);
+//   	 			enableAPMode(callback);
    	 		}else{
 	   	 		conf = JSON.parse(fileData);
 		        console.log("CONFIGURATION FILE DATA: >>> ", conf);
 		        if(conf.wifi_ssid && conf.wifi_passcode && conf.wifi_ssid != 'CHANGE_SSID'){
 		        	enableWIFIMode(conf, callback);
 		        }else{
-		        	enableAPMode(callback);
+//		        	enableAPMode(callback);
 		        }
    	 		}
+   	 		callback(null, "WIFI_ENABLED");
    	 	});
 	};
 

@@ -9,13 +9,13 @@ import { SharedService } from './services/shared.service';
 })
 export class AppComponent {
 
-  constructor(public _auth: AuthService, public sharedService: SharedService){
-      this.currentUser = this.sharedService.getCurrentUser();
-   }
-
   sub: any;
   currentUser: any;
   @ViewChild('closeBtn') closeBtn: ElementRef;
+
+  constructor(public _auth: AuthService, public sharedService: SharedService){
+      this.currentUser = this.sharedService.getCurrentUser();      
+   }
 
   signIn(provider){
     console.log("Sign In to: >>> ", provider);

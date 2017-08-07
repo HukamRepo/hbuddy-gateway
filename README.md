@@ -16,11 +16,11 @@ OR
 
 START CONTAINER
 
-`docker run --rm -it -d --name motion -p 80:8081 -v /tmp:/tmp --device=/dev/video0 hukam/rpi-motion-detection`
+`docker run --rm -it -d --name motion -p 80:8080 -p 8081:8081 -v /tmp:/tmp --device=/dev/video0 hukam/rpi-motion-detection`
 
 FOR LINKING CONTAINERS
 
-`docker run --rm -it -d --name motion -p 80:8081 -v /tmp:/tmp --link gateway-app:gateway-app --device=/dev/video0 hukam/rpi-motion-detection`
+`docker run --rm -it -d --name motion -p 80:8080 -p 8081:8081 -v /tmp:/tmp --link gateway-app:gateway-app --device=/dev/video0 hukam/rpi-motion-detection`
 
 TO START MOTION DETECTION
 
