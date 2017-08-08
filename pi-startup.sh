@@ -10,9 +10,9 @@ docker run --rm -d -p 9000:9000 --name gateway-app -v /tmp:/tmp --privileged -it
 
 sleep 3 &
 
-docker run --rm -it -d --name motion -p 80:8081 -v /tmp:/tmp --link gateway-app:gateway-app --device=/dev/video0 hukam/rpi-motion-detection
+docker run --rm -it -d --name motion -p 80:8080 -p 8081:8081 -v /tmp:/tmp --link gateway-app:gateway-app --device=/dev/video0 hukam/rpi-motion-detection
 
-sleep 3 &
+sleep 10 &
 
 docker exec -it motion motion
 
