@@ -15,7 +15,3 @@ docker run --rm -it -d --name motion -p 80:8080 -p 8081:8081 -v /tmp:/tmp --link
 sleep 10 &
 
 docker exec -it motion motion
-
-sleep 3 &
-
-docker exec -it motion service motion start
