@@ -32,6 +32,14 @@ var methods = {};
 				 console.log("ERROR WHILE LOADING BOARDS FROM LOCAL DB: >>> "+err, null);
 			 }
 		});
+		
+		var devicesDBFile = { filename: '../../localdb/devices.db', autoload: true };
+		localDB.devices = new Datastore(devicesDBFile);
+		localDB.devices.loadDatabase(function (err) {    // Callback is optional
+			 if(err){
+				 console.log("ERROR WHILE LOADING DEVICES FROM LOCAL DB: >>> "+err, null);
+			 }
+		});
 
 		var scenesDBFile = { filename: '../../localdb/scenes.db', autoload: true };
 		localDB.scenes = new Datastore(scenesDBFile);
@@ -56,9 +64,14 @@ var methods = {};
 	};
 
 	methods.loadBoardsFromLocalDB = function(cb){
-//		var findReq = {"gatewayId": CONFIG.gatewayId};
 		 localDB.boards.find({}, function (err, boards) {
 			  cb(err, boards);
+		 });
+	};
+	
+	methods.loadDevicesFromLocalDB = function(query, cb){
+		 localDB.devices.find(query, function (err, devices) {
+			  cb(err, devices);
 		 });
 	};
 
@@ -79,32 +92,40 @@ var methods = {};
 		});
 	}
 
-	methods.refreshConfigurationDB = function(configuration, cb){
-		localDB.configurations.remove({}, { multi: true }, function (err, numRemoved) {
+	methods.refreshConfigurationDB = function(query, configuration, cb){
+		localDB.configurations.remove(query, { multi: true }, function (err, numRemoved) {
 			localDB.configurations.insert(configuration, function (err, configurations) {
 					cb(err, configurations);
 				});
 		  });
 	};
 
-	methods.refreshPlaceAreasDB = function(placeAreas, cb){
-		localDB.placeAreas.remove({}, { multi: true }, function (err, numRemoved) {
+	methods.refreshPlaceAreasDB = function(query, placeAreas, cb){
+		localDB.placeAreas.remove(query, { multi: true }, function (err, numRemoved) {
 			  localDB.placeAreas.insert(placeAreas, function (err, placeAreas) {
 				  cb(err, placeAreas);
 				});
 		  });
 	};
 
-	methods.refreshBoardsDB = function(boards, cb){
-		localDB.boards.remove({}, { multi: true }, function (err, numRemoved) {
+	methods.refreshBoardsDB = function(query, boards, cb){
+		localDB.boards.remove(query, { multi: true }, function (err, numRemoved) {
 			  localDB.boards.insert(boards, function (err, boards) {
 				  cb(err, boards);
 				});
 		  });
 	};
+	
+	methods.refreshDevicesDB = function(query, devices, cb){
+		localDB.devices.remove(query, { multi: true }, function (err, numRemoved) {
+			  localDB.devices.insert(devices, function (err, devices) {
+				  cb(err, devices);
+				});
+		  });
+	};
 
-	methods.refreshScenesDB = function(scenes, cb){
-		localDB.scenes.remove({}, { multi: true }, function (err, numRemoved) {
+	methods.refreshScenesDB = function(query, scenes, cb){
+		localDB.scenes.remove(query, { multi: true }, function (err, numRemoved) {
 			  localDB.scenes.insert(scenes, function (err, scenes) {
 				  cb(err, scenes);
 				});

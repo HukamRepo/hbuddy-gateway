@@ -9,6 +9,8 @@ var CONFIG = require('./common/common').CONFIG(),
   path = require('path'),
   async = require("async"),
   fs = require('fs'),
+  GPS = require('gps'),
+  gps = new GPS,
   conf;
 
 module.exports = function(app) {
@@ -48,6 +50,12 @@ module.exports = function(app) {
 				 global.gatewayInfo = gatewayInfo;
 				//  require('./handlers/ble/blenoHandler').advertise(gatewayInfo);
 				 callback(null, "GLOBAL DETAILS SET");
+		   });
+		   
+		   gps.on('data', function(data) {
+			   console.log(data, gps.state);
+			   console.log("GPS DATA: >>> ", data);
+			   global.gatewayInfo.gps = data;
 		   });
 	};
 

@@ -109,7 +109,16 @@ var methods = {};
 						console.log("ERROR IN loadBoardsFromCloud: >>>> ", err );
 					}else{
 						console.log("\n\n<<<< BOARDS SYNCHRONISED WITH CLOUD IN LOCAL DB >>>>> ", boards.length);
-						methods.broadcastCommandsToBoards(boards);
+						for(var i=0; i<boards.length; i++){
+							var board = boards[i];
+							cloudantHandler.loadDevicesFromCloud(board.parentId, true, function(err, devices){
+								if(err){
+									console.log("ERROR IN loadDevicesFromCloud: >>>> ", err );
+								}else{
+									methods.broadcastCommandsToBoards(devices);
+								}
+							});
+						}						
 					}
 				});
 
@@ -132,36 +141,40 @@ var methods = {};
 			if(err){
 				console.log('<<<<<<< ERROR FETCHING BOARDS FROM LOCAL DB: >> ', err);
 			}else{
-				console.log("BOARDS FETCHED FROM LOCAL DB: >> ", boards.length);
-				methods.broadcastCommandsToBoards(boards);
+				for(var i=0; i<boards.length; i++){
+					var board = boards[i];
+					localDBHandler.loadDevicesFromLocalDB({"parentId": board.uniqueIdentifier}, true, function(err, devices){
+						if(err){
+							console.log("ERROR IN loadDevicesFromCloud: >>>> ", err );
+						}else{
+							methods.broadcastCommandsToBoards(devices);
+						}
+					});
+				}
+				
 			}
 		});
 
 		sceneHandler.processScenes(null);
 	};
 
-	methods.broadcastCommandsToBoards = function(boards){
-		if(!boards){
-			console.log("NO BOARDS TO BROADCAST :>>>>>>> ");
+	methods.broadcastCommandsToBoards = function(devices){
+		if(!devices){
+			console.log("NO DEVICES TO BROADCAST :>>>>>>> ");
 			return false;
 		}
-		console.log("IN broadcastCommandsToBoards: >>>> ", boards.length);
+		console.log("IN broadcastCommandsToBoards, devices.length: >>>> ", devices.length);
 
-		for(var i = 0; i < boards.length; i++){
-			var board = boards[i];
-			if(board.devices){
-				for(var j = 0; j < board.devices.length; j++){
-					var device = board.devices[j];
-					var payload = {
-							d: {
-								boardId: board.uniqueIdentifier,
-								deviceIndex: device.deviceIndex,
-								deviceValue: device.value
-							}
-					};
-					serialportHandler.broadcastMessage(JSON.stringify(payload));
-				}
-			}
+		for(var i = 0; i < devices.length; i++){
+			var device = devices[i];
+			var payload = {
+					d: {
+						boardId: device.parentId,
+						deviceIndex: device.deviceIndex,
+						deviceValue: device.value
+					}
+			};
+			serialportHandler.broadcastMessage(JSON.stringify(payload));
 		}
 	};
 

@@ -23,7 +23,7 @@ var methods = {};
 						  configuration[resp.configurationType] = resp.configuration;
 					  }
 					  if(updateLocalDB){
-						  localDBHandler.refreshConfigurationDB(configuration, function(err, configuration){
+						  localDBHandler.refreshConfigurationDB({}, configuration, function(err, configuration){
 							  if(err){
 								  console.log("ERROR WHILE REFRESHING CONFIGURATION IN LOCAL DB:>> ", err);
 							  }else{
@@ -62,7 +62,7 @@ var methods = {};
 					  cb(err, result);
 				  }else{
 					  if(updateLocalDB){
-						  localDBHandler.refreshPlaceAreasDB(result.docs, function(err, placeAreas){
+						  localDBHandler.refreshPlaceAreasDB({}, result.docs, function(err, placeAreas){
 							  cb(err, placeAreas);
 						  });
 					  }else{
@@ -94,8 +94,34 @@ var methods = {};
 					  cb(err, null);
 				  }else{
 					  if(updateLocalDB){
-						  localDBHandler.refreshBoardsDB(result.docs, function(err, boards){
+						  localDBHandler.refreshBoardsDB({}, result.docs, function(err, boards){
 							  cb(err, boards);
+						  });
+					  }else{
+						  if(result && result.docs && result.docs.length > 0){
+							  cb(err, result.docs[0]);
+						  }else{
+							  cb(err, result);
+						  }
+					  }
+				  }
+			});
+	};
+	
+	methods.loadDevicesFromCloud = function(parentId, updateLocalDB, cb){
+		var cloudantDB = cloudant.use('devices');
+		  var findReq = {
+					selector:{
+	    			  		   "$and": [{'loopback__model__name': 'Device'},{'parentId': parentId}]	    			  		                 
+							}
+  						};
+		  cloudantDB.find(findReq, function(err, result) {
+				  if (err) {
+					  cb(err, null);
+				  }else{
+					  if(updateLocalDB){
+						  localDBHandler.refreshDevicesDB({"parentId": parentId}, result.docs, function(err, devices){
+							  cb(err, devices);
 						  });
 					  }else{
 						  if(result && result.docs && result.docs.length > 0){
@@ -116,7 +142,7 @@ var methods = {};
 					  cb(err, null);
 				  }else{
 					  if(updateLocalDB){
-						  localDBHandler.refreshScenesDB(result.docs, function(err, scenes){
+						  localDBHandler.refreshScenesDB({}, result.docs, function(err, scenes){
 							  cb(err, scenes);
 						  });
 					  }else{
