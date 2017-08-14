@@ -111,7 +111,7 @@ var methods = {};
 						console.log("\n\n<<<< BOARDS SYNCHRONISED WITH CLOUD IN LOCAL DB >>>>> ", boards.length);
 						for(var i=0; i<boards.length; i++){
 							var board = boards[i];
-							cloudantHandler.loadDevicesFromCloud(board.parentId, true, function(err, devices){
+							cloudantHandler.loadDevicesFromCloud(board.uniqueIdentifier, true, function(err, devices){
 								if(err){
 									console.log("ERROR IN loadDevicesFromCloud: >>>> ", err );
 								}else{
@@ -170,8 +170,9 @@ var methods = {};
 			var payload = {
 					d: {
 						boardId: device.parentId,
+						status: device.status,
 						deviceIndex: device.deviceIndex,
-						deviceValue: device.value
+						deviceValue: device.deviceValue
 					}
 			};
 			serialportHandler.broadcastMessage(JSON.stringify(payload));
