@@ -23,7 +23,7 @@ module.exports = function() {
 
 	methods.getAppClient = function(){
 		if(!appClient){
-			CONFIG.GATEWAY_IOT_CONFIG.id = gatewayInfo.gatewayId;
+			CONFIG.GATEWAY_IOT_CONFIG.id = gatewayInfo.gatewayId; 
 			appClient = new Client.IotfGateway(CONFIG.GATEWAY_IOT_CONFIG);
 		}
 		return appClient;
