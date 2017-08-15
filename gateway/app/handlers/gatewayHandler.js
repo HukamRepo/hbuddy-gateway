@@ -31,6 +31,11 @@ var methods = {};
 
 	methods.initGateway = function(){
 		console.log('\n\n<<<<<<<< IN initGateway >>>>>>> ');
+		if(process.platform != 'darwin'){
+			var gpioHandler = require('../handlers/gpioHandler')();
+			gpioHandler.initLEDPins();
+		}
+		
 		localDBHandler.loadAllLocalDBs();
 		commonHandler.checkInternet(function(isConnected) {
 		    if (isConnected) {
