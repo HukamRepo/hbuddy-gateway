@@ -35,7 +35,11 @@ var methods = {};
 		console.log('\n\n<<<<<<<< IN initGateway >>>>>>> ');
 		if(process.platform != 'darwin'){
 			gpioHandler = require('../handlers/gpioHandler')();
-			gpioHandler.initLEDPins();
+			gpioHandler.setupPinsMode(function(err, result){
+				gpioHandler.setLEDStatus(CONFIG.LEDS.RED, true, function(err, result){
+					console.log("\n\n<<<< POWER LED SET TO ON >>> \n\n");
+				});
+			});
 		}
 		
 		localDBHandler.loadAllLocalDBs();
@@ -334,7 +338,9 @@ var methods = {};
 		if(process.platform != 'darwin' && !gpioHandler){
 			gpioHandler = require('../handlers/gpioHandler')();			
 		}
-		gpioHandler.destroyGPIOs(cb);
+		if(gpioHandler){
+			gpioHandler.destroyGPIOs(cb);
+		}		
 	};
 	
 	return methods;

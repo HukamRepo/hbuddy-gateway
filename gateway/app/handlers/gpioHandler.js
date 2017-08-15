@@ -1,4 +1,5 @@
 
+var CONFIG = require('../common/common').CONFIG(),
 var gpio = require('rpi-gpio');
 var async = require('async');
 
@@ -6,58 +7,55 @@ module.exports = function() {
 
 var methods = {};
 
-	const RGB_PINS = {"RED": 11, "GREEN": 13, "BLUE": 15};
-	
 	methods.setupPinsMode = function(cb){
 		try{
 			async.parallel([
 			                function(callback) {
-			                    gpio.setup(RGB_PINS.RED, gpio.DIR_OUT, callback)
+			                    gpio.setup(CONFIG.LEDS.RED, gpio.DIR_OUT, callback)
 			                },
 			                function(callback) {
-			                    gpio.setup(RGB_PINS.GREEN, gpio.DIR_OUT, callback)
+			                    gpio.setup(CONFIG.LEDS.GREEN, gpio.DIR_OUT, callback)
 			                },
 			                function(callback) {
-			                    gpio.setup(RGB_PINS.BLUE, gpio.DIR_OUT, callback)
+			                    gpio.setup(CONFIG.LEDS.BLUE, gpio.DIR_OUT, callback)
 			                }
 			            ], function(err, results) {
 			                cb(err, results);
 			            });
 		}catch(err){
 			console.log("ERROR in setupPinsMode: >>> ", err);
+			cb(err, null);
 		}
 	}
 
-	methods.initLEDPins = function() {
+	methods.setLEDStatus = function(ledPin, status, callback) {
 		try{
-			methods.setupPinsMode(function(err, results){
-				console.log('GPIO Pins set up: >> ', RGB_PINS);
-                methods.startupLEDPattern();
-			});
+			gpio.write(ledPin, status, callback);
 		}catch(err){
 			console.log("ERROR in startupLEDPattern: >>> ", err);
+			callback(err, null);
 		}
 	};
 	
 	methods.startupLEDPattern = function() {
 	    async.series([
 	        function(callback) {
-	            methods.delayedWrite(RGB_PINS.RED, true, callback);
+	            methods.delayedWrite(CONFIG.LEDS.RED, true, callback);
 	        },
 	        function(callback) {
-	        	methods.delayedWrite(RGB_PINS.GREEN, true, callback);
+	        	methods.delayedWrite(CONFIG.LEDS.GREEN, true, callback);
 	        },
 	        function(callback) {
-	        	methods.delayedWrite(RGB_PINS.BLUE, true, callback);
+	        	methods.delayedWrite(CONFIG.LEDS.BLUE, true, callback);
 	        },
 	        function(callback) {
-	        	methods.delayedWrite(RGB_PINS.RED, false, callback);
+	        	methods.delayedWrite(CONFIG.LEDS.RED, false, callback);
             },
             function(callback) {
-            	methods.delayedWrite(RGB_PINS.GREEN, false, callback);
+            	methods.delayedWrite(CONFIG.LEDS.GREEN, false, callback);
             },
             function(callback) {
-            	methods.delayedWrite(RGB_PINS.BLUE, false, callback);
+            	methods.delayedWrite(CONFIG.LEDS.BLUE, false, callback);
             }
 	    ], function(err, results) {
 	        methods.startupLEDPattern();	        
@@ -67,13 +65,13 @@ var methods = {};
 	methods.destroyGPIOs = function(cb){
 		async.parallel([
 		                function(callback) {
-				        	gpio.write(RGB_PINS.RED, false, callback);
+				        	gpio.write(CONFIG.LEDS.RED, false, callback);
 			            },
 			            function(callback) {
-			            	gpio.write(RGB_PINS.GREEN, false, callback);
+			            	gpio.write(CONFIG.LEDS.GREEN, false, callback);
 			            },
 			            function(callback) {
-			            	gpio.write(RGB_PINS.BLUE, false, callback);
+			            	gpio.write(CONFIG.LEDS.BLUE, false, callback);
 			            }
 		            ], function(err, results) {
 							console.log("IN gpioHandler.destroyGPIOs: >>> ");

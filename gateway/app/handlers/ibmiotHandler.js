@@ -3,6 +3,7 @@ var Client = require("ibmiotf");
 var CONFIG = require('../common/common').CONFIG();
 var eventEmmiter = require('../common/common').EVENTS();
 var sceneHandler = require('../handlers/sceneHandler')();
+var gpioHandler = null;
 
 var appClient;
 
@@ -39,16 +40,33 @@ module.exports = function() {
 		}
 	  //setting the log level to 'trace'
 		// appClient.log.setLevel('trace');
+		if(process.platform != 'darwin'){
+			gpioHandler = require('../handlers/gpioHandler')();
+		}
 
 	    appClient.on("connect", function () {
 	    	console.log('\n\n<<<<<<< IBM IoT Cloud Connected Successfully >>>>>> \n\n');
 	    	mqttConnected = true;
 	    	methods.subscribeToGateway();
+	    	if(gpioHandler){
+	    		gpioHandler.setupPinsMode(function(err, result){
+					gpioHandler.setLEDStatus(CONFIG.LEDS.GREEN, true, function(err, result){
+						console.log("\n\n<<<< CLOUD CONNECTIVITY LED SET TO ON >>> \n\n");
+					});
+				});
+	    	}	    	
 	    });
 
 	    appClient.on("disconnect", function () {
 	    	console.log('\n\n<<<<<<< IBM IoT Cloud Is Offline >>>>>> \n\n');
 	    	mqttConnected = false;
+	    	if(gpioHandler){
+	    		gpioHandler.setupPinsMode(function(err, result){
+					gpioHandler.setLEDStatus(CONFIG.LEDS.GREEN, false, function(err, result){
+						console.log("\n\n<<<< CLOUD CONNECTIVITY LED SET TO ON >>> \n\n");
+					});
+				});
+	    	}
 	    });
 
 	    appClient.on("deviceEvent", function (deviceType, deviceId, eventType, format, payload) {

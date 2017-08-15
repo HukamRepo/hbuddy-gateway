@@ -4,6 +4,7 @@
       "UPLOAD_CRON": "0 0 */1 * * *",
       "CONTENT_FOLDER": "/tmp/motion/cam1/",
       "CONFIG_FILE_PATH": "/media/pi/USB/configuration.json",
+      "LEDS": {"RED": 11, "GREEN": 13, "BLUE": 15},
       "GATEWAY_IOT_CONFIG": {
           "org": "rqeofj",
           "id": "a-rqeofj-maegv4oxmm",
