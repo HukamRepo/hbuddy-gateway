@@ -1,7 +1,6 @@
 
 var CONFIG = require('../common/common').CONFIG();
 
-var commonHandler = require('../handlers/commonHandler')();
 var localDBHandler = require('../handlers/localDBHandler')();
 var scheduleHandler = require('../handlers/scheduleHandler')();
 var gatewayHandler = require('../handlers/gatewayHandler')();
@@ -14,9 +13,9 @@ var appConfig = {};
 module.exports = function() {
 
 	methods.gatewayInfo = function(req, resp){
-		commonHandler.gatewayInfo(function(info){
+		gatewayHandler.gatewayInfo(function(info){
 			resp.json(info);
-		})
+		});
 	};
 	
 	methods.motionDetected = function(req, resp){

@@ -1,6 +1,7 @@
 
 var CONFIG = require('./common/common').CONFIG(),
    exec = require("child_process").exec,
+   commonHandler = require('./handlers/commonHandler.js')(),
    gatewayHandler = require('./handlers/gatewayHandler.js')(),
   // sensortagHandler = require('./handlers/sensortagHandler.js')(),
   // dependency_manager = require('./endpoints/dependency_manager.js')(),
@@ -48,7 +49,7 @@ module.exports = function(app) {
 
 	function setGlobalDetails(callback){
 		   global.appRoot = path.resolve(__dirname);
-		   global.gatewayInfo = gatewayHandler.gatewayInfo(function(gatewayInfo){
+		   global.gatewayInfo = commonHandler.gatewayInfo(function(gatewayInfo){
 				 global.gatewayInfo = gatewayInfo;
 				//  require('./handlers/ble/blenoHandler').advertise(gatewayInfo);
 				 callback(null, "GLOBAL DETAILS SET");

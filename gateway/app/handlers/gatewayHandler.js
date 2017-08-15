@@ -18,17 +18,10 @@ module.exports = function() {
 var methods = {};
 
 	methods.gatewayInfo = function(cb){
-		var info = {"gatewayId": "", "internet": "", "visibility": true};
-		info.gatewayId = commonHandler.getRPISerialNumber();
-
-		commonHandler.checkInternet(function(isConnected) {
-			info.internet = isConnected;
-			if(cb){
-				cb(info);
-			}
-		});
-
-		return info;
+		if(cb){
+			cb(global.gatewayInfo);
+		}
+		return global.gatewayInfo;
 	};
 	
 	methods.initGateway = function(){

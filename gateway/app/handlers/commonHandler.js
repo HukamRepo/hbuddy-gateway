@@ -36,7 +36,7 @@ var methods = {};
 	};
 
 	methods.gatewayInfo = function(cb){
-		var info = {"gatewayId": "", "internet": "", "visibility": true};
+		var info = {"gatewayId": "", "internet": "", "visibility": true, "iot_connected": false};
 		info.gatewayId = methods.getRPISerialNumber();
 
 		methods.checkInternet(function(isConnected) {

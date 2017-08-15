@@ -1,5 +1,5 @@
 
-var CONFIG = require('../common/common').CONFIG(),
+var CONFIG = require('../common/common').CONFIG();
 var gpio = require('rpi-gpio');
 var async = require('async');
 
