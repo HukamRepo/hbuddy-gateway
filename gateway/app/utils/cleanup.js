@@ -12,6 +12,9 @@ exports.Cleanup = function Cleanup(callback) {
   // do app specific cleaning before exiting
   process.on('exit', function () {
     process.emit('cleanup');
+    setTimeout(function() {
+        console.log("Waiting for All processes to shutdown....")
+    }, 2000);
   });
 
   // catch ctrl+c event and exit normally

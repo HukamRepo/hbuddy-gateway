@@ -6,9 +6,9 @@ module.exports = function() {
 
 var methods = {};
 
-	const RGB_PINS = {"RED": 17, "GREEN": 22, "BLUE": 27};
-
-	methods.initLEDPins = function() {
+	const RGB_PINS = {"RED": 11, "GREEN": 13, "BLUE": 15};
+	
+	methods.setupPinsMode = function(cb){
 		try{
 			async.parallel([
 			                function(callback) {
@@ -19,11 +19,21 @@ var methods = {};
 			                },
 			                function(callback) {
 			                    gpio.setup(RGB_PINS.BLUE, gpio.DIR_OUT, callback)
-			                },
+			                }
 			            ], function(err, results) {
-			                console.log('GPIO Pins set up: >> ', RGB_PINS);
-			                methods.startupLEDPattern();
+			                cb(err, results);
 			            });
+		}catch(err){
+			console.log("ERROR in setupPinsMode: >>> ", err);
+		}
+	}
+
+	methods.initLEDPins = function() {
+		try{
+			methods.setupPinsMode(function(err, results){
+				console.log('GPIO Pins set up: >> ', RGB_PINS);
+                methods.startupLEDPattern();
+			});
 		}catch(err){
 			console.log("ERROR in startupLEDPattern: >>> ", err);
 		}
@@ -42,22 +52,39 @@ var methods = {};
 	        },
 	        function(callback) {
 	        	methods.delayedWrite(RGB_PINS.RED, false, callback);
-	        },
-	        function(callback) {
-	        	methods.delayedWrite(RGB_PINS.GREEN, false, callback);
-	        },
-	        function(callback) {
-	        	methods.delayedWrite(RGB_PINS.BLUE, false, callback);
-	        },
+            },
+            function(callback) {
+            	methods.delayedWrite(RGB_PINS.GREEN, false, callback);
+            },
+            function(callback) {
+            	methods.delayedWrite(RGB_PINS.BLUE, false, callback);
+            }
 	    ], function(err, results) {
-	        console.log('Writes complete, pause then unexport pins');
-	        setTimeout(function() {
-	            gpio.destroy(function() {
-	                console.log('Closed pins, now exit');
-	            });
-	        }, 500);
+	        methods.startupLEDPattern();	        
 	    });
 	};
+	
+	methods.destroyGPIOs = function(cb){
+		async.parallel([
+		                function(callback) {
+				        	gpio.write(RGB_PINS.RED, false, callback);
+			            },
+			            function(callback) {
+			            	gpio.write(RGB_PINS.GREEN, false, callback);
+			            },
+			            function(callback) {
+			            	gpio.write(RGB_PINS.BLUE, false, callback);
+			            }
+		            ], function(err, results) {
+							console.log("IN gpioHandler.destroyGPIOs: >>> ");
+							gpio.destroy(function() {
+				                console.log('Closed GPIO pins, now exit... ');
+				                if(cb){
+				                	cb(null, "GPIO_CLOSED");
+				                }
+				            });
+		            });
+	}
 	
 	methods.delayedWrite = function (pin, value, callback) {
 	    setTimeout(function() {

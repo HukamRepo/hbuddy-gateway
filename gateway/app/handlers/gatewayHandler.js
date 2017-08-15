@@ -6,10 +6,12 @@ localDBHandler = require('../handlers/localDBHandler')(),
 cloudantHandler = require('../handlers/cloudantHandler')(),
 sceneHandler = require('../handlers/sceneHandler')(),
 scheduleHandler = require('../handlers/scheduleHandler')(),
-serialportHandler = null;
-ibmIoTHandler = null;
-sensorsHandler = null;
-var appConfig;
+serialportHandler = null,
+ibmIoTHandler = null,
+sensorsHandler = null,
+gpioHandler = null,
+appConfig;
+
 
 module.exports = function() {
 
@@ -28,11 +30,11 @@ var methods = {};
 
 		return info;
 	};
-
+	
 	methods.initGateway = function(){
 		console.log('\n\n<<<<<<<< IN initGateway >>>>>>> ');
 		if(process.platform != 'darwin'){
-			var gpioHandler = require('../handlers/gpioHandler')();
+			gpioHandler = require('../handlers/gpioHandler')();
 			gpioHandler.initLEDPins();
 		}
 		
@@ -326,6 +328,13 @@ var methods = {};
 				cb(respMsg);
 			}
 		}
+	};
+	
+	methods.destroyGPIOs = function(cb){
+		if(process.platform != 'darwin' && !gpioHandler){
+			gpioHandler = require('../handlers/gpioHandler')();			
+		}
+		gpioHandler.destroyGPIOs(cb);
 	};
 	
 	return methods;

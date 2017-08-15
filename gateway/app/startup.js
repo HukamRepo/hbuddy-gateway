@@ -21,8 +21,10 @@ module.exports = function(app) {
 
 	function cleanupOnExit(){
 		console.log("\n\n<<<<<<<<< CALLING CLEANUP PROCESS >>>>>>>>> ");
-		// sensortagHandler.disconnectSensorTags();
-		console.log("<<<<<<< Gateway Stopped, Good Bye >>>>>>>>\n");
+//		sensortagHandler.disconnectSensorTags();
+		gatewayHandler.destroyGPIOs(function(err, result){
+			console.log("<<<<<<< Gateway Stopped, Good Bye >>>>>>>>\n");
+		});		
 	}
 
 	function setupGateway(){
