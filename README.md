@@ -58,6 +58,10 @@ Stop all untagged images
 
 `docker rmi $(docker images | grep "^<none>" | awk "{print $3}")`
 
+##TO Test Voice Recording and Audio
+`$arecord -D plughw:1,0 -f cd test.wav`
+`$aplay test.wav`
+
 
 ## REFERENCES
 [OpenCV on Raspberry Pi](http://www.pyimagesearch.com/2016/04/18/install-guide-raspberry-pi-3-raspbian-jessie-opencv-3/) |

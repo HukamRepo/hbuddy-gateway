@@ -111,6 +111,7 @@ VoiceOffline.init = (options, recognizer) => {
 		  if(data.error){
 			  console.log("ERROR in Cloud STT: >>>  ", data.error);
 			  voiceoffline.emit('error', { streamingError: data.error.message })
+			  csr.listening = false;
 			  return;
 		  }
 		  
@@ -140,6 +141,7 @@ VoiceOffline.init = (options, recognizer) => {
       try{
         let triggerHotword = (index == 0)? hotword : models.lookup(index)
         voiceoffline.emit('hotword', index, triggerHotword)
+        csr.listening = false
         CloudSpeechRecognizer.startStreaming(opts, voiceoffline.mic, csr)
       } catch (e) {
 //        throw ERROR.INVALID_INDEX
