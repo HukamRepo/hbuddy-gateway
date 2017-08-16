@@ -17,7 +17,6 @@ module.exports = function() {
 			speechHandler.speechToText(function(result){
 				if(!result || result.length > 200){
 					console.log("DO Nothing: >>> ", result);
-					resp.json({"msg": "STARTED"});
 				}else{
 					console.log("STT RESPONSE: >>>", result);
 					if(result == 'stop' || result == 'stop buddy'){
@@ -28,9 +27,9 @@ module.exports = function() {
 							resp.status(err.statusCode || 500).json(err);
 						});
 					}
-					resp.json({"msg": "STARTED"});
 				}
 			});
+			resp.json({"msg": "STARTED"});
 		}catch(err){
 			console.log("ERROR in speechHandler.speechToText: >> ", err);
 			resp.status(err.statusCode || 500).json(err);

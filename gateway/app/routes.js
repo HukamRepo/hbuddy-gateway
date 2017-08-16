@@ -2,7 +2,7 @@ module.exports = function(router) {
 
   // var configEndpoint = require('./endpoints/configEndpoint.js')();
   var gatewayEndpoint = require('./endpoints/gatewayEndpoint.js')();
-  // var speechEndpoint = require('./endpoints/speechEndpoint.js')();
+  var speechEndpoint = require('./endpoints/speechEndpoint.js')();
 
   router.get('/', function(req, res) {
     res.json({ message: 'Hukam IoT Gateway Server Running ... ' });
@@ -15,8 +15,8 @@ module.exports = function(router) {
   
   router.get('/gateway/motion/detected', gatewayEndpoint.motionDetected);
 
-  // router.post('/stt/start', showClientRequest, speechEndpoint.listenCommands);
-  // router.post('/stt/stop', showClientRequest, speechEndpoint.stopSTT);
+  router.post('/stt/start', showClientRequest, speechEndpoint.listenCommands);
+  router.post('/stt/stop', showClientRequest, speechEndpoint.stopSTT);
 
   router.get('/place', gatewayEndpoint.getPlace);
   router.get('/place/areas', gatewayEndpoint.getPlaceAreas);

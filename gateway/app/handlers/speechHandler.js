@@ -4,16 +4,17 @@ var CONFIG = require('../common/common').CONFIG();
 var cp = require('child_process');
 var format = require('util').format;
 var fs = require('fs');
-const GOOGLE_SPEECH = require('@google-cloud/speech');
 var watson = require('watson-developer-cloud');
 
-var googleKeyPath = require('path').resolve(__dirname, '/config/hukam-774d80cae76d.json');
+var googleKeyPath = require('path').resolve(__dirname, '../resources/keys/hukam-774d80cae76d.json');
 var audioFile = "output.raw";
 //var recordingsPath = require('path').resolve(__dirname, '../recordings');
 var recordingsPath = "/tmp";//TODO: Change this later
 
 var hotwordsFilePath = require('path').resolve(__dirname, '../resources/hotwords/heyBuddy.pmdl');
 const VoiceOffline = require(require('path').resolve(__dirname, '../utils/voiceoffline.js'));
+
+const GOOGLE_SPEECH = require('@google-cloud/speech');
 var speech = GOOGLE_SPEECH({
   projectId: 'hukam-157906',
   keyFilename: googleKeyPath
