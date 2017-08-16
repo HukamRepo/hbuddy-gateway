@@ -19,42 +19,46 @@ CloudSpeechRecognizer.init = recognizer => {
 
 CloudSpeechRecognizer.startStreaming = (options, audioStream, cloudSpeechRecognizer) => {
   console.log("IN startStreaming to STT on Cloud, isListening:>>>> ", cloudSpeechRecognizer.listening);
-  if (cloudSpeechRecognizer.listening) {
-    return
-  }
-
-  cloudSpeechRecognizer.listening = true
-
-  const recognizer = cloudSpeechRecognizer.recognizer
-  const recognitionStream = recognizer.createRecognizeStream({
-    config: {
-      encoding: 'LINEAR16',
-      sampleRate: 16000,
-      languageCode: options.language
-    },
-    singleUtterance: true,
-    interimResults: false,
-    verbose: true
-  })
-
-  recognitionStream.on('error', err => {
-	  cloudSpeechRecognizer.emit('error', err)
-	  cloudSpeechRecognizer.listening = false
-	  audioStream.unpipe(recognitionStream)
-	})
-
-
-  recognitionStream.on('data', data => {
-    if (data) {
-      cloudSpeechRecognizer.emit('data', data)
-      if (data.endpointerType === 'END_OF_UTTERANCE') {
-        cloudSpeechRecognizer.listening = false
-        audioStream.unpipe(recognitionStream)
-      }
-    }
-  })
-
-  audioStream.pipe(recognitionStream)
+  try{
+	  
+			  if (cloudSpeechRecognizer.listening) {
+			    return
+			  }
+			
+			  cloudSpeechRecognizer.listening = true
+			
+			  const recognizer = cloudSpeechRecognizer.recognizer
+			  const recognitionStream = recognizer.streamingRecognize({
+			    config: {
+			      encoding: 'LINEAR16',
+			      sampleRateHertz: 16000,
+			      languageCode: options.language
+			    },
+			    singleUtterance: true,
+			    interimResults: false
+			  })
+			
+			  recognitionStream.on('error', err => {
+				  cloudSpeechRecognizer.emit('error', err)
+				  cloudSpeechRecognizer.listening = false
+				  audioStream.unpipe(recognitionStream)
+				})
+			
+			
+			  recognitionStream.on('data', data => {
+			    if (data) {
+			      cloudSpeechRecognizer.emit('data', data)
+			      if (data.endpointerType === 'END_OF_UTTERANCE') {
+			        cloudSpeechRecognizer.listening = false
+			        audioStream.unpipe(recognitionStream)
+			      }
+			    }
+			  })
+			
+			  audioStream.pipe(recognitionStream)
+	 }catch(err){
+		 console.log("ERROR in setting recognitionStream: >>> ", err);
+	 }
 }
 
 const VoiceOffline = {}
@@ -80,7 +84,7 @@ VoiceOffline.init = (options, recognizer) => {
     models.add({
       file: model.file || 'node_modules/snowboy/resources/snowboy.umdl',
       sensitivity: model.sensitivity || '0.5',
-      hotwords: model.hotwords || 'default'
+      hotwords: model.hotword || 'default'
     })
   })
 
@@ -110,22 +114,25 @@ VoiceOffline.init = (options, recognizer) => {
 			  return;
 		  }
 		  
-	    const result = data.results[0]
-	    if (result) {
-	    	if(result.isFinal){
-			  console.log("Data from Cloud: >>> ", JSON.stringify(data));
-	    	}
-	      transcriptEmpty = false
-	      if (result.isFinal) {
-	        voiceoffline.emit('final-result', result.transcript)
-	        VoiceOffline.annyang.trigger(result.transcript)
-	        transcriptEmpty = true //reset transcript
-	      } else {
-	        voiceoffline.emit('partial-result', result.transcript)
-	      }
-	    } else if (data.endpointerType === 'END_OF_UTTERANCE' && transcriptEmpty) {
-	      voiceoffline.emit('final-result', "")
-	    }
+		  var transcript = "";
+		  console.log("GOOGLE STT Response: >> ", data);
+		  
+		  if(data.results && data.results.length > 0){
+			  const result = data.results[0];
+			  if(result.isFinal){
+				  if(result.alternatives && result.alternatives.length > 0){
+					  transcript = result.alternatives[0].transcript;
+					  voiceoffline.emit('final-result', transcript);
+					  VoiceOffline.annyang.trigger(transcript);
+				      transcriptEmpty = true //reset transcript
+				  }				  
+			  }else{
+				  if(result.alternatives && result.alternatives.length > 0){
+					  transcript = result.alternatives[0].transcript;
+					  voiceoffline.emit('partial-result', transcript);
+				  }
+			  }
+		  }
   })
 
   voiceoffline.trigger = (index, hotword) => {
@@ -135,10 +142,12 @@ VoiceOffline.init = (options, recognizer) => {
         voiceoffline.emit('hotword', index, triggerHotword)
         CloudSpeechRecognizer.startStreaming(opts, voiceoffline.mic, csr)
       } catch (e) {
-        throw ERROR.INVALID_INDEX
+//        throw ERROR.INVALID_INDEX
+    	  console.log("\nERROR in VoiceOffline: >>> ", e);
       }
     } else {
-      throw ERROR.NOT_STARTED
+//      throw ERROR.NOT_STARTED
+    	console.log("\n<<< VoiceOffline Not Started Error >>> ");
     }
   }
 

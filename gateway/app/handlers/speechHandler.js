@@ -5,8 +5,9 @@ var cp = require('child_process');
 var format = require('util').format;
 var fs = require('fs');
 var watson = require('watson-developer-cloud');
+var eventEmmiter = require('../common/common').EVENTS();
 
-var googleKeyPath = require('path').resolve(__dirname, '../resources/keys/hukam-774d80cae76d.json');
+var googleKeyPath = require('path').resolve(__dirname, '../resources/keys/hukam-f32b2442e888.json');
 var audioFile = "output.raw";
 //var recordingsPath = require('path').resolve(__dirname, '../recordings');
 var recordingsPath = "/tmp";//TODO: Change this later
@@ -29,6 +30,11 @@ var watsonResponse = {};
 module.exports = function() {
 
 var methods = {};
+
+	eventEmmiter.on('TTS', function(payload) {
+			console.log("IN TTS EVENT received: >> ", payload);
+			methods.convertTTS(payload);
+	});
 
 	methods.speechToText = function(cb) {
 		console.log("IN speechHandler, speechToText >>>>>>> ");

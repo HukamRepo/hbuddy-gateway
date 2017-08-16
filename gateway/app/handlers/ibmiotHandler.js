@@ -187,22 +187,21 @@ module.exports = function() {
 			var payload = JSON.parse(payloadStr);
 				if(payload.d && payload.d.boardId && payload.d.deviceIndex){
 					var command = "";
-					if(payload.d.analogValue && payload.d.deviceValue > 0){
-						command = "#"+payload.d.boardId+"#"+payload.d.deviceIndex+"#"+payload.d.analogValue;
-					}else{
-						command = "#"+payload.d.boardId+"#"+payload.d.deviceIndex+"#"+payload.d.deviceValue;
-					}
+					command = "#"+payload.d.boardId+"#D#" +payload.d.status+"#"+payload.d.deviceIndex+"#"+payload.d.deviceValue;
+					
 					console.log('Command To Broadcast: >>> ', command);
 
 					eventEmmiter.emit("broadcast", command);
 
 				}else if(payload.action){
-					if(payload.type && payload.type == "Scene" && payload.data){
+					if(payload.action == "UPDATE_SCENE" && payload.data){
 						// TODO: Refresh Scene
 						console.log("Refresh Scene: >>> ", payload.data.title);
 						sceneHandler.updateScene(payload.data);
+					}else if(payload.action == "TTS" && payload.data){
+						eventEmmiter.emit("TTS", payload.data);
 					}else{
-						console.log("MQTT Payload.type is Invalid: >>> ", payload.type);
+						console.log("MQTT Payload is Invalid: >>> ", payload);
 					}
 				}else{
 					console.log("INVALID PAYLOAD RECEIVED: >>> ", payload);

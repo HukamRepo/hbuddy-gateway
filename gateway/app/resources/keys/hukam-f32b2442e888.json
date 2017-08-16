@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "hukam-157906",
+  "private_key_id": "f32b2442e888ec8a23a4389c81d7dbc413fc0626",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQCX7cn7ZXKlc/Jm\nQCERZEUXYNQZgpBZNM+wu7iDr/Z38kBOSBtFqrZsa4bDI3A0Yz6sx5PYZ6Af45xX\n/aA5gK5x+q/S2CkldtinaiCyPm3jA96wgjVkFPAflWWkXpTfaLebspTVPXCX+Nq2\nxiWMy3jRb2yTbqK2tpsyDGFvOUjTwd1gr1+3qF/nJHHWpFroMhoW+WZhT49tU6cl\nkXCdk6oN6yiRqI/2rV2LKu6LyxS8uT4MEZERLSnhxp6efNJuy73NjNJTQcs1voVD\n6u4E1/NdIXLZIbHH+Jlgbuq6tlvrCqjvcPAs/Iw3bFCGf5rF6gnBOzzehi/bu05m\nJ/EC26NHAgMBAAECggEAEuEpyGPC62yNIse1VEPxkgYmVUU0SuGVLZEmTLcBGcaw\n1wl+2hlssexqwrUUrG3oy+/BH5NBArV2KDkMQBkNlHxifQD/m/g41BUMGxpG7X79\nnVGQ8O7pKAOYreRS+7A3oNGATT9lTn1OMIhPAkAGs3/1Lh0Be1MV1hJTyU6FDktI\nABuCgYiteFZ+E3C5E2FvvLXu9Bw3QeAaLKDYsIlWxlap4HPVgPEFbNPyuKWFzuMO\nIGaMgtOeT9Wz8tYA+u6zfAjc8wBQ/iTTI0pEQZYgLUMaGOqkQ8LZLMAWRBSPSWfE\nELQZnSYorjW6W4cq0iFIdKPqiOswWpP0z0cmCCgLgQKBgQDJ2GVV57JmpZsGypwv\nv+BcSXLZT+sG8l1BeVNXiG8uzvNn8UHGfLHGRaY1ysjzp8+yynMNL0xe54tutO70\nXjIGhqFavOcJFKG45ODvkdDsvR1Rs1FLylu6b+O/UUTV3O/b9bb/txDNvASTeAwh\nqBRb6ZIOSRwr2Bfj78yObTgBTQKBgQDAsOrmMi/YB5LFxKa01gItg+rGFpLzKkJ3\nYPUA5c095YYUZSAv7XSZ2plbUBbMcq9LxsDQCRqYkwA5MyytwKRT2+gqxDVqKXrP\nIkOYe0BOcKLUUm1oDXvFzg1WiMnvvOiV41cJkZcQ0/lS5SlXIHjN2EciHAYkBYO/\n3JUOnT5s4wKBgEJYtQaFwGhpKwoSc0Bmy7LKGcxArrp71Bd/b9un5xP1xqB19u7t\nceoAXt/zphYhJO5aCXNeBrZzWausIZeFlt/6RPN0gGTFuVrzMNTOk2QdzZNbY++L\ntpcTzELIzd2WX+lnXR206PsXQFHQ9fviKb8EiZPUiEQJJeEwo4Z1dCFJAoGBAMAi\nqNcIS/SY+J0CzUeb7Wf9FeiXMcgN52Cp6SMQAWsqpltHyqR/nbib5DbM0S7jXC+u\n6yuFKGPikGJ4yKAoarLDn+ik5K4K1k4b2FL+8sxEO9iCqF0MtNIz99DFbLYEI9bx\nbSQ5a+x3sTAbGPGri0mV0rgMQYNBjHGPPYHpAQoJAoGAS8tM0h2DpPaObGdGO1oW\nd0XmWjBeFP2x3N9GjFUhZ1wC/tj2PE/6BfIQkHXX1LpOI/A3I7XdEkyXwWliVwvL\nYSAkKMIJfIi072v9s5H5NCjZpg6dR6AcloP859TtaI/XQEtABv6jww29WqGSAHOY\nmGxIA9Uz8EcHLR9fUllWc2o=\n-----END PRIVATE KEY-----\n",
+  "client_email": "hukam-service-account@hukam-157906.iam.gserviceaccount.com",
+  "client_id": "105012037543937445066",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://accounts.google.com/o/oauth2/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/hukam-service-account%40hukam-157906.iam.gserviceaccount.com"
+}
