@@ -22,14 +22,11 @@ RUN echo "anon_root=/var/lib/motion" >> /etc/vsftpd.conf \
       && sed -i -e"s/^.*listen_ipv6=.*$/listen_ipv6=NO/" /etc/vsftpd.conf \
       && sed -i -e"s/^.*anonymous_enable=.*$/anonymous_enable=YES/" /etc/vsftpd.conf
 
-# Create a directory where our app will be placed
-RUN mkdir -p /usr/src/app
-
 #Change directory so that our commands run inside this new directory
-WORKDIR /usr/src/app
+WORKDIR /root
 
 # Copy dependency definitions
-COPY package.json /usr/src/app
+COPY package.json /root
 
 COPY app/resources/init.d/.asoundrc /root/
 
@@ -37,7 +34,7 @@ COPY app/resources/init.d/.asoundrc /root/
 RUN JOBS=MAX npm i --unsafe-perm --production
 
 # Get all the code needed to run the app
-COPY . /usr/src/app
+COPY . /root
 
 ENV TINI_SUBREAPER=true
 
