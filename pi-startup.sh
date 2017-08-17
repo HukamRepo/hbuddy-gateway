@@ -10,7 +10,7 @@ sudo modprobe bcm2835-v4l2
 wget https://raw.githubusercontent.com/sinny777/hbuddy-gateway/master/gateway/app/resources/init.d/.asoundrc
 mv .asoundrc ~/.asoundrc
 
-docker run --rm -d -p 9000:9000 --name gateway-app -v ~/:/root -v /tmp:/tmp --privileged -it hukam/gateway-app
+docker run --rm -d -p 9000:9000 --name gateway-app -v /opt:/opt -v /tmp:/tmp --privileged -it hukam/gateway-app
 
 sleep 3 &
 

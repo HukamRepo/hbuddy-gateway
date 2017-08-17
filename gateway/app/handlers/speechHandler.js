@@ -5,6 +5,7 @@ var cp = require('child_process');
 var format = require('util').format;
 var fs = require('fs');
 var watson = require('watson-developer-cloud');
+var conversationHandler = require('../handlers/conversationHandler')();
 var eventEmmiter = require('../common/common').EVENTS();
 
 var googleKeyPath = require('path').resolve(__dirname, '../resources/keys/hukam-f32b2442e888.json');
@@ -25,7 +26,10 @@ var ttsCredentials = CONFIG.SERVICES_CONFIG.tts;
 ttsCredentials.version = 'v1';
 var ttsService = watson.text_to_speech(ttsCredentials);
 
+var speakInVoice = "en-US_AllisonVoice";
+
 var watsonResponse = {};
+var context;
 
 module.exports = function() {
 
@@ -51,8 +55,17 @@ var methods = {};
 			});
 
 			voiceOffline.on('final-result', function(result){
-				if(cb){
-					cb(result);
+				if(!result || result.length > 200){
+					console.log("DO Nothing: >>> ", result);
+				}else{
+					console.log("STT RESPONSE: >>>", result);
+					if(result == 'stop' || result == 'stop buddy' || result == 'thanks buddy' || result == 'thanks'){
+						methods.stopTTS();
+					}else{
+						methods.getCommandResponse(result, true, function(err){
+							console.log("STT ERROR Resp: >>> ", err);
+						});
+					}
 				}
 			});
 
@@ -63,10 +76,76 @@ var methods = {};
 			voiceOffline.on('error', function(error){
 				console.log("VoiceOffline ERROR: >>> ", error);
 			});
+			
+			if(cb){
+				cb("hBuddy Listening now....");
+			}
+			
+			methods.getCommandResponse("Hey Buddy", false, function(err){
+				console.log("STT ERROR Resp: >>> ", err);
+			});
+			
 		}catch(err){
 			console.log("Error in speechHandler: >>> ", err);
-			throw new Error("Error in speechHandler: >>> ", err);
+//			throw new Error("Error in speechHandler: >>> ", err);
+			console.log("ERROR while hBuddy Listening: ", err);
+			cb(err);
 		}
+	};
+	
+	methods.getCommandResponse = function(commandResp, playTTS, errFunc){
+		var conversationReq = {
+								"params": {
+											input: commandResp
+										},
+								"context": context
+								};
+		console.log("getCommandResponse for: ", commandResp);
+		conversationHandler.callConversation(conversationReq, function(err, watsonResponse){
+			if(err){
+				console.log(err);
+				if(errFunc){
+					errFunc(err);
+				}
+			}else{
+				
+					if(watsonResponse && watsonResponse.context){
+						context = watsonResponse.context;
+					}
+				
+					if(watsonResponse && watsonResponse.output && watsonResponse.output.text){
+						var respText = "";
+						if(watsonResponse.output.log_messages){
+							if(watsonResponse.output.log_messages.level == 'err'){
+								console.log("ERROR In Conversation Service: >>>> ", watsonResponse.output.log_messages.msg);
+								return;
+							}
+						}
+						for(var i = 0 ; i < watsonResponse.output.text.length; i++){
+							respText += watsonResponse.output.text[i]+" ";
+						}
+
+						console.log("Conversation Response: ", respText);
+						if(playTTS){
+							var query = {"voice": speakInVoice,
+				  			  		"text": respText,
+				  			  		"accept": "audio/ogg; codec=opus",
+				  			  		"download": true };
+							methods.convertTTS(query, errFunc);
+						}						
+					}else{
+						if(watsonResponse && watsonResponse.context && watsonResponse.context.next_action != "DO_NOTHING" && playTTS){
+							var query = {"voice": speakInVoice,
+				  			  		"text": "Sorry, I can not help you with this.",
+				  			  		"accept": "audio/ogg; codec=opus",
+				  			  		"download": true };
+							methods.convertTTS(query, errFunc);
+						}else{
+							console.log("DO NOTHING >>>>>> ");
+						}
+				}
+			}
+		});
 	};
 
 	methods.convertTTS = function(query, errorFunc){
