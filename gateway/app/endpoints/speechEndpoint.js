@@ -7,10 +7,6 @@ var methods = {};
 module.exports = function() {
 
 	methods.listenCommands = function(req, resp, next){
-		context = {
-			"gatewayId": gatewayInfo.gatewayId
-		};
-		
 		console.log("IN speechEndpoint, listenCommands >>>>>>> ");
 		try{
 			speechHandler.speechToText(function(result){

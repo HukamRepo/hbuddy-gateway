@@ -43,6 +43,9 @@ var methods = {};
 	methods.speechToText = function(cb) {
 		console.log("IN speechHandler, speechToText >>>>>>> ");
 		try{
+			context = {
+					"gatewayId": gatewayInfo.gatewayId
+				};
 			const language = "en-IN";
 			var hotwords = [{ file: hotwordsFilePath, hotword: 'hey buddy', sensitivity: '0.5' }];
 			var voiceOffline = VoiceOffline.init({ hotwords, language }, speech);
@@ -96,11 +99,10 @@ var methods = {};
 	methods.getCommandResponse = function(commandResp, playTTS, errFunc){
 		var conversationReq = {
 								"params": {
-											input: commandResp
-										},
-								"context": context
+											input: commandResp,
+											"context": context
+										}								
 								};
-		console.log("getCommandResponse for: ", commandResp);
 		conversationHandler.callConversation(conversationReq, function(err, watsonResponse){
 			if(err){
 				console.log(err);

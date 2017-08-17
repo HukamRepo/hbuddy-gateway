@@ -20,14 +20,13 @@ module.exports = function() {
 
 var methods = {};
 
-	methods.callConversation = function(req, cb) {
-		if(!req || !req.params || !req.params.input){
+	methods.callConversation = function(conversationReq, cb) {
+		if(!conversationReq || !conversationReq.params || !conversationReq.params.input){
 			cb("INVALID REQ FOR CONVERSATION ! ", null);
 		}
 		apiOptions.url = CONFIG.SERVICES_CONFIG.hbuddyApi.endpoint + "/Conversations";
 		apiOptions.method = "POST";
-		apiOptions.json = req;
-
+		apiOptions.json = conversationReq;
 	    request(apiOptions, function (err, resp, body) {
 	        if (err) {
 	            cb(err, null);

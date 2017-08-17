@@ -15,7 +15,7 @@
         },
         "SERVICES_CONFIG":{
           "hbuddyApi": {
-            "endpoint":"https://hbuddy-dev.mybluemix.net/api",
+            "endpoint":"http://hbuddy-dev.mybluemix.net/api",
             "clientId": "default",
             "clientSecret": "SECRET"
           },
