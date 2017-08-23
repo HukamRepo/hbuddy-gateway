@@ -5,6 +5,8 @@ var CONFIG = require('../common/common').CONFIG(),
     format = require('util').format,
     moment = require('moment');
 
+moment.locale('en');
+
 var apiOptions = {
 		  url: CONFIG.SERVICES_CONFIG.hbuddyApi.endpoint,
 		  method: "GET",

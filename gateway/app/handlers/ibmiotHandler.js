@@ -23,7 +23,7 @@ module.exports = function() {
 
 	methods.getAppClient = function(){
 		if(!appClient){
-			CONFIG.GATEWAY_IOT_CONFIG.id = gatewayInfo.gatewayId; 
+			CONFIG.GATEWAY_IOT_CONFIG.id = gatewayInfo.gatewayId;
 			appClient = new Client.IotfGateway(CONFIG.GATEWAY_IOT_CONFIG);
 		}
 		return appClient;
@@ -53,7 +53,7 @@ module.exports = function() {
 				gpioHandler.setLEDStatus(CONFIG.LEDS.GREEN, true, function(err, result){
 					console.log("\n<<<< CLOUD CONNECTIVITY LED SET TO ON >>> \n");
 				});
-	    	}	    	
+	    	}
 	    });
 
 	    appClient.on("disconnect", function () {
@@ -71,7 +71,7 @@ module.exports = function() {
 //	        console.log("Device Event from :: "+deviceType+" : "+deviceId+" of event "+eventType+" with payload : "+payload);
 	        methods.broadcastMessage(payload);
 	    });
-	    
+
 	    appClient.on("command", function (type, id, commandName, format, payload, topic) {
 //	        console.log("Gateway Command from :: "+deviceType+" : "+deviceId+" of event "+eventType+" with payload : "+payload);
 	        methods.broadcastMessage(payload);
@@ -187,8 +187,8 @@ module.exports = function() {
 			var payload = JSON.parse(payloadStr);
 				if(payload.d && payload.d.boardId && payload.d.deviceIndex){
 					var command = "";
-					command = "#"+payload.d.boardId+"#D#" +payload.d.status+"#"+payload.d.deviceIndex+"#"+payload.d.deviceValue;
-					
+					command = "#"+payload.d.boardId+"#D#" +payload.d.deviceIndex+"#"+payload.d.status+"#"+payload.d.deviceValue;
+
 					console.log('Command To Broadcast: >>> ', command);
 
 					eventEmmiter.emit("broadcast", command);
