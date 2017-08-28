@@ -41,7 +41,7 @@ var methods = {};
   			  		"text": text,
   			  		"accept": "audio/ogg; codec=opus",
   			  		"download": true };
-			methods.convertTTS(payload);
+			methods.convertTTS(query);
 	});
 
 	methods.speechToText = function(cb) {
