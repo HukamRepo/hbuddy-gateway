@@ -9,7 +9,7 @@ var conversationHandler = require('../handlers/conversationHandler')();
 var eventEmmiter = require('../common/common').EVENTS();
 
 var googleKeyPath = require('path').resolve(__dirname, '../resources/keys/hukam-f32b2442e888.json');
-var audioFile = "output.raw";
+
 //var recordingsPath = require('path').resolve(__dirname, '../recordings');
 var recordingsPath = "/tmp";//TODO: Change this later
 
@@ -26,7 +26,12 @@ var ttsCredentials = CONFIG.SERVICES_CONFIG.tts;
 ttsCredentials.version = 'v1';
 var ttsService = watson.text_to_speech(ttsCredentials);
 
-var speakInVoice = "en-US_AllisonVoice";
+var TTS_CONFIG = {
+		"voice":"en-US_AllisonVoice",
+		"accept":"audio/wav",
+		"download":true,
+		"audioFile":"tts.wav"
+}
 
 var watsonResponse = {};
 var context;
@@ -37,10 +42,10 @@ var methods = {};
 
 	eventEmmiter.on('TTS', function(text) {
 			console.log("IN TTS EVENT received: >> ", text);
-			var query = {"voice": speakInVoice,
+			var query = {"voice": TTS_CONFIG.speakInVoice,
   			  		"text": text,
-  			  		"accept": "audio/ogg; codec=opus",
-  			  		"download": true };
+  			  		"accept": TTS_CONFIG.accept,
+  			  		"download": TTS_CONFIG.download };
 			methods.convertTTS(query);
 	});
 
@@ -133,18 +138,18 @@ var methods = {};
 
 						console.log("Conversation Response: ", respText);
 						if(playTTS){
-							var query = {"voice": speakInVoice,
+							var query = {"voice": TTS_CONFIG.speakInVoice,
 				  			  		"text": respText,
-				  			  		"accept": "audio/ogg; codec=opus",
-				  			  		"download": true };
+				  			  		"accept": TTS_CONFIG.accept,
+				  			  		"download": TTS_CONFIG.download };
 							methods.convertTTS(query);
 						}						
 					}else{
 						if(watsonResponse && watsonResponse.context && watsonResponse.context.next_action != "DO_NOTHING" && playTTS){
-							var query = {"voice": speakInVoice,
+							var query = {"voice": TTS_CONFIG.speakInVoice,
 				  			  		"text": "Sorry, I can not help you with this.",
-				  			  		"accept": "audio/ogg; codec=opus",
-				  			  		"download": true };
+				  			  		"accept": TTS_CONFIG.accept,
+				  			  		"download": TTS_CONFIG.download };
 							methods.convertTTS(query);
 						}else{
 							console.log("DO NOTHING >>>>>> ");
@@ -159,7 +164,7 @@ var methods = {};
 		if(!query || !query.text || query.text.length < 3){
 			return;
 		}
-		var outfile = recordingsPath+"/tts.opus";
+		var outfile = recordingsPath+"/"+TTS_CONFIG.audioFile;
 		var transcript = ttsService.synthesize(query).pipe(fs.createWriteStream(outfile))
         .on('error', function(){
         	console.log("Error in convertTTS: >> ");
@@ -172,7 +177,7 @@ var methods = {};
 	methods.playAudioFrom = function(filePath) {
 		console.log('IN playAudioFrom: >> ', filePath);
         console.log('playing %s', filePath);
-        cp.exec(format('omxplayer -o local %s', filePath));
+        cp.exec(format('aplay %s', filePath));
 	};
 
 	methods.stopTTS = function() {

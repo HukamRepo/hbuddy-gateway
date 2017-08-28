@@ -182,7 +182,7 @@ module.exports = function() {
 
 
 	methods.broadcastMessage = function(payloadStr){
-		console.log('IN broadcastMessage: >> payload: ', payloadStr);
+//		console.log('IN broadcastMessage: >> payload: ', payloadStr);
 		try{
 			var payload = JSON.parse(payloadStr);
 				if(payload.d && payload.d.boardId && payload.d.deviceIndex){
