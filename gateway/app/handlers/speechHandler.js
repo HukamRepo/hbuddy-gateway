@@ -155,12 +155,15 @@ var methods = {};
 	};
 
 	methods.convertTTS = function(query){
+		console.log("IN convertTTS: >> ", JSON.stringify(query));
 		if(!query || !query.text || query.text.length < 3){
 			return;
 		}
 		var outfile = recordingsPath+"/tts.opus";
 		var transcript = ttsService.synthesize(query).pipe(fs.createWriteStream(outfile))
-        .on('error', errorFunc)
+        .on('error', function(){
+        	console.log("Error in convertTTS: >> ");
+        })
         .on('close', function() {
         	methods.playAudioFrom(outfile);
          });
