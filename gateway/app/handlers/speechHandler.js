@@ -35,8 +35,12 @@ module.exports = function() {
 
 var methods = {};
 
-	eventEmmiter.on('TTS', function(payload) {
-			console.log("IN TTS EVENT received: >> ", payload);
+	eventEmmiter.on('TTS', function(text) {
+			console.log("IN TTS EVENT received: >> ", text);
+			var query = {"voice": speakInVoice,
+  			  		"text": text,
+  			  		"accept": "audio/ogg; codec=opus",
+  			  		"download": true };
 			methods.convertTTS(payload);
 	});
 
@@ -133,7 +137,7 @@ var methods = {};
 				  			  		"text": respText,
 				  			  		"accept": "audio/ogg; codec=opus",
 				  			  		"download": true };
-							methods.convertTTS(query, errFunc);
+							methods.convertTTS(query);
 						}						
 					}else{
 						if(watsonResponse && watsonResponse.context && watsonResponse.context.next_action != "DO_NOTHING" && playTTS){
@@ -141,7 +145,7 @@ var methods = {};
 				  			  		"text": "Sorry, I can not help you with this.",
 				  			  		"accept": "audio/ogg; codec=opus",
 				  			  		"download": true };
-							methods.convertTTS(query, errFunc);
+							methods.convertTTS(query);
 						}else{
 							console.log("DO NOTHING >>>>>> ");
 						}
@@ -150,7 +154,7 @@ var methods = {};
 		});
 	};
 
-	methods.convertTTS = function(query, errorFunc){
+	methods.convertTTS = function(query){
 		if(!query || !query.text || query.text.length < 3){
 			return;
 		}

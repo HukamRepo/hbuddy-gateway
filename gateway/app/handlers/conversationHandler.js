@@ -50,6 +50,8 @@ var methods = {};
 	        		}else{
 	        			cb(null, body.conversation);
 	        		}
+	        	}else{
+	        		cb(null, resp);
 	        	}
 	        } catch(ex) {
 	            ex.message = format("Unexpected response format from %s - %s", apiOptions.url, ex.message);

@@ -198,8 +198,8 @@ module.exports = function() {
 						// TODO: Refresh Scene
 						console.log("Refresh Scene: >>> ", payload.data.title);
 						sceneHandler.updateScene(payload.data);
-					}else if(payload.action == "TTS" && payload.data){
-						eventEmmiter.emit("TTS", payload.data);
+					}else if(payload.action == "TTS" && payload.text){
+						eventEmmiter.emit("TTS", payload.text);
 					}else{
 						console.log("MQTT Payload is Invalid: >>> ", payload);
 					}
