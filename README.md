@@ -3,9 +3,9 @@
 docker run --rm --privileged multiarch/qemu-user-static:register --reset
 
 ## Running Hukam Gateway Application Docker Container
-`docker run --rm -d -p 9000:9000 --name gateway-app -v /opt:/opt -v /tmp:/tmp --privileged -it hukam/gateway-app`
+`docker run --rm -d -p 9000:9000 --name gateway-app -v /opt:/opt -v /tmp:/tmp --privileged hukam/gateway-app`
 
-`docker run --rm -it -p 9000:9000 --name gateway-app -v /opt:/opt -v /tmp:/tmp --privileged -it hukam/gateway-app`
+`docker run --rm -it -p 9000:9000 --name gateway-app -v /opt:/opt -v /tmp:/tmp --privileged hukam/gateway-app`
 
 
 ## Running Hukam Gateway UI Docker Container
