@@ -46,6 +46,7 @@ module.exports = function(appConfig) {
 
 	methods.writeToSerialPort = function(command){
 		if(serialPort){
+			command += "Z";
 			serialPort.write(command, function(){
 				console.log('Command Broadcast Successfully: >>> ', command);
 			});
