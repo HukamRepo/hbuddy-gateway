@@ -92,15 +92,15 @@ module.exports = function(appConfig) {
 			
 			if(deviceWithData.temp){
 				deviceWithData.data.temp = deviceWithData.temp;
-				delete deviceWithData.data["temp"];
+				delete deviceWithData["temp"];
 			}
 			if(deviceWithData.hum){
 				deviceWithData.data.hum = deviceWithData.hum;
-				delete deviceWithData.data["hum"];
+				delete deviceWithData["hum"];
 			}
 			if(deviceWithData.dewpoint){
 				deviceWithData.data.dewpoint = deviceWithData.dewpoint;
-				delete deviceWithData.data["dewpoint"];
+				delete deviceWithData["dewpoint"];
 			}
 
 			eventEmmiter.emit("serialdata", deviceWithData);
