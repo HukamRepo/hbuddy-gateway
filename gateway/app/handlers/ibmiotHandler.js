@@ -112,12 +112,12 @@ module.exports = function() {
 		// BELOW IS THE FORMAT OF DATA RECEIVED FROM MASTER SWITCH BOARD
 		// "{"type":"switch_board", "uniqueId":"SWB-AB00-11-22-33", "data": {"deviceId":1, "deviceValue": 1, "analogValue": 5}}";
 
-		if(!deviceWithData || !deviceWithData.uniqueId || !deviceWithData.type || !deviceWithData.data){
+		if(!deviceWithData || (!deviceWithData.uniqueId && !deviceWithData.id) || !deviceWithData.type || !deviceWithData.data){
 			console.log("INVALID deviceWithData to Publish ", deviceWithData);
 			return false;
 		}
 
-		if(deviceWithData.type == "switch_board" && deviceWithData.data.deviceIndex){
+		if(deviceWithData.type == "switch_board"){
 			return true;
 		}
 

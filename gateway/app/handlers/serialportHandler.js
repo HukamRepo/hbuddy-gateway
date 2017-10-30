@@ -78,11 +78,30 @@ module.exports = function(appConfig) {
 		var timeNow = new Date();
 		try{
 			var deviceWithData = JSON.parse(deviceData);
+			
+			if(deviceWithData.id && !deviceWithData.uniqueId){
+				deviceWithData.uniqueId = deviceWithData.id;
+				delete deviceWithData["id"];
+			}
+			
 			if(!deviceWithData.data){
 				deviceWithData.data = {};
 			}
 			deviceWithData.data.ts = timeNow;
 			deviceWithData.data.gatewayId = global.gatewayInfo.gatewayId;
+			
+			if(deviceWithData.temp){
+				deviceWithData.data.temp = deviceWithData.temp;
+				delete deviceWithData.data["temp"];
+			}
+			if(deviceWithData.hum){
+				deviceWithData.data.hum = deviceWithData.hum;
+				delete deviceWithData.data["hum"];
+			}
+			if(deviceWithData.dewpoint){
+				deviceWithData.data.dewpoint = deviceWithData.dewpoint;
+				delete deviceWithData.data["dewpoint"];
+			}
 
 			eventEmmiter.emit("serialdata", deviceWithData);
 
