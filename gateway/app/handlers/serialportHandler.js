@@ -22,8 +22,7 @@ module.exports = function(appConfig) {
 		try{
 			var Readline = SerialPort.parsers.Readline;
 			serialPort = new SerialPort(usbPort, {
-			    baudrate: 9600,
-			    highWaterMark: 131072,
+			    baudrate: 9600
 			  });
 			  var parser = serialPort.pipe(new Readline({delimiter: '\n'}));
 			  parser.on('data', function(data) {
@@ -46,7 +45,7 @@ module.exports = function(appConfig) {
 
 	methods.writeToSerialPort = function(command){
 		if(serialPort){
-			command += "\n";
+			command += "Z\n";
 			serialPort.write(command, function(){
 				console.log('Command Broadcast Successfully: >>> ', command);
 			});
