@@ -22,7 +22,7 @@ module.exports = function(appConfig) {
 		try{
 			var Readline = SerialPort.parsers.Readline;
 			serialPort = new SerialPort(usbPort, {
-			    baudrate: 9600,
+			    baudrate: 115200,
 			    highWaterMark: 131072,
 			  });
 			  var parser = serialPort.pipe(new Readline({delimiter: '\n'}));
