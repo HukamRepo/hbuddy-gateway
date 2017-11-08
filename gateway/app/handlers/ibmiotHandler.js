@@ -10,7 +10,7 @@ var appClient;
 var startTime = new Date();
 var mqttConnected = false;
 
-module.exports = function() {
+module.exports = function(appConfig) {
 
 	var methods = {};
 
@@ -122,7 +122,7 @@ module.exports = function() {
 		}
 
 		for (var dataKey in deviceWithData.data) {
-			if(appConfig.PUBLISH_CONFIG){
+			if(appConfig && appConfig.PUBLISH_CONFIG){
 				var sensorsConf = appConfig.PUBLISH_CONFIG.sensors;
 				console.log("sensorsConf: >>>> ", sensorsConf, ", deviceWithData: >> ", deviceWithData);
 				if(sensorsConf && sensorsConf.length > 0){

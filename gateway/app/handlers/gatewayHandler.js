@@ -41,7 +41,7 @@ var methods = {};
 		    	handleOnline(function(appConfig){
 				    	serialportHandler = require('../handlers/serialportHandler')(appConfig);
 							serialportHandler.initSerialPort();
-							ibmIoTHandler = require('../handlers/ibmiotHandler')();
+							ibmIoTHandler = require('../handlers/ibmiotHandler')(appConfig);
 							ibmIoTHandler.connectToIBMCloud(function(appclient){
 								appClient = appclient;
 							});
