@@ -22,9 +22,11 @@ module.exports = function(appConfig) {
 		try{
 			var Readline = SerialPort.parsers.Readline;
 			serialPort = new SerialPort(usbPort, {
-			    baudrate: 9600
+				options: {
+				      baudrate:9600				     
+				    }
 			  });
-			  var parser = serialPort.pipe(new Readline({delimiter: '\n'}));
+			  var parser = serialPort.pipe(new Readline());
 			  parser.on('data', function(data) {
 			      console.log('\n\ndata received: ' + data);
 			      if(!data || data.trim() == ""){
