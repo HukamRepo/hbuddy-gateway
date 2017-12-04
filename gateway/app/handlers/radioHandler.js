@@ -1,9 +1,11 @@
 
-var SerialPort = require("serialport");
-var usbPort = "/dev/ttyUSB0";
+var SX127x = require('sx127x');
 var CONFIG = require('../common/common').CONFIG();
 var eventEmmiter = require('../common/common').EVENTS();
-var serialPort;
+
+var sx127x = new SX127x({
+	  frequency: 433e6
+	});
 
 var appClient;
 
@@ -15,46 +17,52 @@ module.exports = function(appConfig) {
 
 	eventEmmiter.on('broadcast', function(command) {
   		console.log("IN broadcast EVENT received: >> ", command);
-			methods.writeToSerialPort(command);
+			methods.writeToRadio(command);
 	});
 
-	methods.initSerialPort = function(){
-		console.log("IN initSerialPort: >> ");
+	methods.initRadio = function(){
+		console.log("IN initRadio: >> ");
 		try{
-			var Readline = SerialPort.parsers.Readline;
-			serialPort = new SerialPort(usbPort, {
-				options: {
-				      baudrate:9600				     
-				    }
-			  });
-			  var parser = serialPort.pipe(new Readline());
-			  parser.on('data', function(data) {
-			      console.log('\n\ndata received: ' + data);
-			      if(!data || data.trim() == ""){
-			    	  console.log("Empty Data Received: >>>> ", data);
-			      }else{
-			    	  methods.handleDataOnSerialPort(data);
-			      }
-			    });
+			sx127x.open(function(err) {
+				  console.log('Radio Open: ', err ? err : 'success');
+				  if (err) {
+					  console.log(err);
+				  }
+				  sx127x.on('data', function(data, rssi) {
+//				    console.log('data:', '\'' + data.toString() + '\'', rssi);
+				    console.log('\n\nRadio data received: ' + data.toString());
+				      if(!data || data.trim() == ""){
+				    	  console.log("Empty Data Received: >>>> ", data);
+				      }else{
+				    	  methods.handleDataOnRadio(data);
+				      }
+				  });
 
-			  serialPort.on('error', function(err) {
-	//			  throw new Error('Custom SerialPort Communication Error: ', err);
-				  console.log('ERROR In SERIAL PORT COMMUNICATION: >>> ', err);
-			  });
-		}catch(err){
-			console.log(err);
-		}
+				  // enable receive mode
+				  sx127x.receive(function(err) {
+				    console.log('receive', err ? err : 'success');
+				  });
+				});
+			
+			}catch(err){
+				console.log(err);
+		    }
 	};
 
-	methods.writeToSerialPort = function(command){
-		if(serialPort){
+	methods.writeToRadio = function(command){
+		if(sx127x){
 			command += "Z\n";
-			serialPort.write(command, function(){
-				console.log('Command Broadcast Successfully: >>> ', command);
+			sx127x.write(new Buffer(command), function(err){
+				if(err){
+					console.log('\tError in writeToRadio: ', err');
+				}else{
+					console.log('Command Broadcast Successfully: >>> ', command);
+				}
+				
 			});
 		}else{
-			console.log("SerialPort not Initialized yet !");
-			methods.initSerialPort();
+			console.log("Radio not Initialized yet !");
+			methods.initRadio();
 		}
 	};
 
@@ -65,7 +73,7 @@ module.exports = function(appConfig) {
 				if(payload.d && payload.d.boardId && payload.d.deviceIndex){
 					var command = "#"+payload.d.boardId+"#D#"+payload.d.deviceIndex+"#"+payload.d.status+"#"+payload.d.deviceValue;
 					console.log('Command To Broadcast: >>> ', command);
-					methods.writeToSerialPort(command, function(){
+					methods.writeToRadio(command, function(){
 						console.log('Command Broadcast Successfully: >>> ', command);
 					});
 				}else{
@@ -76,7 +84,7 @@ module.exports = function(appConfig) {
 		}
 	};
 
-	methods.handleDataOnSerialPort = function(deviceData){
+	methods.handleDataOnRadio = function(deviceData){
 		var timeNow = new Date();
 		try{
 			var deviceWithData = JSON.parse(deviceData);
@@ -105,10 +113,10 @@ module.exports = function(appConfig) {
 				delete deviceWithData["dewpoint"];
 			}
 
-			eventEmmiter.emit("serialdata", deviceWithData);
+			eventEmmiter.emit("radiodata", deviceWithData);
 
 		}catch(err){
-			console.log('ERROR IN handleDataOnSerialPort: >>> ', err);
+			console.log('ERROR IN handleDataOnRadio: >>> ', err);
 		}
 	};
 

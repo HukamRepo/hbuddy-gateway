@@ -14,10 +14,10 @@ module.exports = function(appConfig) {
 
 	var methods = {};
 
-	eventEmmiter.on('serialdata', function(serialData) {
-  		console.log("IN serialdata EVENT received: >> ", serialData);
-			if(methods.publishRequired(serialData)){
-				methods.publishMessage(serialData);
+	eventEmmiter.on('radiodata', function(radioData) {
+  		console.log("IN radiodata EVENT received: >> ", radioData);
+			if(methods.publishRequired(radioData)){
+				methods.publishMessage(radioData);
 			}
 	});
 

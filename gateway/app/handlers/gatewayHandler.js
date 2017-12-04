@@ -6,7 +6,7 @@ localDBHandler = require('../handlers/localDBHandler')(),
 cloudantHandler = require('../handlers/cloudantHandler')(),
 sceneHandler = require('../handlers/sceneHandler')(),
 scheduleHandler = require('../handlers/scheduleHandler')(),
-serialportHandler = null,
+radioHandler = null,
 ibmIoTHandler = null,
 sensorsHandler = null,
 gpioHandler = null,
@@ -39,8 +39,8 @@ var methods = {};
 		commonHandler.checkInternet(function(isConnected) {
 		    if (isConnected) {
 		    	handleOnline(function(appConfig){
-				    	serialportHandler = require('../handlers/serialportHandler')(appConfig);
-							serialportHandler.initSerialPort();
+				    	radioHandler = require('../handlers/radioHandler')(appConfig);
+							radioHandler.initRadio();
 							ibmIoTHandler = require('../handlers/ibmiotHandler')(appConfig);
 							ibmIoTHandler.connectToIBMCloud(function(appclient){
 								appClient = appclient;
@@ -50,8 +50,8 @@ var methods = {};
 		    	});
 		    } else {
 		    	handleOffline(function(appConfig){
-			    		serialportHandler = require('../handlers/serialportHandler')(appConfig);
-							serialportHandler.initSerialPort();
+			    		radioHandler = require('../handlers/radioHandler')(appConfig);
+							radioHandler.initRadio();
 							methods.startProcessWithLocal();
 		    	});
 		    }
@@ -179,7 +179,7 @@ var methods = {};
 						deviceValue: device.deviceValue
 					}
 			};
-			serialportHandler.broadcastMessage(JSON.stringify(payload));
+			radioHandler.broadcastMessage(JSON.stringify(payload));
 		}
 	};
 
@@ -219,7 +219,7 @@ var methods = {};
 				if(payload.d && payload.d.boardId && payload.d.deviceIndex){
 					var command = "#"+payload.d.boardId+"#"+payload.d.deviceIndex+"#"+payload.d.deviceValue;
 					console.log('Command To Broadcast: >>> ', command);
-					serialportHandler.writeToSerialPort(command, function(){
+					radioHandler.writeToRadio(command, function(){
 						console.log('Command Broadcast Successfully: >>> ', command);
 						respMsg.status = "SUCCESS";
 						respMsg.msg = "Command Broadcast Successfully: >>> " + command;
