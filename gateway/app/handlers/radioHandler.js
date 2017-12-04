@@ -3,9 +3,7 @@ var SX127x = require('sx127x');
 var CONFIG = require('../common/common').CONFIG();
 var eventEmmiter = require('../common/common').EVENTS();
 
-var sx127x = new SX127x({
-	  frequency: 433e6
-	});
+var sx127x;
 
 var appClient;
 
@@ -23,6 +21,13 @@ module.exports = function(appConfig) {
 	methods.initRadio = function(){
 		console.log("IN initRadio: >> ");
 		try{
+			if(sx127x){
+				return false;
+			}
+			sx127x = new SX127x({
+				  frequency: 433e6
+				});
+			
 			sx127x.open(function(err) {
 				  console.log('Radio Open: ', err ? err : 'success');
 				  if (err) {
@@ -31,22 +36,31 @@ module.exports = function(appConfig) {
 				  sx127x.on('data', function(data, rssi) {
 //				    console.log('data:', '\'' + data.toString() + '\'', rssi);
 				    console.log('\n\nRadio data received: ' + data.toString());
-				      if(!data || data.trim() == ""){
+				      if(!data.toString() || data.toString().trim() == ""){
 				    	  console.log("Empty Data Received: >>>> ", data);
 				      }else{
-				    	  methods.handleDataOnRadio(data);
+				    	  methods.handleDataOnRadio(data.toString());
 				      }
 				  });
 
 				  // enable receive mode
 				  sx127x.receive(function(err) {
-				    console.log('receive', err ? err : 'success');
+				    console.log('LORA In Receive Mode ', err ? err : 'success');
+				  });
+				});
+			
+			    process.on('SIGINT', function() {
+				  // close the device
+				  sx127x.close(function(err) {
+				    console.log('close', err ? err : 'success');
+				    process.exit();
 				  });
 				});
 			
 			}catch(err){
+				console.log("Error in initRadion: >>>>>>> ");
 				console.log(err);
-		    }
+		    }			
 	};
 
 	methods.writeToRadio = function(command){
@@ -54,11 +68,13 @@ module.exports = function(appConfig) {
 			command += "Z\n";
 			sx127x.write(new Buffer(command), function(err){
 				if(err){
-					console.log('\tError in writeToRadio: ', err');
+					console.log('\tError in writeToRadio: ', err);
 				}else{
 					console.log('Command Broadcast Successfully: >>> ', command);
 				}
-				
+				sx127x.receive(function(err) {
+				    console.log('LORA In Receive Mode ', err ? err : 'success');
+				  });
 			});
 		}else{
 			console.log("Radio not Initialized yet !");
@@ -85,6 +101,10 @@ module.exports = function(appConfig) {
 	};
 
 	methods.handleDataOnRadio = function(deviceData){
+		console.log("IN handleDataOnRadio: >> ", deviceData);
+		if(deviceData && deviceData == "ACK"){
+			return false;
+		}
 		var timeNow = new Date();
 		try{
 			var deviceWithData = JSON.parse(deviceData);
@@ -119,6 +139,8 @@ module.exports = function(appConfig) {
 			console.log('ERROR IN handleDataOnRadio: >>> ', err);
 		}
 	};
+	
+	methods.initRadio();
 
 
     return methods;

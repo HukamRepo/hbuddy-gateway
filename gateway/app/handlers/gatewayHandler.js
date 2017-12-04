@@ -40,7 +40,7 @@ var methods = {};
 		    if (isConnected) {
 		    	handleOnline(function(appConfig){
 				    	radioHandler = require('../handlers/radioHandler')(appConfig);
-							radioHandler.initRadio();
+//							radioHandler.initRadio();
 							ibmIoTHandler = require('../handlers/ibmiotHandler')(appConfig);
 							ibmIoTHandler.connectToIBMCloud(function(appclient){
 								appClient = appclient;
@@ -51,7 +51,7 @@ var methods = {};
 		    } else {
 		    	handleOffline(function(appConfig){
 			    		radioHandler = require('../handlers/radioHandler')(appConfig);
-							radioHandler.initRadio();
+//							radioHandler.initRadio();
 							methods.startProcessWithLocal();
 		    	});
 		    }
