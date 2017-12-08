@@ -14,8 +14,8 @@ module.exports = function(appConfig) {
 
 	var methods = {};
 
-	eventEmmiter.on('radiodata', function(radioData) {
-  		console.log("IN radiodata EVENT received: >> ", radioData);
+	eventEmmiter.on('publishdata', function(radioData) {
+  		console.log("IN publishdata EVENT received: >> ", radioData);
 			if(methods.publishRequired(radioData)){
 				methods.publishMessage(radioData);
 			}

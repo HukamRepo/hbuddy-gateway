@@ -133,7 +133,7 @@ module.exports = function(appConfig) {
 				delete deviceWithData["dewpoint"];
 			}
 
-			eventEmmiter.emit("radiodata", deviceWithData);
+			eventEmmiter.emit("publishdata", deviceWithData);
 
 		}catch(err){
 			console.log('ERROR IN handleDataOnRadio: >>> ', err);

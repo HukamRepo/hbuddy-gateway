@@ -13,8 +13,8 @@ module.exports = function(appConfig) {
 
 	var methods = {};
 
-	eventEmmiter.on('broadcast', function(command) {
-  		console.log("IN broadcast EVENT received: >> ", command);
+	eventEmmiter.on('writetoserial', function(command) {
+  		console.log("IN writetoserial EVENT received: >> ", command);
 			methods.writeToSerialPort(command);
 	});
 

@@ -9,6 +9,7 @@ scheduleHandler = require('../handlers/scheduleHandler')(),
 radioHandler = null,
 ibmIoTHandler = null,
 sensorsHandler = null,
+serialportHandler = null,
 gpioHandler = null,
 appConfig;
 
@@ -33,6 +34,9 @@ var methods = {};
 					console.log("\n\n<<<< POWER LED SET TO ON >>> \n\n");
 				});
 			});
+			
+//			serialportHandler = require('../handlers/serialportHandler')();
+			
 		}
 		
 		localDBHandler.loadAllLocalDBs();
@@ -179,7 +183,9 @@ var methods = {};
 						deviceValue: device.deviceValue
 					}
 			};
+			
 			radioHandler.broadcastMessage(JSON.stringify(payload));
+			
 		}
 	};
 
