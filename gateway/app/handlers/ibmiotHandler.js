@@ -191,7 +191,7 @@ module.exports = function(appConfig) {
 
 					console.log('Command To Broadcast: >>> ', command);
 
-					eventEmmiter.emit("broadcast", command);
+					eventEmmiter.emit("writetoserial", command);
 
 				}else if(payload.action){
 					if(payload.action == "UPDATE_SCENE" && payload.data){

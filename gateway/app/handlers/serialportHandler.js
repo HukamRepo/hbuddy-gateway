@@ -7,7 +7,7 @@ var serialPort;
 
 var appClient;
 
-module.exports = function(appConfig) {
+module.exports = function() {
 
 	var lastPublishTime = {};
 
