@@ -48,7 +48,7 @@ module.exports = function() {
 
 	methods.writeToSerialPort = function(command){
 		if(serialPort){
-			command += "Z\n";
+			command += "\n";
 			serialPort.write(command, function(){
 				console.log('Command Broadcast Successfully: >>> ', command);
 			});
@@ -63,9 +63,9 @@ module.exports = function() {
 		try{
 			var payload = JSON.parse(payloadStr);
 				if(payload.d && payload.d.boardId && payload.d.deviceIndex){
-					var command = "#"+payload.d.boardId+"#D#"+payload.d.deviceIndex+"#"+payload.d.status+"#"+payload.d.deviceValue;
-					console.log('Command To Broadcast: >>> ', command);
-					methods.writeToSerialPort(command, function(){
+//					var command = "#"+payload.d.boardId+"#D#"+payload.d.deviceIndex+"#"+payload.d.status+"#"+payload.d.deviceValue;
+					console.log('Command To Broadcast: >>> ', payloadStr);
+					methods.writeToSerialPort(payloadStr, function(){
 						console.log('Command Broadcast Successfully: >>> ', command);
 					});
 				}else{
@@ -79,6 +79,11 @@ module.exports = function() {
 	methods.handleDataOnSerialPort = function(deviceData){
 		var timeNow = new Date();
 		try{
+			
+			if(deviceData.indexOf('ACK_') > -1){
+				return false;
+			}
+			
 			var deviceWithData = JSON.parse(deviceData);
 			
 			if(deviceWithData.id && !deviceWithData.uniqueId){

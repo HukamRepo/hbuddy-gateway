@@ -186,13 +186,10 @@ module.exports = function(appConfig) {
 		try{
 			var payload = JSON.parse(payloadStr);
 				if(payload.d && payload.d.boardId && payload.d.deviceIndex){
-					var command = "";
-					command = "#"+payload.d.boardId+"#D#" +payload.d.deviceIndex+"#"+payload.d.status+"#"+payload.d.deviceValue;
-
-					console.log('Command To Broadcast: >>> ', command);
-
-					eventEmmiter.emit("writetoserial", command);
-
+//					var command = "";
+//					command = "#"+payload.d.boardId+"#D#" +payload.d.deviceIndex+"#"+payload.d.status+"#"+payload.d.deviceValue;
+					console.log('Command To Broadcast: >>> ', payloadStr);
+					eventEmmiter.emit("writetoserial", JSON.stringify(payload.d));
 				}else if(payload.action){
 					if(payload.action == "UPDATE_SCENE" && payload.data){
 						// TODO: Refresh Scene
