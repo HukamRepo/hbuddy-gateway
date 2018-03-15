@@ -6,10 +6,10 @@ localDBHandler = require('../handlers/localDBHandler')(),
 cloudantHandler = require('../handlers/cloudantHandler')(),
 sceneHandler = require('../handlers/sceneHandler')(),
 scheduleHandler = require('../handlers/scheduleHandler')(),
-//radioHandler = null,
+radioHandler = null,
 ibmIoTHandler = null,
 sensorsHandler = null,
-serialportHandler = null,
+//serialportHandler = null,
 gpioHandler = null,
 appConfig;
 
@@ -41,9 +41,9 @@ var methods = {};
 		commonHandler.checkInternet(function(isConnected) {
 		    if (isConnected) {
 		    	handleOnline(function(appConfig){
-//				    		radioHandler = require('../handlers/radioHandler')(appConfig);
-//							radioHandler.initRadio();
-		    				serialportHandler.initSerialPort();
+				    		radioHandler = require('../handlers/radioHandler')(appConfig);
+							radioHandler.initRadio();
+//		    				serialportHandler.initSerialPort();
 							ibmIoTHandler = require('../handlers/ibmiotHandler')(appConfig);
 							ibmIoTHandler.connectToIBMCloud(function(appclient){
 								appClient = appclient;
@@ -53,9 +53,9 @@ var methods = {};
 		    	});
 		    } else {
 		    	handleOffline(function(appConfig){
-//			    			radioHandler = require('../handlers/radioHandler')(appConfig);
-//							radioHandler.initRadio();
-		    				serialportHandler.initSerialPort();
+			    			radioHandler = require('../handlers/radioHandler')(appConfig);
+							radioHandler.initRadio();
+//		    				serialportHandler.initSerialPort();
 							methods.startProcessWithLocal();
 		    	});
 		    }
@@ -223,11 +223,11 @@ var methods = {};
 		var respMsg = {};
 		try{
 				if(payload.d && payload.d.boardId && payload.d.deviceIndex){
-					var command = "#"+payload.d.boardId+"#"+payload.d.deviceIndex+"#"+payload.d.deviceValue;
-					console.log('Command To Broadcast: >>> ', command);
-//					radioHandler.writeToRadio(command, function(){
-					serialportHandler.writeToSerialPort(command, function(){
-						console.log('Command Broadcast Successfully: >>> ', command);
+//					var command = "#"+payload.d.boardId+"#"+payload.d.deviceIndex+"#"+payload.d.deviceValue;
+					console.log('Command To Broadcast: >>> ', payload.d);
+					radioHandler.writeToRadio(JSON.stringify(payload.d), function(){
+//					serialportHandler.writeToSerialPort(command, function(){
+						console.log('Command Broadcast Successfully: >>> ', payload.d);
 						respMsg.status = "SUCCESS";
 						respMsg.msg = "Command Broadcast Successfully: >>> " + command;
 						if(cb){

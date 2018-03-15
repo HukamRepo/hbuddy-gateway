@@ -65,7 +65,7 @@ module.exports = function(appConfig) {
 
 	methods.writeToRadio = function(command){
 		if(sx127x){
-			command += "Z\n";
+			command += "\n";
 			sx127x.write(new Buffer(command), function(err){
 				if(err){
 					console.log('\tError in writeToRadio: ', err);
@@ -87,10 +87,10 @@ module.exports = function(appConfig) {
 		try{
 			var payload = JSON.parse(payloadStr);
 				if(payload.d && payload.d.boardId && payload.d.deviceIndex){
-					var command = "#"+payload.d.boardId+"#D#"+payload.d.deviceIndex+"#"+payload.d.status+"#"+payload.d.deviceValue;
-					console.log('Command To Broadcast: >>> ', command);
-					methods.writeToRadio(command, function(){
-						console.log('Command Broadcast Successfully: >>> ', command);
+//					var command = "#"+payload.d.boardId+"#D#"+payload.d.deviceIndex+"#"+payload.d.status+"#"+payload.d.deviceValue;
+					console.log('Command To Broadcast: >>> ', payload.d);
+					methods.writeToRadio(JSON.stringify(payload.d), function(){
+						console.log('Command Broadcast Successfully: >>> ', payload.d);
 					});
 				}else{
 					console.log("INVALID PAYLOAD RECEIVED: >>> ", payload);
