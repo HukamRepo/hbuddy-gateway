@@ -36,7 +36,7 @@ var methods = {};
 			});
 		}
 		
-		serialportHandler = require('../handlers/serialportHandler')();
+//		serialportHandler = require('../handlers/serialportHandler')();
 		localDBHandler.loadAllLocalDBs();
 		commonHandler.checkInternet(function(isConnected) {
 		    if (isConnected) {
@@ -184,7 +184,8 @@ var methods = {};
 					}
 			};
 			
-			serialportHandler.broadcastMessage(JSON.stringify(payload));
+//			serialportHandler.broadcastMessage(JSON.stringify(payload));
+			radioHandler.broadcastMessage(JSON.stringify(payload));
 			
 		}
 	};

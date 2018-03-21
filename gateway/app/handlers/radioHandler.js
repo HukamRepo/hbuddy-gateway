@@ -60,6 +60,9 @@ module.exports = function(appConfig) {
 			}catch(err){
 				console.log("Error in initRadion: >>>>>>> ");
 				console.log(err);
+				sx127x.receive(function(err) {
+				    console.log('LORA In Receive Mode ', err ? err : 'success');
+				  });
 		    }			
 	};
 
