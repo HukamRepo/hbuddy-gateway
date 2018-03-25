@@ -15,7 +15,7 @@ module.exports = function(appConfig) {
 	var methods = {};
 
 	eventEmmiter.on('publishdata', function(radioData) {
-  		console.log("IN publishdata EVENT received: >> ", radioData);
+//  		console.log("IN publishdata EVENT received: >> ", radioData);
 			if(methods.publishRequired(radioData)){
 				methods.publishMessage(radioData);
 			}
@@ -107,7 +107,7 @@ module.exports = function(appConfig) {
 	};
 
 	methods.publishRequired = function(deviceWithData){
-		console.log("IN publishRequired: >>> ", deviceWithData);
+//		console.log("IN publishRequired: >>> ", deviceWithData);
 
 		// BELOW IS THE FORMAT OF DATA RECEIVED FROM MASTER SWITCH BOARD
 		// "{"type":"switch_board", "uniqueId":"SWB-AB00-11-22-33", "data": {"deviceId":1, "deviceValue": 1, "analogValue": 5}}";
@@ -124,7 +124,7 @@ module.exports = function(appConfig) {
 		for (var dataKey in deviceWithData.data) {
 			if(appConfig && appConfig.PUBLISH_CONFIG){
 				var sensorsConf = appConfig.PUBLISH_CONFIG.sensors;
-				console.log("sensorsConf: >>>> ", sensorsConf, ", deviceWithData: >> ", deviceWithData);
+//				console.log("sensorsConf: >>>> ", sensorsConf, ", deviceWithData: >> ", deviceWithData);
 				if(sensorsConf && sensorsConf.length > 0){
 					for(var i = 0; i < sensorsConf.length; i++){
 						sensorConf = sensorsConf[i];
