@@ -19,19 +19,24 @@ OR
 
 START CONTAINER
 
-`docker run --rm -it -d --name motion -p 80:8080 -p 8081:8081 -v /tmp:/tmp --device=/dev/video0 hukam/rpi-motion-detection`
+`docker run -it -d --name motion -p 90:9090 -p 9091:9091 -v /tmp:/tmp --device=/dev/video0 hukam/rpi-motion-detection`
+
+
+MOTION DETECTION STANDALONE
+
+`docker run -it -d --name motion -p 90:9090 -p 9091:9091 -v /tmp:/tmp --device=/dev/video0 hukam/rpi-motion-detection`
 
 FOR LINKING CONTAINERS
 
-`docker run --rm -it -d --name motion -p 80:8080 -p 8081:8081 -v /tmp:/tmp --link gateway-app:gateway-app --device=/dev/video0 hukam/rpi-motion-detection`
+`docker run -it -d --name motion 90:9090 -p 9091:9091 -v /tmp:/tmp --link gateway-app:gateway-app --device=/dev/video0 hukam/rpi-motion-detection`
 
 TO START MOTION DETECTION
 
-`docker exec -it motion motion`
+`docker start motion`
 
 TO STOP
 
-`docker exec -it motion service motion stop`
+`docker stop motion`
 
 ## Running FaceRecognition Docker Container
 
@@ -43,7 +48,7 @@ To Clear Docker logs
 
 `truncate -s 0 /var/lib/docker/containers/*/*-json.log`
 
-OR 
+OR
 
 `echo "" > $(docker inspect --format='{{.LogPath}}' <CONTAINER_ID_OR_NAME>)`
 
