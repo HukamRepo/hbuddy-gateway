@@ -5,8 +5,7 @@ MAINTAINER Gurvinder Singh <contact@hukamtechnologies.com>
 ENV INITSYSTEM on \
   AUDIODEV hw:1,0 \
   AUDIODRIVER alsa \
-  BUILD_VERSION="V1" \
-  CLOUDANT_URL $CLOUDANT_URL
+  BUILD_VERSION="V1"
 
 # Updates and adds system required packages
 RUN apt-get update && \
