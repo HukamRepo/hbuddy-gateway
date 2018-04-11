@@ -30,11 +30,11 @@ COPY package.json /root
 
 COPY app/resources/init.d/.asoundrc /root/
 
-# Install dependencies
-RUN JOBS=MAX npm i --unsafe-perm --production
-
 # Get all the code needed to run the app
 COPY . /root
+
+# Install dependencies
+RUN JOBS=MAX npm i --unsafe-perm --production
 
 ENV TINI_SUBREAPER=true
 
