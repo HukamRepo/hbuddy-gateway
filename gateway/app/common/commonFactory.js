@@ -52,7 +52,7 @@ var methods = {};
 
   methods.IBMIoTHandler = function(){
     if(!ibmIoTHandler){
-      ibmIoTHandler = require('../handlers/ibmIoTHandler')();
+      ibmIoTHandler = require('../handlers/ibmiotHandler')();
     }
     return ibmIoTHandler;
   }
