@@ -1,12 +1,11 @@
 
 //TODO: THIS ONE STILL NEEDS MORE WORK
+var FACTORY = require('../common/commonFactory')();
 
 var conf;
 
-module.exports = function(ibmIoTHandler) {
-	
-	var sensortagHandler = require('../handlers/sensortagHandler')(ibmIoTHandler);
-    
+module.exports = function() {
+
 var methods = {};
 
 	methods.connectSensors = function(payload, callback) {
@@ -15,29 +14,29 @@ var methods = {};
 		}
 		console.log("IN sensorsHandler.connectSensors, configuration: >>> ", conf);
 		try{
-			sensortagHandler.connectSensorTags(conf, function(error, data){
+			FACTORY.SensorTagHandler().connectSensorTags(conf, function(error, data){
 				if(callback){
 					callback(error, data);
 				}
-			});			
+			});
 		}catch(err){
 			console.log("ERROR in connectSensors: >> ", err);
-			sensortagHandler.disconnectSensorTags();
+			FACTORY.SensorTagHandler().disconnectSensorTags();
 			if(callback){
 				callback(err, null);
 			}
 		}
 	};
-	
+
 	methods.disconnectSensors = function() {
 		console.log("IN sensorsHandler.disconnectSensors: >>>> ");
 		try{
-			sensortagHandler.disconnectSensorTags();
+			FACTORY.SensorTagHandler().disconnectSensorTags();
 		}catch(err){
 			console.log("ERROR in disconnectSensors: >> ", err);
 		}
 	};
-	
+
 	return methods;
-    
+
 }

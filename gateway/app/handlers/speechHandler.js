@@ -1,11 +1,10 @@
 
-var CONFIG = require('../common/common').CONFIG();
 
+var FACTORY = require('../common/commonFactory')();
 var cp = require('child_process');
 var format = require('util').format;
 var fs = require('fs');
 var watson = require('watson-developer-cloud');
-var conversationHandler = require('../handlers/conversationHandler')();
 var eventEmmiter = require('../common/common').EVENTS();
 
 var googleKeyPath = require('path').resolve(__dirname, '../resources/keys/hukam-f32b2442e888.json');
@@ -22,7 +21,7 @@ var speech = GOOGLE_SPEECH({
   keyFilename: googleKeyPath
 });
 
-var ttsCredentials = CONFIG.SERVICES_CONFIG.tts;
+var ttsCredentials = FACTORY.getGatewayConfig().SERVICES_CONFIG.tts;
 ttsCredentials.version = 'v1';
 var ttsService = watson.text_to_speech(ttsCredentials);
 
@@ -88,15 +87,15 @@ var methods = {};
 			voiceOffline.on('error', function(error){
 				console.log("VoiceOffline ERROR: >>> ", error);
 			});
-			
+
 			if(cb){
 				cb("hBuddy Listening now....");
 			}
-			
+
 			methods.getCommandResponse("Hey Buddy", false, function(err){
 				console.log("STT ERROR Resp: >>> ", err);
 			});
-			
+
 		}catch(err){
 			console.log("Error in speechHandler: >>> ", err);
 //			throw new Error("Error in speechHandler: >>> ", err);
@@ -104,26 +103,26 @@ var methods = {};
 			cb(err);
 		}
 	};
-	
+
 	methods.getCommandResponse = function(commandResp, playTTS, errFunc){
 		var conversationReq = {
 								"params": {
 											input: commandResp,
 											"context": context
-										}								
+										}
 								};
-		conversationHandler.callConversation(conversationReq, function(err, watsonResponse){
+		FACTORY.ConversationHandler().callConversation(conversationReq, function(err, watsonResponse){
 			if(err){
 				console.log(err);
 				if(errFunc){
 					errFunc(err);
 				}
 			}else{
-				
+
 					if(watsonResponse && watsonResponse.context){
 						context = watsonResponse.context;
 					}
-				
+
 					if(watsonResponse && watsonResponse.output && watsonResponse.output.text){
 						var respText = "";
 						if(watsonResponse.output.log_messages){
@@ -143,7 +142,7 @@ var methods = {};
 				  			  		"accept": TTS_CONFIG.accept,
 				  			  		"download": TTS_CONFIG.download };
 							methods.convertTTS(query);
-						}						
+						}
 					}else{
 						if(watsonResponse && watsonResponse.context && watsonResponse.context.next_action != "DO_NOTHING" && playTTS){
 							var query = {"voice": TTS_CONFIG.speakInVoice,

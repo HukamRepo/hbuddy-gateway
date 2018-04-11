@@ -1,16 +1,14 @@
 
 var Client = require("ibmiotf");
-var CONFIG = require('../common/common').CONFIG();
+var FACTORY = require('../common/commonFactory')();
 var eventEmmiter = require('../common/common').EVENTS();
-var sceneHandler = require('../handlers/sceneHandler')();
-var gpioHandler = null;
 
 var appClient;
 
 var startTime = new Date();
 var mqttConnected = false;
 
-module.exports = function(appConfig) {
+module.exports = function() {
 
 	var methods = {};
 
@@ -23,8 +21,8 @@ module.exports = function(appConfig) {
 
 	methods.getAppClient = function(){
 		if(!appClient){
-			CONFIG.GATEWAY_IOT_CONFIG.id = gatewayInfo.gatewayId;
-			appClient = new Client.IotfGateway(CONFIG.GATEWAY_IOT_CONFIG);
+			FACTORY.getGatewayConfig().GATEWAY_IOT_CONFIG.id = gatewayInfo.gatewayId;
+			appClient = new Client.IotfGateway(FACTORY.getGatewayConfig().GATEWAY_IOT_CONFIG);
 		}
 		return appClient;
 	};
@@ -32,25 +30,22 @@ module.exports = function(appConfig) {
 	methods.connectToIBMCloud = function(){
 //		checkConnectivity();
 		if(!appClient){
-			CONFIG.GATEWAY_IOT_CONFIG.id = gatewayInfo.gatewayId;
-			appClient = new Client.IotfGateway(CONFIG.GATEWAY_IOT_CONFIG);
+			FACTORY.getGatewayConfig().GATEWAY_IOT_CONFIG.id = gatewayInfo.gatewayId;
+			appClient = new Client.IotfGateway(FACTORY.getGatewayConfig().GATEWAY_IOT_CONFIG);
 		}
 		if(!mqttConnected){
 			appClient.connect();
 		}
 	  //setting the log level to 'trace'
 		// appClient.log.setLevel('trace');
-		if(process.platform != 'darwin'){
-			gpioHandler = require('../handlers/gpioHandler')();
-		}
 
 	    appClient.on("connect", function () {
 	    	console.log('\n\n<<<<<<< IBM IoT Cloud Connected Successfully >>>>>> \n\n');
 	    	mqttConnected = true;
 	    	global.gatewayInfo.iot_connected = true;
 	    	methods.subscribeToGateway();
-	    	if(gpioHandler){
-				gpioHandler.setLEDStatus(CONFIG.LEDS.GREEN, true, function(err, result){
+	    	if(FACTORY.GpioHandler()){
+					FACTORY.GpioHandler().setLEDStatus(FACTORY.getGatewayConfig().LEDS.GREEN, true, function(err, result){
 					console.log("\n<<<< CLOUD CONNECTIVITY LED SET TO ON >>> \n");
 				});
 	    	}
@@ -60,8 +55,8 @@ module.exports = function(appConfig) {
 	    	console.log('\n\n<<<<<<< IBM IoT Cloud Is Offline >>>>>> \n\n');
 	    	mqttConnected = false;
 	    	global.gatewayInfo.iot_connected = false;
-	    	if(gpioHandler){
-					gpioHandler.setLEDStatus(CONFIG.LEDS.GREEN, false, function(err, result){
+	    	if(FACTORY.GpioHandler()){
+						FACTORY.GpioHandler().setLEDStatus(FACTORY.getGatewayConfig().LEDS.GREEN, false, function(err, result){
 						console.log("\n<<<< CLOUD CONNECTIVITY LED SET TO OFF >>> \n");
 					});
 	    	}
@@ -122,8 +117,8 @@ module.exports = function(appConfig) {
 		}
 
 		for (var dataKey in deviceWithData.data) {
-			if(appConfig && appConfig.PUBLISH_CONFIG){
-				var sensorsConf = appConfig.PUBLISH_CONFIG.sensors;
+			if(FACTORY.getGatewayConfig() && FACTORY.getGatewayConfig().PUBLISH_CONFIG){
+				var sensorsConf = FACTORY.getGatewayConfig().PUBLISH_CONFIG.sensors;
 //				console.log("sensorsConf: >>>> ", sensorsConf, ", deviceWithData: >> ", deviceWithData);
 				if(sensorsConf && sensorsConf.length > 0){
 					for(var i = 0; i < sensorsConf.length; i++){
@@ -170,10 +165,10 @@ module.exports = function(appConfig) {
 			 if(!appClient){
 				 methods.connectToIBMCloud(function(appclient){
 						appClient = appclient;
-						appClient.publishDeviceEvent(CONFIG.GATEWAY_IOT_CONFIG.type, global.gatewayInfo.gatewayId, "cloud", "json", sensorData);
+						appClient.publishDeviceEvent(FACTORY.getGatewayConfig().GATEWAY_IOT_CONFIG.type, global.gatewayInfo.gatewayId, "cloud", "json", sensorData);
 					});
 			 }else{
-				 appClient.publishDeviceEvent(CONFIG.GATEWAY_IOT_CONFIG.type, global.gatewayInfo.gatewayId, "cloud", "json", sensorData);
+				 appClient.publishDeviceEvent(FACTORY.getGatewayConfig().GATEWAY_IOT_CONFIG.type, global.gatewayInfo.gatewayId, "cloud", "json", sensorData);
 			 }
 		}catch(err){
 			console.log(err);
@@ -194,7 +189,7 @@ module.exports = function(appConfig) {
 					if(payload.action == "UPDATE_SCENE" && payload.data){
 						// TODO: Refresh Scene
 						console.log("Refresh Scene: >>> ", payload.data.title);
-						sceneHandler.updateScene(payload.data);
+						FACTORY.SceneHandler().updateScene(payload.data);
 					}else if(payload.action == "TTS" && payload.text){
 						eventEmmiter.emit("TTS", payload.text);
 					}else{

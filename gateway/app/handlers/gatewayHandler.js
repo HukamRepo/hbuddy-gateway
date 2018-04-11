@@ -1,18 +1,9 @@
 
-var CONFIG = require('../common/common').CONFIG(),
+var FACTORY = require('../common/commonFactory')(),
 exec = require("child_process").exec,
-commonHandler = require('../handlers/commonHandler')(),
-localDBHandler = require('../handlers/localDBHandler')(),
-cloudantHandler = require('../handlers/cloudantHandler')(),
-sceneHandler = require('../handlers/sceneHandler')(),
-scheduleHandler = require('../handlers/scheduleHandler')(),
-radioHandler = null,
-ibmIoTHandler = null,
-sensorsHandler = null,
-//serialportHandler = null,
+// serialportHandler = null,
 gpioHandler = null,
-appConfig;
-
+appConfig = null;
 
 module.exports = function() {
 
@@ -24,37 +15,32 @@ var methods = {};
 		}
 		return global.gatewayInfo;
 	};
-	
+
 	methods.initGateway = function(){
 		console.log('\n\n<<<<<<<< IN initGateway >>>>>>> ');
-		if(process.platform != 'darwin'){
-			gpioHandler = require('../handlers/gpioHandler')();
-			gpioHandler.setupPinsMode(function(err, result){
-				gpioHandler.setLEDStatus(CONFIG.LEDS.RED, true, function(err, result){
-					console.log("\n\n<<<< POWER LED SET TO ON >>> \n\n");
-				});
-			});
-		}
-		
+
 //		serialportHandler = require('../handlers/serialportHandler')();
-		localDBHandler.loadAllLocalDBs();
-		commonHandler.checkInternet(function(isConnected) {
+		if(FACTORY.LocalDBHandler()){
+				FACTORY.LocalDBHandler().loadAllLocalDBs();
+		}
+		FACTORY.CommonHandler().checkInternet(function(isConnected) {
 		    if (isConnected) {
-		    	handleOnline(function(appConfig){
-				    		radioHandler = require('../handlers/radioHandler')(appConfig);
-							radioHandler.initRadio();
-//		    				serialportHandler.initSerialPort();
-							ibmIoTHandler = require('../handlers/ibmiotHandler')(appConfig);
-							ibmIoTHandler.connectToIBMCloud(function(appclient){
+		    	handleOnline(function(){
+							if(FACTORY.RadioHandler()){
+									FACTORY.RadioHandler().initRadio();
+							}
+									// serialportHandler.initSerialPort();
+							FACTORY.IBMIoTHandler().connectToIBMCloud(function(appclient){
 								appClient = appclient;
 							});
-							// sensorsHandler = require('../handlers/sensorsHandler.js')(ibmIoTHandler);
 							methods.startProcessWithCloud();
+							methods.uploadFiles();
 		    	});
 		    } else {
-		    	handleOffline(function(appConfig){
-			    			radioHandler = require('../handlers/radioHandler')(appConfig);
-							radioHandler.initRadio();
+		    	handleOffline(function(){
+						if(FACTORY.RadioHandler()){
+								FACTORY.RadioHandler().initRadio();
+						}
 //		    				serialportHandler.initSerialPort();
 							methods.startProcessWithLocal();
 		    	});
@@ -65,34 +51,46 @@ var methods = {};
 
 	handleOnline = function(cb){
 		console.log("<<<<<<< INTERNET IS AVAILABLE >>>>>>> ");
-		cloudantHandler.loadConfigurationsFromCloud(true, function(err, configurations){
+		FACTORY.CloudantHandler().loadConfigurationsFromCloud(true, function(err, configurations){
 			if(err){
 				console.log('ERROR IN FETCHING CONFIGURATIONS: >>>>>> ', err);
-				appConfig = CONFIG;
 			}else{
-				appConfig = configurations;
+				FACTORY.setAppConfig(configurations);
+				if(FACTORY.GpioHandler()){
+					FACTORY.GpioHandler().setupPinsMode(function(err, result){
+						FACTORY.GpioHandler().setLEDStatus(FACTORY.getGatewayConfig().LEDS.RED, true, function(err, result){
+							console.log("\n\n<<<< POWER LED SET TO ON >>> \n\n");
+						});
+					});
+				}
 			}
-			cb(appConfig);
+			cb();
 		});
 	};
 
 	handleOffline = function(cb){
 		console.log("<<<<<<< INTERNET IS NOT AVAILABLE >>>>>>> ");
 		var appConfig;
-		localDBHandler.loadConfigurationsFromLocalDB(function(err, configurations){
+		FACTORY.LocalDBHandler().loadConfigurationsFromLocalDB(function(err, configurations){
 			if(err){
 				console.log('ERROR IN FETCHING CONFIGURATIONS: >>>>>> ', err);
-				appConfig = CONFIG;
 			}else{
-				appConfig = configurations;
+				FACTORY.setAppConfig(configurations);
+				if(FACTORY.GpioHandler()){
+					FACTORY.GpioHandler().setupPinsMode(function(err, result){
+						FACTORY.GpioHandler().setLEDStatus(FACTORY.getGatewayConfig().LEDS.RED, true, function(err, result){
+							console.log("\n\n<<<< POWER LED SET TO ON >>> \n\n");
+						});
+					});
+				}
 			}
-			cb(appConfig);
+			cb();
 		});
 	};
 
 	methods.startProcessWithCloud = function(){
 		console.log("\n\n <<<<<<<<<<<< IN startProcessWithCloud: >>>>>>>\n\n ");
-		cloudantHandler.loadPlaceFromCloud(function(err, place){
+		FACTORY.CloudantHandler().loadPlaceFromCloud(function(err, place){
 			if(err){
 				console.log("ERROR IN loadPlaceFromCloud: >>>> ", err );
 			}else{
@@ -104,7 +102,7 @@ var methods = {};
 
 				global.place = place;
 				console.log("<<<< PLACE SYNCHRONISED WITH CLOUD IN LOCAL DB >>>>> ", global.place);
-				cloudantHandler.loadPlaceAreasFromCloud(true, function(err, placeAreas){
+				FACTORY.CloudantHandler().loadPlaceAreasFromCloud(true, function(err, placeAreas){
 					if(err){
 						console.log("ERROR IN loadPlaceAreasFromCloud: >>>> ", err );
 					}else{
@@ -112,30 +110,30 @@ var methods = {};
 					}
 				});
 
-				cloudantHandler.loadBoardsFromCloud(true, function(err, boards){
+				FACTORY.CloudantHandler().loadBoardsFromCloud(true, function(err, boards){
 					if(err){
 						console.log("ERROR IN loadBoardsFromCloud: >>>> ", err );
 					}else{
 						console.log("\n\n<<<< BOARDS SYNCHRONISED WITH CLOUD IN LOCAL DB >>>>> ", boards.length);
 						for(var i=0; i<boards.length; i++){
 							var board = boards[i];
-							cloudantHandler.loadDevicesFromCloud(board.uniqueIdentifier, true, function(err, devices){
+							FACTORY.CloudantHandler().loadDevicesFromCloud(board.uniqueIdentifier, true, function(err, devices){
 								if(err){
 									console.log("ERROR IN loadDevicesFromCloud: >>>> ", err );
 								}else{
 									methods.broadcastCommandsToBoards(devices);
 								}
 							});
-						}						
+						}
 					}
 				});
 
-				cloudantHandler.loadScenesFromCloud(true, function(err, scenes){
+				FACTORY.CloudantHandler().loadScenesFromCloud(true, function(err, scenes){
 					if(err){
 						console.log("ERROR IN loadScenesFromCloud: >>>> ", err );
 					}else{
 						console.log("\n\n<<<< SCENES SYNCHRONISED WITH CLOUD IN LOCAL DB >>>>> ", scenes.length);
-						sceneHandler.processScenes(scenes);
+						FACTORY.SceneHandler().processScenes(scenes);
 					}
 				});
 
@@ -145,13 +143,13 @@ var methods = {};
 	};
 
 	methods.startProcessWithLocal = function(){
-		localDBHandler.loadBoardsFromLocalDB(function(err, boards){
+		FACTORY.LocalDBHandler().loadBoardsFromLocalDB(function(err, boards){
 			if(err){
 				console.log('<<<<<<< ERROR FETCHING BOARDS FROM LOCAL DB: >> ', err);
 			}else{
 				for(var i=0; i<boards.length; i++){
 					var board = boards[i];
-					localDBHandler.loadDevicesFromLocalDB({"parentId": board.uniqueIdentifier}, true, function(err, devices){
+					FACTORY.LocalDBHandler().loadDevicesFromLocalDB({"parentId": board.uniqueIdentifier}, true, function(err, devices){
 						if(err){
 							console.log("ERROR IN loadDevicesFromCloud: >>>> ", err );
 						}else{
@@ -159,11 +157,11 @@ var methods = {};
 						}
 					});
 				}
-				
+
 			}
 		});
 
-		sceneHandler.processScenes(null);
+		FACTORY.SceneHandler().processScenes(null);
 	};
 
 	methods.broadcastCommandsToBoards = function(devices){
@@ -183,10 +181,12 @@ var methods = {};
 						deviceValue: device.deviceValue
 					}
 			};
-			
+
 //			serialportHandler.broadcastMessage(JSON.stringify(payload));
-			radioHandler.broadcastMessage(JSON.stringify(payload));
-			
+			if(FACTORY.RadioHandler()){
+					FACTORY.RadioHandler().broadcastMessage(JSON.stringify(payload));
+			}
+
 		}
 	};
 
@@ -203,7 +203,7 @@ var methods = {};
 				if(payload.type == 'SENSOR'){
 					methods.handleSensorCommand(payload, cb);
 				}
-				
+
 				if(payload.type == 'LINUX'){
 					methods.handleLinuxCommand(payload, cb);
 				}
@@ -226,7 +226,7 @@ var methods = {};
 				if(payload.d && payload.d.boardId && payload.d.deviceIndex){
 //					var command = "#"+payload.d.boardId+"#"+payload.d.deviceIndex+"#"+payload.d.deviceValue;
 					console.log('Command To Broadcast: >>> ', payload.d);
-					radioHandler.writeToRadio(JSON.stringify(payload.d), function(){
+					FACTORY.RadioHandler().writeToRadio(JSON.stringify(payload.d), function(){
 //					serialportHandler.writeToSerialPort(command, function(){
 						console.log('Command Broadcast Successfully: >>> ', payload.d);
 						respMsg.status = "SUCCESS";
@@ -239,7 +239,7 @@ var methods = {};
 					if(payload.type && payload.type == "Scene" && payload.data){
 						// TODO: Refresh Scene
 						console.log("Refresh Scene: >>> ", payload.data.title);
-						sceneHandler.updateScene(payload.data);
+						FACTORY.SceneHandler.updateScene(payload.data);
 					}else{
 						console.log("Payload.type is Invalid: >>> ", payload.type);
 						respMsg.status = "ERROR";
@@ -270,17 +270,17 @@ var methods = {};
 		var respMsg = {};
 		try{
 
-			if(!sensorsHandler){
+			if(!FACTORY.SensorsHandler()){
 				console.log("No SensorsHandler, may be Internet is not connected >>>>");
 				return;
 			}
 
 			if(payload.command == 'CONNECT_SENSORS'){
-				sensorsHandler.connectSensors(payload);
+				FACTORY.SensorsHandler().connectSensors(payload);
 			}
 
 			if(payload.command == 'DISCONNECT_SENSORS'){
-				sensorsHandler.disconnectSensors();
+				FACTORY.SensorsHandler().disconnectSensors();
 			}
 
 			respMsg.status = "SUCCESS";
@@ -334,16 +334,20 @@ var methods = {};
 			}
 		}
 	};
-	
+
 	methods.destroyGPIOs = function(cb){
-		if(process.platform != 'darwin' && !gpioHandler){
-			gpioHandler = require('../handlers/gpioHandler')();			
+		if(FACTORY.GpioHandler()){
+			FACTORY.GpioHandler().destroyGPIOs(cb);
 		}
-		if(gpioHandler){
-			gpioHandler.destroyGPIOs(cb);
-		}		
 	};
-	
+
+	methods.uploadFiles = function(){
+    console.log("IN uploadFiles: >> ");
+  		FACTORY.ScheduleHandler().scheduleContentUpload(function(err, resp){
+  			console.log("FILES UPLOAD RESP: >>> ", resp);
+  		});
+  	};
+
 	return methods;
 
 }

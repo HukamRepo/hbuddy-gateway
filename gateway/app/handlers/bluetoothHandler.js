@@ -1,9 +1,9 @@
 
 //TODO: THIS ONE STILL NEEDS MORE WORK
 
-var noble = require('noble'),
+var FACTORY = require('../common/commonFactory')(),
+noble = require('noble'),
 bleno = require('bleno'),
-commonHandler = require('../handlers/commonHandler')(),
 sensorTags = {},
 interval,
 ble;
@@ -13,7 +13,7 @@ var HBuddyService = require('../handlers/ble/hbuddyService');
 var primaryService = new HBuddyService();
 
 module.exports = function() {
-    
+
 var methods = {};
 
 	methods.startAdvertising = function(){
@@ -26,7 +26,7 @@ var methods = {};
 				bleno.stopAdvertising();
 			  }
 			});
-		
+
 		bleno.on('advertisingStart', function(error) {
 			  console.log('on -> advertisingStart: ' + (error ? 'error ' + error : 'success'));
 			  if (!error) {
@@ -35,7 +35,7 @@ var methods = {};
 			    });
 			  }
 		});
-		
+
 	}
 
 	methods.connectSensorTags = function() {
@@ -57,7 +57,7 @@ var methods = {};
 				    peripheral.connect(function(error) {
 				        console.log('connected to peripheral: ' + peripheral.uuid);
 				        ble = peripheral;
-				        
+
 				        peripheral.discoverServices(null, function(error, services) {
 				            console.log('discovered the following services:');
 				            for (var i in services) {
@@ -73,23 +73,23 @@ var methods = {};
 				          });
 				      });
 				});
-				
+
 		}catch(err){
 			console.log("ERROR in connectSensorTags: >> ", err);
 		}
 	};
-	
+
 	methods.readCharactristicData = function(characteristic){
 		characteristic.read(function(error, data){
 			if(error){
 				console.log("ERROR In reading data for ", characteristic.uuid, ": >>>", error);
 			}else{
-				console.log('\n\nFULL DATA for: >>> ', commonHandler.simpleStringify(characteristic));
+				console.log('\n\nFULL DATA for: >>> ', FACTORY.CommonHandler().simpleStringify(characteristic));
 				console.log("DATA: >> ", String(data));
-			}			
+			}
 		});
 	};
-	
+
 	methods.disconnectSensorTags = function() {
 		console.log("IN bluetoothHandler.disconnectSensorTags: >>> ");
 		try{
@@ -98,12 +98,12 @@ var methods = {};
 			       console.log('disconnected from peripheral: ' + ble.uuid);
 			    });
 			}
-				
+
 		}catch(err){
 			console.log("ERROR in disconnectSensorTags: >> ", err);
 		}
 	};
-	
+
     return methods;
-    
+
 }

@@ -1,13 +1,12 @@
 
 var SX127x = require('sx127x');
-var CONFIG = require('../common/common').CONFIG();
 var eventEmmiter = require('../common/common').EVENTS();
 
 var sx127x;
 
 var appClient;
 
-module.exports = function(appConfig) {
+module.exports = function() {
 
 	var lastPublishTime = {};
 
@@ -27,7 +26,7 @@ module.exports = function(appConfig) {
 			sx127x = new SX127x({
 				  frequency: 433e6
 				});
-			
+
 			sx127x.open(function(err) {
 				  console.log('Radio Open: ', err ? err : 'success');
 				  if (err) {
@@ -48,7 +47,7 @@ module.exports = function(appConfig) {
 				    console.log('LORA In Receive Mode ', err ? err : 'success');
 				  });
 				});
-			
+
 			    process.on('SIGINT', function() {
 				  // close the device
 				  sx127x.close(function(err) {
@@ -56,11 +55,11 @@ module.exports = function(appConfig) {
 				    process.exit();
 				  });
 				});
-			
+
 			}catch(err){
 				console.log("Error in initRadion: >>>>>>> ");
-				console.log(err);				
-		    }			
+				console.log(err);
+		    }
 	};
 
 	methods.writeToRadio = function(command){
@@ -108,18 +107,18 @@ module.exports = function(appConfig) {
 		var timeNow = new Date();
 		try{
 			var deviceWithData = JSON.parse(deviceData);
-			
+
 			if(deviceWithData.id && !deviceWithData.uniqueId){
 				deviceWithData.uniqueId = deviceWithData.id;
 				delete deviceWithData["id"];
 			}
-			
+
 			if(!deviceWithData.data){
 				deviceWithData.data = {};
 			}
 			deviceWithData.data.ts = timeNow;
 			deviceWithData.data.gatewayId = global.gatewayInfo.gatewayId;
-			
+
 			if(deviceWithData.temp){
 				deviceWithData.data.temp = deviceWithData.temp;
 				delete deviceWithData["temp"];
@@ -142,7 +141,7 @@ module.exports = function(appConfig) {
 			  });
 		}
 	};
-	
+
 	methods.initRadio();
 
 

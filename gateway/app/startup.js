@@ -1,12 +1,10 @@
 
-var CONFIG = require('./common/common').CONFIG(),
+var FACTORY = require('./common/commonFactory')(),
+CONFIG = require('./common/common').CONFIG(),
    exec = require("child_process").exec,
-   commonHandler = require('./handlers/commonHandler.js')(),
-   gatewayHandler = require('./handlers/gatewayHandler.js')(),
-  // sensortagHandler = require('./handlers/sensortagHandler.js')(),
+   // sensortagHandler = require('./handlers/sensortagHandler.js')(),
   // dependency_manager = require('./endpoints/dependency_manager.js')(),
   // wifi_manager = require('./endpoints/wifi_manager.js')(),
-   scheduleHandler = require('./handlers/scheduleHandler.js')(),
   path = require('path'),
   async = require("async"),
   fs = require('fs'),
@@ -23,9 +21,9 @@ module.exports = function(app) {
 	function cleanupOnExit(){
 		console.log("\n\n<<<<<<<<< CALLING CLEANUP PROCESS >>>>>>>>> ");
 //		sensortagHandler.disconnectSensorTags();
-		gatewayHandler.destroyGPIOs(function(err, result){
+		FACTORY.GatewayHandler().destroyGPIOs(function(err, result){
 			console.log("<<<<<<< Gateway Stopped, Good Bye >>>>>>>>\n");
-		});		
+		});
 	}
 
 	function setupGateway(){
@@ -34,41 +32,32 @@ module.exports = function(app) {
 		                  setGlobalDetails,
 		                  // checkDependencies,
 		                  checkConnectivity,
-		    	          readConfigurationFile,
-		    	          uploadFiles
+		    	          readConfigurationFile		    	          
 		    	     ], function (err, result) {
         							if (err) {
         								console.log("SHOW STOPPER ERROR: >>>  ", err);
         								return;
         							}
 							        console.log("Final Result: >> ", gatewayInfo);
-							        gatewayHandler.initGateway();
+							        FACTORY.GatewayHandler().initGateway();
 	     			      });
 	};
 
 
 	function setGlobalDetails(callback){
 		   global.appRoot = path.resolve(__dirname);
-		   global.gatewayInfo = commonHandler.gatewayInfo(function(gatewayInfo){
+		   global.gatewayInfo = FACTORY.CommonHandler().gatewayInfo(function(gatewayInfo){
 				 global.gatewayInfo = gatewayInfo;
 				//  require('./handlers/ble/blenoHandler').advertise(gatewayInfo);
 				 callback(null, "GLOBAL DETAILS SET");
 		   });
-		   
+
 		   gps.on('data', function(data) {
 			   console.log(data, gps.state);
 			   console.log("GPS DATA: >>> ", data);
 			   global.gatewayInfo.gps = data;
 		   });
 	};
-
-	function uploadFiles(status, callback){
-    console.log("IN uploadFiles: >> ", status);
-  		scheduleHandler.scheduleContentUpload(function(err, resp){
-  			console.log(resp);
-  		});
-  		callback(null, "SCHEDULER CALLED");
-  	};
 
   function checkConnectivity(status, callback){
 		var scriptPath = appRoot+"/resources/shellscripts/connectivity.sh";

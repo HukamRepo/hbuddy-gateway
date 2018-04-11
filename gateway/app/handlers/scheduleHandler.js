@@ -1,9 +1,6 @@
 
-var CONFIG = require('../common/common').CONFIG(),
+var FACTORY = require('../common/commonFactory')(),
 schedule = require('node-schedule'),
-localDBHandler = require('../handlers/localDBHandler')(),
-commonHandler = require('../handlers/commonHandler')(),
-objStorageHandler = require('../handlers/objectStorageHandler')(),
 fs = require('fs');
 
 module.exports = function() {
@@ -11,7 +8,7 @@ module.exports = function() {
 var methods = {};
 
 	methods.scheduleContentUpload = function(callback){
-		console.log("IN scheduleContentUpload, CRON: >> ", CONFIG.UPLOAD_CRON, ", CONTENT_FOLDER: >> ", CONFIG.CONTENT_FOLDER)
+		console.log("IN scheduleContentUpload, CRON: >> ", FACTORY.getGatewayConfig().UPLOAD_CRON, ", CONTENT_FOLDER: >> ", FACTORY.getGatewayConfig().CONTENT_FOLDER)
 		/*
 		var rule = new schedule.RecurrenceRule();
 		rule.hour = 1;
@@ -31,17 +28,17 @@ var methods = {};
 			  });
 		});
 		*/
-		
+
 		authenticateObjectStorage(function(err, authResp){
 			  if(err){
-				  console.log("ERROR IN authenticateObjectStorage:>>> ", err);					  
+				  console.log("ERROR IN authenticateObjectStorage:>>> ", err);
 			  }else{
-				  objStorageHandler.createContainer(gatewayInfo.gatewayId, function(err, container){
+				  FACTORY.ObjectStorageHandler().createContainer(gatewayInfo.gatewayId, function(err, container){
 			  			if(err){
 			  				console.log("ERROR while creating Container on ObjectStorage: >>", err);
 			  			}else{
 			  	  			console.log("\n\n <<<< Container Created on Object Storage: >> ", container.name);
-				  	  		methods.uploadContent(CONFIG.CONTENT_FOLDER, function(err, resp){
+				  	  		methods.uploadContent(FACTORY.getGatewayConfig().CONTENT_FOLDER, function(err, resp){
 								  console.log(resp);
 							});
 			  			}
@@ -49,21 +46,21 @@ var methods = {};
 			  }
 		  });
 
-			var j = schedule.scheduleJob(CONFIG.UPLOAD_CRON, function(){
+			var j = schedule.scheduleJob(FACTORY.getGatewayConfig().UPLOAD_CRON, function(){
 			  console.log('Going to Run Scheduler >>>>>> ', new Date());
 			  authenticateObjectStorage(function(err, authResp){
 				  if(err){
-					  console.log("ERROR IN authenticateObjectStorage:>>> ", err);					  
+					  console.log("ERROR IN authenticateObjectStorage:>>> ", err);
 				  }else{
 					  console.log("authenticateObjectStorage Resp: >> ", authResp);
-					  methods.uploadContent(CONFIG.CONTENT_FOLDER, function(err, resp){
+					  methods.uploadContent(FACTORY.getGatewayConfig().CONTENT_FOLDER, function(err, resp){
 						  console.log(resp);
 					  });
 				  }
 			  });
 			});
-			
-			callback(null, " \n\n Upload Job Scheduled with CRON >>>>> " +CONFIG.UPLOAD_CRON);
+
+			callback(null, " \n\n Upload Job Scheduled with CRON >>>>> " +FACTORY.getGatewayConfig().UPLOAD_CRON);
 	};
 
 	function authenticateObjectStorage(callback){
@@ -72,7 +69,7 @@ var methods = {};
 			  return;
 		  }
 
-  		objStorageHandler.authenticateObjectStorage(function(err, resp){
+  		FACTORY.ObjectStorageHandler().authenticateObjectStorage(function(err, resp){
   			if(err){
   				console.log(err, null);
   			}else{
@@ -100,12 +97,12 @@ var methods = {};
 				    	console.log("UPLOAD RESP: >> ", resp);
 				    });
 				  });
-				 
+
 				 if(cb){
 					cb(null, "Uploading Files in progress from ... ", contentFolder);
 				 }
 			}
-			 
+
 		});
 	};
 

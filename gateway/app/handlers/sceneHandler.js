@@ -1,8 +1,5 @@
 
 var schedule = require('node-schedule');
-var commonHandler = require('../handlers/commonHandler')();
-var cloudantHandler = require('../handlers/cloudantHandler')();
-var localDBHandler = require('../handlers/localDBHandler')();
 
 module.exports = function() {
 
@@ -12,7 +9,7 @@ var methods = {};
 		if(scenes && scenes.length > 0){
 			methods.scheduleAllScenes(scenes);
 		}else{
-			localDBHandler.loadScenesFromLocalDB(function(err, scenes){
+			FACTORY.LocalDBHandler().loadScenesFromLocalDB(function(err, scenes){
 				if(err){
 					console.log("ERROR IN loadScenesFromLocalDB: >>>> ", err );
 				}else{
@@ -95,11 +92,11 @@ var methods = {};
 	methods.inactivateScene = function(scene){
 		if(!scene.settings.repeat || scene.settings.repeat.length == 0){
 			if(scene.settings && scene.settings.startTime && scene.status == "ACTIVE"){
-				var secsDiff = commonHandler.timeDifferenceFromStr(scene.settings.startTime);
+				var secsDiff = FACTORY.CommonHandler().timeDifferenceFromStr(scene.settings.startTime);
 				if(secsDiff <= 0){
 					console.log("INACTIVATE SCENE: >>> ", scene.title, ", REPEAT: ", scene.settings.repeat);
 					scene.status = "INACTIVE";
-					localDBHandler.updateScene(scene, function(err, scene){
+					FACTORY.LocalDBHandler().updateScene(scene, function(err, scene){
 						if(err){
 							console.log("Error while updating Scene in LocalDB: >>> ", err);
 						}else{
@@ -107,7 +104,7 @@ var methods = {};
 						}
 					});
 
-					cloudantHandler.updateScene(scene, function(err, scene){
+					FACTORY.CloudantHandler().updateScene(scene, function(err, scene){
 						if(err){
 							console.log("Error while updating Scene in Cloudant: >>> ", err);
 						}else{
@@ -122,7 +119,7 @@ var methods = {};
 	methods.updateScene = function(scene){
 		console.log("IN updateScene: >>> ID: ", scene.id, ", Title: ", scene.title);
 
-		localDBHandler.updateScene(scene, function(err, scene){
+		FACTORY.LocalDBHandler().updateScene(scene, function(err, scene){
 			if(err){
 				console.log("Error while updating Scene in LocalDB: >>> ", err);
 			}else{

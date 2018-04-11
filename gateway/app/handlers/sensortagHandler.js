@@ -1,17 +1,16 @@
 
 //TODO: THIS ONE STILL NEEDS MORE WORK
 
-var SensorTag = require('../utils/sensorTag/sensortag'),
-commonHandler = require('../handlers/commonHandler')(),
+var FACTORY = require('../common/commonFactory')(),
+SensorTag = require('../utils/sensorTag/sensortag'),
 async = require('async'),
-CONFIG = require('../config/config').get(),
 conf,
 sensorTags = {},
 interval;
 var appClient;
 
-module.exports = function(ibmIoTHandler) {
-    
+module.exports = function() {
+
 var methods = {};
 
 	methods.connectSensorTags = function(configuration, callback) {
@@ -24,7 +23,7 @@ var methods = {};
 			methods.disconnectSensorTags();
 		}
 	};
-	
+
 	methods.disconnectSensorTags = function() {
 		console.log("IN sensortagHandler.disconnectSensorTags: >>>> ");
 		try{
@@ -36,11 +35,11 @@ var methods = {};
 				    });
 				}
 			});
-			
+
 			if(interval){
 				clearInterval(interval);
 			}
-			
+
 			if(sensorTags){
 				for(var key in sensorTags){
 				    console.log(" \t >>> ", key+": "+sensorTags[key]);
@@ -50,26 +49,26 @@ var methods = {};
 				    });
 				}
 			}
-			
+
 		}catch(err){
 			console.log("ERROR in disconnectSensorTags: >> ", err);
 		}
 	};
-	
+
 	function onDiscover(sensorTag){
 		console.log("sensorTag Discovered: >>>> ");
 		var tagId = "";
 		sensorTag.on('disconnect', function() {
 		    console.log('disconnected!');
 		  });
-		
+
 		sensorTag.connectAndSetUp(function connected(error){
 			if(error){
 				console.log("sensorTag Connection Error: >>> ", error);
 			}else{
 				console.log("<<<<< sensorTag Connected: >>> ");
 			}
-			
+
 			sensorTag.readSystemId(function(error, systemId){
 				if(systemId){
 					tagId = systemId;
@@ -80,10 +79,10 @@ var methods = {};
 					}else{
 						sensorTags[tagId].sensorTag = sensorTag;
 						sensorTags[tagId].data = {"systemId": tagId};
-					}				
+					}
 				}
 			});
-			
+
 			if(conf){
 				if(conf.temperature && conf.temperature.enable){
 					sensorTag.enableIrTemperature(function(error){
@@ -100,7 +99,7 @@ var methods = {};
 						});
 					});
 				}
-				
+
 				if(conf.humidity){
 					sensorTag.enableHumidity(function(error){
 						sensorTag.notifyHumidity(function(error){
@@ -116,7 +115,7 @@ var methods = {};
 						});
 					});
 				}
-					
+
 					sensorTag.enableLuxometer(function(error){
 						sensorTag.notifyLuxometer(function(error){
 							if(error){
@@ -129,7 +128,7 @@ var methods = {};
 							}
 						});
 					});
-					
+
 					sensorTag.enableGyroscope(function(error){
 						sensorTag.notifyGyroscope(function(error){
 							if(error){
@@ -142,7 +141,7 @@ var methods = {};
 							}
 						});
 					});
-					
+
 					sensorTag.enableAccelerometer(function(error){
 						sensorTag.notifyAccelerometer(function(error){
 							if(error){
@@ -155,9 +154,9 @@ var methods = {};
 							}
 						});
 					});
-			
+
 			}
-			
+
 			sensorTag.on('simpleKeyChange', function(left, right, reedRelay) {
 		          console.log('left: ' + left);
 		          console.log('right: ' + right);
@@ -175,24 +174,24 @@ var methods = {};
 		  				}
 		  			});
 		          }
-		          
+
 		          if(left){
 		        	  sensorTag.disconnect(function(){
 			        	  console.log("DISCONNECTION CALLED on : >>> ", tagId);
 			          });
-		          }		         
-		          
+		          }
+
 		        });
 
 		        sensorTag.notifySimpleKey();
-			
+
 			interval = setInterval(function() {
 				broadcasting();
 			}, 5000);
-			
+
 		});
 	};
-	
+
 	function broadcasting(){
 		console.log("IN broadcasting: >> ");
 		if(sensorTags){
@@ -207,16 +206,16 @@ var methods = {};
 				var sensorData = {"d": sensorTags[key].data};
 				var deviceId = key.split(':').join('');
 				if(!appClient){
-					appClient = ibmIoTHandler.getAppClient();
+					appClient = FACTORY.IBMIoTHandler().getAppClient();
 					appClient.publishDeviceEvent("SensorTag", deviceId, "cloud", "json", sensorData);
 				 }else{
 					 appClient.publishDeviceEvent("SensorTag", deviceId, "cloud", "json", sensorData);
 				 }
-				
+
 			}
 		}
 	};
-	
+
 	methods.readBatteryLevelWithKey = function(sensorTagId, cb){
 		if(sensorTags){
 			for(var key in sensorTags){
@@ -235,7 +234,7 @@ var methods = {};
 			}
 		}
 	};
-	
+
 	methods.readBatteryLevel = function(sensorTag, cb){
 		if(sensorTag){
 			sensorTag.readBatteryLevel(function(error, batteryLevel){
@@ -248,5 +247,5 @@ var methods = {};
 	};
 
 	return methods;
-    
+
 }

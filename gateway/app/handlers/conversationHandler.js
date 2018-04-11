@@ -1,32 +1,32 @@
 'use strict'
 
-var CONFIG = require('../common/common').CONFIG(),
+var FACTORY = require('../common/commonFactory')(),
     request = require('request'),
     format = require('util').format,
     moment = require('moment');
 
 moment.locale('en');
 
+module.exports = function() {
+
+var methods = {};
+
 var apiOptions = {
-		  url: CONFIG.SERVICES_CONFIG.hbuddyApi.endpoint,
+		  url: FACTORY.getGatewayConfig().SERVICES_CONFIG.hbuddyApi.endpoint,
 		  method: "GET",
 		  headers: {
 		    "Accept": "application/json",
 		    "Content-Type":"application/json",
-		    "X-IBM-Client-Id": CONFIG.SERVICES_CONFIG.hbuddyApi.clientId,
-		    "X-IBM-Client-Secret": CONFIG.SERVICES_CONFIG.hbuddyApi.clientSecret
+		    "X-IBM-Client-Id": FACTORY.getGatewayConfig().SERVICES_CONFIG.hbuddyApi.clientId,
+		    "X-IBM-Client-Secret": FACTORY.getGatewayConfig().SERVICES_CONFIG.hbuddyApi.clientSecret
 		  }
 		};
-
-module.exports = function() {
-
-var methods = {};
 
 	methods.callConversation = function(conversationReq, cb) {
 		if(!conversationReq || !conversationReq.params || !conversationReq.params.input){
 			cb("INVALID REQ FOR CONVERSATION ! ", null);
 		}
-		apiOptions.url = CONFIG.SERVICES_CONFIG.hbuddyApi.endpoint + "/Conversations";
+		apiOptions.url = FACTORY.getGatewayConfig().SERVICES_CONFIG.hbuddyApi.endpoint + "/Conversations";
 		apiOptions.method = "POST";
 		apiOptions.json = conversationReq;
 	    request(apiOptions, function (err, resp, body) {

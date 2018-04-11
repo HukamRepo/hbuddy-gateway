@@ -1,10 +1,6 @@
 
-var CONFIG = require('../common/common').CONFIG();
-
-var localDBHandler = require('../handlers/localDBHandler')();
-var commonHandler = require('../handlers/commonHandler')();
-
-var cloudant = require('cloudant')(CONFIG.SERVICES_CONFIG.cloudantNOSQLDB.url);
+var FACTORY = require('../common/commonFactory')(),
+cloudant = require('cloudant')(process.env.CLOUDANT_URL);
 
 module.exports = function() {
 
@@ -12,7 +8,7 @@ var methods = {};
 
 	methods.loadConfigurationsFromCloud = function(updateLocalDB, cb){
 		var cloudantDB = cloudant.use('configurations');
-		var findReq = {selector:{"loopback__model__name":"Configuration"}};
+		var findReq = {selector:{"loopback__model__name":"Configuration", "configurationType":"GATEWAY_CONFIG"}};
 		var configuration = {};
 		cloudantDB.find(findReq, function(err, result) {
 				  if (err) {
@@ -23,7 +19,7 @@ var methods = {};
 						  configuration[resp.configurationType] = resp.configuration;
 					  }
 					  if(updateLocalDB){
-						  localDBHandler.refreshConfigurationDB({}, configuration, function(err, configuration){
+						  FACTORY.LocalDBHandler().refreshConfigurationDB({}, configuration, function(err, configuration){
 							  if(err){
 								  console.log("ERROR WHILE REFRESHING CONFIGURATION IN LOCAL DB:>> ", err);
 							  }else{
@@ -62,7 +58,7 @@ var methods = {};
 					  cb(err, result);
 				  }else{
 					  if(updateLocalDB){
-						  localDBHandler.refreshPlaceAreasDB({}, result.docs, function(err, placeAreas){
+						  FACTORY.LocalDBHandler().refreshPlaceAreasDB({}, result.docs, function(err, placeAreas){
 							  cb(err, placeAreas);
 						  });
 					  }else{
@@ -94,7 +90,7 @@ var methods = {};
 					  cb(err, null);
 				  }else{
 					  if(updateLocalDB){
-						  localDBHandler.refreshBoardsDB({}, result.docs, function(err, boards){
+						  FACTORY.LocalDBHandler().refreshBoardsDB({}, result.docs, function(err, boards){
 							  cb(err, boards);
 						  });
 					  }else{
@@ -107,12 +103,12 @@ var methods = {};
 				  }
 			});
 	};
-	
+
 	methods.loadDevicesFromCloud = function(parentId, updateLocalDB, cb){
 		var cloudantDB = cloudant.use('devices');
 		  var findReq = {
 					selector:{
-	    			  		   "$and": [{'loopback__model__name': 'Device'},{'parentId': parentId}]	    			  		                 
+	    			  		   "$and": [{'loopback__model__name': 'Device'},{'parentId': parentId}]
 							}
   						};
 		  cloudantDB.find(findReq, function(err, result) {
@@ -120,7 +116,7 @@ var methods = {};
 					  cb(err, null);
 				  }else{
 					  if(updateLocalDB){
-						  localDBHandler.refreshDevicesDB({"parentId": parentId}, result.docs, function(err, devices){
+						  FACTORY.LocalDBHandler().refreshDevicesDB({"parentId": parentId}, result.docs, function(err, devices){
 							  cb(err, devices);
 						  });
 					  }else{
@@ -142,7 +138,7 @@ var methods = {};
 					  cb(err, null);
 				  }else{
 					  if(updateLocalDB){
-						  localDBHandler.refreshScenesDB({}, result.docs, function(err, scenes){
+						  FACTORY.LocalDBHandler().refreshScenesDB({}, result.docs, function(err, scenes){
 							  cb(err, scenes);
 						  });
 					  }else{

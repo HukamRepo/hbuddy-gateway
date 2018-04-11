@@ -7,6 +7,8 @@ var bodyParser = require('body-parser');
 var app        = express();
 var morgan     = require('morgan');
 
+require('dotenv').config({path: process.env.PWD+"/.env"});
+
 // configure app
 app.use(morgan('dev')); // log requests to the console
 

@@ -1,5 +1,5 @@
 
-var CONFIG = require('../common/common').CONFIG();
+var FACTORY = require('../common/commonFactory')();
 
 var fs = require('fs');
 
@@ -9,11 +9,11 @@ osConfig = {
 	    useServiceCatalog: true,
 	    useInternal: false,
 	    keystoneAuthVersion: 'v3',
-	    authUrl: CONFIG.SERVICES_CONFIG.objectstorage.auth_url,
-	    tenantId: CONFIG.SERVICES_CONFIG.objectstorage.projectId,    //projectId from credentials
-	    domainId: CONFIG.SERVICES_CONFIG.objectstorage.domainId,
-	    username: CONFIG.SERVICES_CONFIG.objectstorage.username,
-	    password: CONFIG.SERVICES_CONFIG.objectstorage.password,
+	    authUrl: FACTORY.getGatewayConfig().SERVICES_CONFIG.objectstorage.auth_url,
+	    tenantId: FACTORY.getGatewayConfig().SERVICES_CONFIG.objectstorage.projectId,    //projectId from credentials
+	    domainId: FACTORY.getGatewayConfig().SERVICES_CONFIG.objectstorage.domainId,
+	    username: FACTORY.getGatewayConfig().SERVICES_CONFIG.objectstorage.username,
+	    password: FACTORY.getGatewayConfig().SERVICES_CONFIG.objectstorage.password,
 	    region: 'dallas'   //dallas or london region
 	};
 
@@ -29,7 +29,7 @@ var methods = {};
 //		    storageClient._identity
 		});
 	};
-	
+
 	methods.createContainer = function(containerName, callback){
 		storageClient.createContainer({
 			 name: containerName,
