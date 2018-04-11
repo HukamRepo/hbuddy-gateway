@@ -1,4 +1,4 @@
-s
+
 var FACTORY = require('../common/commonFactory')(),
 gpio = require('rpi-gpio'),
 async = require('async');
