@@ -9,3 +9,4 @@ node_modules
 /public/scripts/lib
 .DS_Store
 .project
+.env
