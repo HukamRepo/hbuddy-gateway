@@ -13,7 +13,7 @@ module.exports = function() {
 	var methods = {};
 
 	eventEmmiter.on('publishdata', function(radioData) {
-//  		console.log("IN publishdata EVENT received: >> ", radioData);
+		console.log("IN publishdata EVENT received: >> ", radioData);
 			if(methods.publishRequired(radioData)){
 				methods.publishMessage(radioData);
 			}
