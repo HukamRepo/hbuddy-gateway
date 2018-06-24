@@ -31,7 +31,7 @@ var methods = {};
     if(!appConfig.GATEWAY_CONFIG.BROADCAST_TYPE){
     	appConfig.GATEWAY_CONFIG.BROADCAST_TYPE = "LORA";
     }    
-    console.log("\n\n<<<<<<< GATEWAY CONFIGURATION SET >>>>>>>>> ");
+    console.log("\n\n<<<<<<< GATEWAY CONFIGURATION SET >>>>>>>>>> ");
     console.log(appConfig);
   }
 
