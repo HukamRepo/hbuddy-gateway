@@ -1,7 +1,6 @@
 
 var FACTORY = require('../common/commonFactory')(),
 exec = require("child_process").exec,
-// serialportHandler = null,
 gpioHandler = null,
 appConfig = null;
 
@@ -19,7 +18,6 @@ var methods = {};
 	methods.initGateway = function(){
 		console.log('\n\n<<<<<<<< IN initGateway >>>>>>> ');
 
-//		serialportHandler = require('../handlers/serialportHandler')();
 		if(FACTORY.LocalDBHandler()){
 				FACTORY.LocalDBHandler().loadAllLocalDBs();
 		}
@@ -29,7 +27,10 @@ var methods = {};
 							if(FACTORY.RadioHandler()){
 									FACTORY.RadioHandler().initRadio();
 							}
-									// serialportHandler.initSerialPort();
+							if(FACTORY.SerialportHandler()){
+								FACTORY.SerialportHandler().initSerialPort();
+							}
+						
 							FACTORY.IBMIoTHandler().connectToIBMCloud(function(appclient){
 								appClient = appclient;
 							});
@@ -41,7 +42,10 @@ var methods = {};
 						if(FACTORY.RadioHandler()){
 								FACTORY.RadioHandler().initRadio();
 						}
-//		    				serialportHandler.initSerialPort();
+						if(FACTORY.SerialportHandler()){
+							FACTORY.SerialportHandler().initSerialPort();
+						}
+
 							methods.startProcessWithLocal();
 		    	});
 		    }
@@ -182,9 +186,11 @@ var methods = {};
 					}
 			};
 
-//			serialportHandler.broadcastMessage(JSON.stringify(payload));
 			if(FACTORY.RadioHandler()){
-					FACTORY.RadioHandler().broadcastMessage(JSON.stringify(payload));
+				FACTORY.RadioHandler().broadcastMessage(JSON.stringify(payload));
+			}
+			if(FACTORY.SerialportHandler()){
+				FACTORY.SerialportHandler().broadcastMessage(JSON.stringify(payload));
 			}
 
 		}
@@ -226,15 +232,28 @@ var methods = {};
 				if(payload.d && payload.d.boardId && payload.d.deviceIndex){
 //					var command = "#"+payload.d.boardId+"#"+payload.d.deviceIndex+"#"+payload.d.deviceValue;
 					console.log('Command To Broadcast: >>> ', payload.d);
-					FACTORY.RadioHandler().writeToRadio(JSON.stringify(payload.d), function(){
-//					serialportHandler.writeToSerialPort(command, function(){
-						console.log('Command Broadcast Successfully: >>> ', payload.d);
-						respMsg.status = "SUCCESS";
-						respMsg.msg = "Command Broadcast Successfully: >>> " + command;
-						if(cb){
-							cb(respMsg);
-						}
-					});
+					if(FACTORY.RadioHandler()){
+						FACTORY.RadioHandler().writeToRadio(JSON.stringify(payload.d), function(){
+								console.log('Command Broadcast Successfully: >>> ', payload.d);
+								respMsg.status = "SUCCESS";
+								respMsg.msg = "Command Broadcast Successfully: >>> " + command;
+								if(cb){
+									cb(respMsg);
+								}
+							});
+					}				
+					
+					if(FACTORY.SerialportHandler()){
+						FACTORY.SerialportHandler().writeToSerialPort(command, function(){
+							console.log('Command Broadcast Successfully: >>> ', payload.d);
+							respMsg.status = "SUCCESS";
+							respMsg.msg = "Command Broadcast Successfully: >>> " + command;
+							if(cb){
+								cb(respMsg);
+							}
+						});
+					}
+					
 				}else if(payload.action){
 					if(payload.type && payload.type == "Scene" && payload.data){
 						// TODO: Refresh Scene

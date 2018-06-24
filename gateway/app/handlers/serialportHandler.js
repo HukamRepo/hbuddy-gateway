@@ -110,7 +110,8 @@ module.exports = function() {
 				delete deviceWithData["dewpoint"];
 			}
 
-			eventEmmiter.emit("serialdata", deviceWithData);
+			eventEmmiter.emit("publishdata", deviceWithData);
+			eventEmmiter.emit("serialdata", deviceWithData);			
 
 		}catch(err){
 			console.log('ERROR IN handleDataOnSerialPort: >>> ', err);
