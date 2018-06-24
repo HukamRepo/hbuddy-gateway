@@ -24,10 +24,10 @@ var methods = {};
 		FACTORY.CommonHandler().checkInternet(function(isConnected) {
 		    if (isConnected) {
 		    	handleOnline(function(){
-							if(FACTORY.RadioHandler()){
+							if(FACTORY.getGatewayConfig().BROADCAST_TYPE == "LORA" && FACTORY.RadioHandler()){
 									FACTORY.RadioHandler().initRadio();
 							}
-							if(FACTORY.SerialportHandler()){
+							if(FACTORY.getGatewayConfig().BROADCAST_TYPE == "XBEE" && FACTORY.SerialportHandler()){
 								FACTORY.SerialportHandler().initSerialPort();
 							}
 						
@@ -39,10 +39,10 @@ var methods = {};
 		    	});
 		    } else {
 		    	handleOffline(function(){
-						if(FACTORY.RadioHandler()){
+						if(FACTORY.getGatewayConfig().BROADCAST_TYPE == "LORA" && FACTORY.RadioHandler()){
 								FACTORY.RadioHandler().initRadio();
 						}
-						if(FACTORY.SerialportHandler()){
+						if(FACTORY.getGatewayConfig().BROADCAST_TYPE == "XBEE" && FACTORY.SerialportHandler()){
 							FACTORY.SerialportHandler().initSerialPort();
 						}
 
@@ -186,10 +186,10 @@ var methods = {};
 					}
 			};
 
-			if(FACTORY.RadioHandler()){
+			if(FACTORY.getGatewayConfig().BROADCAST_TYPE == "LORA" && FACTORY.RadioHandler()){
 				FACTORY.RadioHandler().broadcastMessage(JSON.stringify(payload));
 			}
-			if(FACTORY.SerialportHandler()){
+			if(FACTORY.getGatewayConfig().BROADCAST_TYPE == "XBEE" && FACTORY.SerialportHandler()){
 				FACTORY.SerialportHandler().broadcastMessage(JSON.stringify(payload));
 			}
 
@@ -232,7 +232,7 @@ var methods = {};
 				if(payload.d && payload.d.boardId && payload.d.deviceIndex){
 //					var command = "#"+payload.d.boardId+"#"+payload.d.deviceIndex+"#"+payload.d.deviceValue;
 					console.log('Command To Broadcast: >>> ', payload.d);
-					if(FACTORY.RadioHandler()){
+					if(FACTORY.getGatewayConfig().BROADCAST_TYPE == "LORA" &&  FACTORY.RadioHandler()){
 						FACTORY.RadioHandler().writeToRadio(JSON.stringify(payload.d), function(){
 								console.log('Command Broadcast Successfully: >>> ', payload.d);
 								respMsg.status = "SUCCESS";
@@ -243,7 +243,7 @@ var methods = {};
 							});
 					}				
 					
-					if(FACTORY.SerialportHandler()){
+					if(FACTORY.getGatewayConfig().BROADCAST_TYPE == "XBEE" && FACTORY.SerialportHandler()){
 						FACTORY.SerialportHandler().writeToSerialPort(command, function(){
 							console.log('Command Broadcast Successfully: >>> ', payload.d);
 							respMsg.status = "SUCCESS";

@@ -184,8 +184,11 @@ module.exports = function() {
 //					var command = "";
 //					command = "#"+payload.d.boardId+"#D#" +payload.d.deviceIndex+"#"+payload.d.status+"#"+payload.d.deviceValue;
 //					console.log('Command To Broadcast: >>> ', payloadStr);
-					eventEmmiter.emit("writetoserial", JSON.stringify(payload.d));
-					eventEmmiter.emit("broadcast", JSON.stringify(payload.d));					
+					if(FACTORY.getGatewayConfig().BROADCAST_TYPE == "LORA"){
+						eventEmmiter.emit("broadcast", JSON.stringify(payload.d));
+					}else{
+						eventEmmiter.emit("writetoserial", JSON.stringify(payload.d));
+					}										
 				}else if(payload.action){
 					if(payload.action == "UPDATE_SCENE" && payload.data){
 						// TODO: Refresh Scene

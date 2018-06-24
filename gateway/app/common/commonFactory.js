@@ -25,12 +25,21 @@ var methods = {};
 
   methods.setAppConfig = function(config){
     appConfig = config;
+    if(!appConfig.GATEWAY_CONFIG){
+    	appConfig.GATEWAY_CONFIG = {};
+    }
+    if(!appConfig.GATEWAY_CONFIG.BROADCAST_TYPE){
+    	appConfig.GATEWAY_CONFIG.BROADCAST_TYPE = "LORA";
+    }    
     console.log("\n\n<<<<<<< GATEWAY CONFIGURATION SET >>>>>>>>> ");
     console.log(appConfig);
   }
 
   methods.getGatewayConfig = function(){
     if(appConfig && appConfig.GATEWAY_CONFIG){
+    	if(!appConfig.GATEWAY_CONFIG.BROADCAST_TYPE){
+        	appConfig.GATEWAY_CONFIG.BROADCAST_TYPE = "LORA";
+        }       
       return appConfig.GATEWAY_CONFIG;
     }
     return null;
@@ -108,7 +117,7 @@ var methods = {};
 
   methods.RadioHandler = function(){
     if(process.platform != 'darwin' && !radioHandler){
-//      radioHandler = require('../handlers/radioHandler')();
+      radioHandler = require('../handlers/radioHandler')();
     }
     return radioHandler;
   }
