@@ -24,7 +24,7 @@ module.exports = function() {
 				return false;
 			}
 			sx127x = new SX127x({
-				  frequency: 868e6
+				  frequency: 433e6
 				});
 
 			sx127x.open(function(err) {
