@@ -14,15 +14,19 @@ module.exports = function() {
 
 	methods.gatewayInfo = function(req, resp){
 		gatewayHandler.gatewayInfo(function(info){
+			resp.header("Access-Control-Allow-Origin", '*');
+			resp.header("Access-Control-Allow-Credentials", true);
+			resp.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
+			resp.header("Access-Control-Allow-Headers", 'Origin,X-Requested-With,Content-Type,Accept,content-type,application/json,Authorization');
 			resp.json(info);
 		});
 	};
-	
+
 	methods.motionDetected = function(req, resp){
 		console.log("IN gatewayEndpoint.motionDetected at : >>>>>> ", new Date());
 		methods.uploadContent(req, resp);
 	};
-	
+
 	methods.handleCommand = function(req, res){
 		var payload = req.body;
 		gatewayHandler.handleCommand(payload, function(respMsg){

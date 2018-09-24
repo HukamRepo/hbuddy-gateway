@@ -79,6 +79,7 @@ This command will remove all Weaved and/or remot3.it software and directories fr
 
 
 ## REFERENCES
+[Pi Startup Scripts](https://www.dexterindustries.com/howto/run-a-program-on-your-raspberry-pi-at-startup/)
 [OpenCV on Raspberry Pi](http://www.pyimagesearch.com/2016/04/18/install-guide-raspberry-pi-3-raspbian-jessie-opencv-3/) |
 [Motion Detection 1](https://github.com/remonlam/rpi-docker-motion) |
 [Motion Detection 2](https://github.com/yushi/rpi-dockerfile) |

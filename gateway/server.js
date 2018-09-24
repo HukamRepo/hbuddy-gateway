@@ -39,10 +39,18 @@ if (app.get('env') === 'production') {
     console.log("PRODUCTION ENVIRONMENT >>>>>>");
 };
 
-app.use(function (err, req, res, next) {
-	  console.error(err.stack)
-	  res.status(500).send('Something broke!')
-	});
+app.use(function(req, res, next) {
+   res.header("Access-Control-Allow-Origin", '*');
+   res.header("Access-Control-Allow-Credentials", true);
+   res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
+   res.header("Access-Control-Allow-Headers", 'Origin,X-Requested-With,Content-Type,Accept,content-type,application/json,Authorization');
+   next();
+ });
+
+// app.use(function (err, req, res, next) {
+// 	  console.error(err.stack)
+// 	  res.status(500).send('Something broke!')
+// 	});
 
 // express.vhost(vhost, app);
 
