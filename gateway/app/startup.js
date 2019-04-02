@@ -34,8 +34,8 @@ module.exports = function(app) {
 		                  setGlobalDetails,
 		                  // checkDependencies,
 		                  checkConnectivity,
-		                  readConfigurationFile,
-		                  handlePublicAvailability
+		                  readConfigurationFile
+		                  // handlePublicAvailability
 		    	     ], function (err, result) {
         							if (err) {
         								console.log("SHOW STOPPER ERROR: >>>  ", err);
@@ -45,7 +45,7 @@ module.exports = function(app) {
 							        console.log("Final Result: >> ", result);
 							        if(process.env.TYPE == "GATEWAY"){
 							        	FACTORY.GatewayHandler().initGateway();
-							        }							        							        
+							        }
 	     			      });
 	};
 
@@ -86,21 +86,21 @@ module.exports = function(app) {
         	}
         });
 	};
-	
+
 	function handlePublicAvailability(status, callback){
 		const opts = {
 			    proto: 'http', // http|tcp|tls, defaults to http
 			    addr: 9000, // port or network address, defaultst to 80
 			    auth: 'hbuddy:1SatnamW', // http basic authentication for tunnel
 //			    authtoken: '6XStYLNm3VPW3RGpoSHgU_55v3UVzEgAjRznnMtnUFh', // your authtoken from ngrok.com
-			    region: 'ap', // one of ngrok regions (us, eu, au, ap), defaults to us		    
-			}; 
+			    region: 'ap', // one of ngrok regions (us, eu, au, ap), defaults to us
+			};
 		console.log("NGROK OPTIONS: >>> ", opts);
-		
+
 		(async function() {
 			  const url = await ngrok.connect(opts);
 			  console.log("\n\nNGROK URL: >>>> ", url);
-			  callback(null, url); 
+			  callback(null, url);
 			})();
 	};
 
