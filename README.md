@@ -6,7 +6,7 @@ docker run --rm --privileged multiarch/qemu-user-static:register --reset
 
 `docker run --privileged -it -p 9000:9000 --name gateway-app -v /opt:/opt -v /tmp:/tmp -e CLOUDANT_URL=$CLOUDANT_URL hukam/gateway-app`
 
-docker run --privileged -it -p 9000:9000 --name gateway-app -v /opt:/opt -v /tmp:/tmp -e CLOUDANT_URL=https://34fd0b82-60b8-4d0d-9231-1f03135d4273-bluemix:75ae9c3507534f29ddfd175531aa780f889f4fc858a666dcacf572b097d08849@34fd0b82-60b8-4d0d-9231-1f03135d4273-bluemix.cloudant.com hukam/gateway-app
+docker run --privileged -it -p 9000:9000 --name gateway-app -v /opt:/opt -v /tmp:/tmp -e TYPE=GATEWAY CLOUDANT_URL=https://34fd0b82-60b8-4d0d-9231-1f03135d4273-bluemix:75ae9c3507534f29ddfd175531aa780f889f4fc858a666dcacf572b097d08849@34fd0b82-60b8-4d0d-9231-1f03135d4273-bluemix.cloudant.com hukam/gateway-app
 
 ## Running Hukam Gateway UI Docker Container
 `docker run --rm -it -p 3000:4200 hukam/gateway-ui`

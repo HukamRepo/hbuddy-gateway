@@ -11,7 +11,7 @@
   ],
   "main": "server.js",
   "scripts": {
-    "install" : "node scripts/install.js",
+    "install": "node scripts/install.js",
     "start": "node server.js --host=0.0.0.0 --disable-host-check",
     "test": "npm test",
     "provision": "apt-get update -y && apt-get install isc-dhcp-server hostapd iw -y"
@@ -39,6 +39,7 @@
     "morgan": "^1.8.2",
     "mqtt": "^2.11.0",
     "nedb": "^1.8.0",
+    "ngrok": "^3.1.0",
     "node-record-lpcm16": "^0.3.0",
     "node-schedule": "^1.2.4",
     "os": "^0.1.1",

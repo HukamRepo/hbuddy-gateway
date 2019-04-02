@@ -36,10 +36,14 @@ COPY . /root
 # Install dependencies
 RUN JOBS=MAX npm i --unsafe-perm --production
 
-ENV TINI_SUBREAPER=true
-
 EXPOSE 9000
 
-ENTRYPOINT ["tini","-s", "--"]
+# Add Tini
+ENV TINI_VERSION v0.18.0
+ADD https://github.com/krallin/tini/releases/download/${TINI_VERSION}/tini /tini
+RUN chmod +x /tini
+ENV TINI_SUBREAPER=true
+
+ENTRYPOINT ["/tini","-s", "--"]
 
 CMD ["npm", "start"]
