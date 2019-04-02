@@ -34,8 +34,8 @@ module.exports = function(app) {
 		                  setGlobalDetails,
 		                  // checkDependencies,
 		                  checkConnectivity,
-		                  readConfigurationFile
-		                  // handlePublicAvailability
+		                  readConfigurationFile,
+                      handlePublicAvailability
 		    	     ], function (err, result) {
         							if (err) {
         								console.log("SHOW STOPPER ERROR: >>>  ", err);
@@ -87,7 +87,22 @@ module.exports = function(app) {
         });
 	};
 
-	function handlePublicAvailability(status, callback){
+  function handlePublicAvailability(status, callback){
+
+    var scriptPath = appRoot+"/resources/shellscripts/public_access.sh "+global.gatewayInfo.gatewayId;
+    var command = 'sh '+scriptPath;
+        var myscript = exec(command);
+        myscript.stdout.on('data',function(data){
+          var resp = String(data);
+          callback(null, resp);
+        });
+        myscript.stderr.on('data',function(data){
+          var resp = String(data);
+          callback(null, resp);
+        });
+  }
+
+  function handlePublicAvailabilityOld(status, callback){
 		const opts = {
 			    proto: 'http', // http|tcp|tls, defaults to http
 			    addr: 9000, // port or network address, defaultst to 80
