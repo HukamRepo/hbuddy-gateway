@@ -14,7 +14,7 @@ GATEWAY_ID=$1
 
 echo $GATEWAY_ID
 
-ssh -R $GATEWAY_ID.serveo.net:80:localhost:9000 serveo.net
+ssh -t -t -R $GATEWAY_ID.serveo.net:80:localhost:9000 serveo.net &&
 
 echo "Gateway has now access on https ..."
 

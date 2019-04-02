@@ -12,7 +12,7 @@ CONFIG = require('./common/common').CONFIG(),
   gps = new GPS,
   conf;
 
-const ngrok = require('ngrok');
+// const ngrok = require('ngrok');
 
 module.exports = function(app) {
 
@@ -34,8 +34,8 @@ module.exports = function(app) {
 		                  setGlobalDetails,
 		                  // checkDependencies,
 		                  checkConnectivity,
-		                  readConfigurationFile,
-                      handlePublicAvailability
+		                  readConfigurationFile
+                      // handlePublicAvailability
 		    	     ], function (err, result) {
         							if (err) {
         								console.log("SHOW STOPPER ERROR: >>>  ", err);
@@ -88,20 +88,23 @@ module.exports = function(app) {
 	};
 
   function handlePublicAvailability(status, callback){
-
+    console.log("IN handlePublicAvailability: >>> ", status);
     var scriptPath = appRoot+"/resources/shellscripts/public_access.sh "+global.gatewayInfo.gatewayId;
     var command = 'sh '+scriptPath;
         var myscript = exec(command);
         myscript.stdout.on('data',function(data){
           var resp = String(data);
+          console.log("public_access.sh resp: >>> %s", resp);
           callback(null, resp);
         });
         myscript.stderr.on('data',function(data){
           var resp = String(data);
-          callback(null, resp);
+          // console.log("public_access.sh err: >>> %s", resp);
+          // callback(null, resp);
         });
   }
 
+  /*
   function handlePublicAvailabilityOld(status, callback){
 		const opts = {
 			    proto: 'http', // http|tcp|tls, defaults to http
@@ -118,6 +121,7 @@ module.exports = function(app) {
 			  callback(null, url);
 			})();
 	};
+  */
 
 
 /*
