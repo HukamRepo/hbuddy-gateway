@@ -32,3 +32,7 @@ network={
 ## Login
 Power on your hBuddy and open browser of your choice at following URL:
 http://hbuddy-gateway.local
+
+or use below Command
+
+ssh -R hukam.serveo.net:80:localhost:9000 serveo.net

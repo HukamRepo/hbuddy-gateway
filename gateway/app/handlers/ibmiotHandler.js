@@ -107,16 +107,20 @@ module.exports = function() {
 		// BELOW IS THE FORMAT OF DATA RECEIVED FROM MASTER SWITCH BOARD
 		// "{"type":"switch_board", "uniqueId":"SWB-AB00-11-22-33", "data": {"deviceId":1, "deviceValue": 1, "analogValue": 5}}";
 
-		if(!deviceWithData || (!deviceWithData.uniqueId && !deviceWithData.id) || !deviceWithData.type || !deviceWithData.data){
+		if(!deviceWithData || !deviceWithData.d){
+			return false;
+		}
+
+		if(!deviceWithData || !deviceWithData.d || (!deviceWithData.d.uniqueId && !deviceWithData.d.id) || !deviceWithData.d.type){
 			console.log("INVALID deviceWithData to Publish ", deviceWithData);
 			return false;
 		}
 
-		if(deviceWithData.type == "switch_board"){
+		if(deviceWithData.d.type == "SB_MICRO"){
 			return true;
 		}
 
-		for (var dataKey in deviceWithData.data) {
+		for (var dataKey in deviceWithData.d) {
 			if(FACTORY.getGatewayConfig() && FACTORY.getGatewayConfig().PUBLISH_CONFIG){
 				var sensorsConf = FACTORY.getGatewayConfig().PUBLISH_CONFIG.sensors;
 //				console.log("sensorsConf: >>>> ", sensorsConf, ", deviceWithData: >> ", deviceWithData);
@@ -151,24 +155,19 @@ module.exports = function() {
 
 	methods.publishMessage = function(deviceWithData){
 		try{
-
-			if(deviceWithData.type && deviceWithData.data){
-				deviceWithData.data.type = deviceWithData.type;
-			}
-			if(deviceWithData.uniqueId && deviceWithData.data){
-				deviceWithData.data.uniqueId = deviceWithData.uniqueId;
-			}
-
-			 var sensorData = {"d": deviceWithData.data};
+			 if(!deviceWithData || !deviceWithData.d){
+				 console.log("Invalid data to Publish :>>> ", deviceWithData);
+				 return false;
+			 }
 			 console.log('\n\n<<<<<< IN publishMessage >>>>>>>>> myData: ', JSON.stringify(deviceWithData));
 
 			 if(!appClient){
 				 methods.connectToIBMCloud(function(appclient){
 						appClient = appclient;
-						appClient.publishDeviceEvent(FACTORY.getGatewayConfig().GATEWAY_IOT_CONFIG.type, global.gatewayInfo.gatewayId, "cloud", "json", sensorData);
+						appClient.publishDeviceEvent(FACTORY.getGatewayConfig().GATEWAY_IOT_CONFIG.type, global.gatewayInfo.gatewayId, "cloud", "json", deviceWithData);
 					});
 			 }else{
-				 appClient.publishDeviceEvent(FACTORY.getGatewayConfig().GATEWAY_IOT_CONFIG.type, global.gatewayInfo.gatewayId, "cloud", "json", sensorData);
+				 appClient.publishDeviceEvent(FACTORY.getGatewayConfig().GATEWAY_IOT_CONFIG.type, global.gatewayInfo.gatewayId, "cloud", "json", deviceWithData);
 			 }
 		}catch(err){
 			console.log(err);
@@ -188,7 +187,7 @@ module.exports = function() {
 						eventEmmiter.emit("broadcast", JSON.stringify(payload.d));
 					}else{
 						eventEmmiter.emit("writetoserial", JSON.stringify(payload.d));
-					}										
+					}
 				}else if(payload.action){
 					if(payload.action == "UPDATE_SCENE" && payload.data){
 						// TODO: Refresh Scene
