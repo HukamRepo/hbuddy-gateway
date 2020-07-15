@@ -35,7 +35,7 @@ var methods = {};
     console.log(appConfig);
   }
 
-  methods.getGatewayConfig = function(){
+  methods.getGatewayConfig = function(){ 
     if(appConfig && appConfig.GATEWAY_CONFIG){
     	if(!appConfig.GATEWAY_CONFIG.BROADCAST_TYPE){
         	appConfig.GATEWAY_CONFIG.BROADCAST_TYPE = "LORA";

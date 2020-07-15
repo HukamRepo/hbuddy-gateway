@@ -1,4 +1,5 @@
 
+var FACTORY = require('../common/commonFactory')();
 var schedule = require('node-schedule');
 
 module.exports = function() {

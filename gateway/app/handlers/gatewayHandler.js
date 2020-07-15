@@ -22,6 +22,7 @@ var methods = {};
 				FACTORY.LocalDBHandler().loadAllLocalDBs();
 		}
 		FACTORY.CommonHandler().checkInternet(function(isConnected) {
+			isConnected = false; // TODO: Need to implement MongoDB instead of Cloudant
 		    if (isConnected) {
 		    	handleOnline(function(){
 							if(FACTORY.getGatewayConfig().BROADCAST_TYPE == "LORA" && FACTORY.RadioHandler()){
@@ -153,7 +154,7 @@ var methods = {};
 			}else{
 				for(var i=0; i<boards.length; i++){
 					var board = boards[i];
-					FACTORY.LocalDBHandler().loadDevicesFromLocalDB({"parentId": board.uniqueIdentifier}, true, function(err, devices){
+					FACTORY.LocalDBHandler().loadDevicesFromLocalDB({"parentId": board.uniqueIdentifier}, function(err, devices){
 						if(err){
 							console.log("ERROR IN loadDevicesFromCloud: >>>> ", err );
 						}else{
