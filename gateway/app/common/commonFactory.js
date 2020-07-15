@@ -1,5 +1,6 @@
 
 var exec = require("child_process").exec,
+fs = require('fs'),
 gatewayHandler,
 commonHandler,
 localDBHandler,
@@ -26,7 +27,8 @@ var methods = {};
   methods.setAppConfig = function(config){
     appConfig = config;
     if(!appConfig.GATEWAY_CONFIG){
-    	appConfig.GATEWAY_CONFIG = {};
+      let rawData = fs.readFileSync('./config/default.json');
+      appConfig.GATEWAY_CONFIG = JSON.parse(rawData);      
     }
     if(!appConfig.GATEWAY_CONFIG.BROADCAST_TYPE){
     	appConfig.GATEWAY_CONFIG.BROADCAST_TYPE = "LORA";

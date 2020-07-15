@@ -10,7 +10,7 @@ var methods = {};
 			var fs = require('fs');
 		    var content = fs.readFileSync('/proc/cpuinfo', 'utf8');
 		    var cont_array = content.split("\n");
-		    var serial_line = cont_array[cont_array.length-2];
+		    var serial_line = cont_array[cont_array.length-3];
 		    var serial = serial_line.split(":");
 		    return serial[1].slice(1);
 //		    return "GG-000-000-001";

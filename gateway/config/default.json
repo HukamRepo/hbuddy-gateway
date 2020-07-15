@@ -4,6 +4,7 @@
       "UPLOAD_CRON": "0 0 */1 * * *",
       "CONTENT_FOLDER": "/tmp/motion/cam1/",
       "CONFIG_FILE_PATH": "/media/pi/USB/configuration.json",
+      "BROADCAST_TYPE": "LORA",
       "LEDS": {"RED": 11, "GREEN": 13, "BLUE": 15},
       "server": {
             "port": 9000
