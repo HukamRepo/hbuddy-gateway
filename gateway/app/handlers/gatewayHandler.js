@@ -16,7 +16,7 @@ var methods = {};
 	};
 
 	methods.initGateway = function(){
-		console.log('\n\n<<<<<<<< IN initGateway >>>>>>> ');
+		console.log('\n\n<<<<<<<< IN initGateway >>>>>>>> ');
 
 		if(FACTORY.LocalDBHandler()){
 				FACTORY.LocalDBHandler().loadAllLocalDBs();
